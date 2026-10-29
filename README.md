@@ -1,13 +1,12 @@
 # Missing No More
 
-Tabular data imputation for ARIN 7101. Work on `dev`. Each person owns one folder and can work there without touching the others.
+Tabular data imputation for ARIN 7101. Work on `dev`. Blith, Hamad, and Henry each have their own folder. Yicheng and Eric share `deep_learning/`.
 
 | Folder | Method | Owner |
 | --- | --- | --- |
 | `random_forest/` | Random forest | Blith |
 | `knn/` | k-nearest neighbours | Hamad |
-| `deep_learning_yicheng/` | Deep learning | Yicheng |
-| `deep_learning_eric/` | Deep learning | Eric |
+| `deep_learning/` | Deep learning | Yicheng, Eric |
 | `iterative/` | Iterative model | Henry |
 
 Put shared datasets in `data/`. Those files are not committed.
