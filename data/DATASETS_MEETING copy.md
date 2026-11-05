@@ -24,6 +24,7 @@ These are the five suggested datasets. Breast Cancer, Wine and Yeast go from eas
 | 3 | Yeast | 1,453 × 9 |
 | 4 | Credit card default (Taiwan) | 29,965 × 24 |
 | 5 | FRED-MD | 334 × 111 |
+| 6 | Energy Efficiency Dataset | 768 x 8 |
 
 \*After the cleaning described in the remarks. The experiments use a random sample of at most 3,000 of these rows.
 
