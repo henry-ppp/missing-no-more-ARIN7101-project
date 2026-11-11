@@ -1,0 +1,13 @@
+dataset,missing_rate,method,rmse,mae,nrmse,nmae,checkpoint_path
+breast_cancer,0.1,autoencoder,26.372462022764186,5.196240623987461,0.0693733272427928,0.0451074651669271,deep_learning/checkpoints/breast_cancer_autoencoder_rate0.1_seed0_epochs100.pt
+breast_cancer,0.2,autoencoder,37.326280726271015,6.30009201552037,0.0692311572460945,0.0459505017658994,deep_learning/checkpoints/breast_cancer_autoencoder_rate0.2_seed0_epochs100.pt
+breast_cancer,0.3,autoencoder,33.868394627523436,6.070087363157067,0.07130641273015,0.0474365119132558,deep_learning/checkpoints/breast_cancer_autoencoder_rate0.3_seed0_epochs100.pt
+breast_cancer,0.5,autoencoder,38.28036741849006,7.663608647015672,0.0784426665169689,0.0526280933976568,deep_learning/checkpoints/breast_cancer_autoencoder_rate0.5_seed0_epochs100.pt
+wine_white,0.1,vae,9.698110341808976,3.283625407940513,0.0998058758853577,0.0703995705871764,deep_learning/checkpoints/wine_white_vae_rate0.1_seed0_epochs100.pt
+wine_white,0.2,vae,10.078696814101075,3.3428957367853127,0.1005491200323235,0.0708682047898451,deep_learning/checkpoints/wine_white_vae_rate0.2_seed0_epochs100.pt
+wine_white,0.3,vae,10.404971463796093,3.477174590476007,0.1010253582488454,0.0716744595569191,deep_learning/checkpoints/wine_white_vae_rate0.3_seed0_epochs100.pt
+wine_white,0.5,autoencoder,11.232402508046649,3.765544546197336,0.1077086423887094,0.0765201018759284,deep_learning/checkpoints/wine_white_autoencoder_rate0.5_seed0_epochs100.pt
+yeast,0.1,autoencoder,0.088227935306823,0.0550167487399433,0.1010269122533953,0.0631637422080548,deep_learning/checkpoints/yeast_autoencoder_rate0.1_seed0_epochs100.pt
+yeast,0.2,autoencoder,0.0910911764903897,0.0556258793572357,0.1043565199664618,0.063745686276564,deep_learning/checkpoints/yeast_autoencoder_rate0.2_seed0_epochs100.pt
+yeast,0.3,autoencoder,0.0961874725829706,0.0588041813010381,0.112381506170007,0.0680105323349512,deep_learning/checkpoints/yeast_autoencoder_rate0.3_seed0_epochs100.pt
+yeast,0.5,autoencoder,0.1005924203225088,0.0608146986979972,0.1148347061784103,0.069663381696541,deep_learning/checkpoints/yeast_autoencoder_rate0.5_seed0_epochs100.pt
