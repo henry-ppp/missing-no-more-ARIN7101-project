@@ -3,6 +3,14 @@ __pycache__/
 venv/
 .env
 .ipynb_checkpoints/
-data/*
-!data/.gitkeep
-deep_learning/checkpoints/
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/output/*
+!data/output/.gitkeep
+data/*.csv
+models/deep_learning/checkpoints/
+*.pt
+*.pth
+.pytest_cache/
