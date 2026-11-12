@@ -5,3 +5,4 @@ venv/
 .ipynb_checkpoints/
 data/*
 !data/.gitkeep
+deep_learning/checkpoints/
