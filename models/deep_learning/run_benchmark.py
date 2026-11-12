@@ -14,11 +14,11 @@ from pathlib import Path
 import pandas as pd
 import torch
 
-from deep_learning.datasets import RECOMMENDED_DATASETS, available_datasets, load_dataset
-from deep_learning.methods import METHODS, create_imputer
-from deep_learning.normalized_metrics import nmae, nrmse
-from shared.mask import apply_mask, mcar_mask
-from shared.metrics import mae, rmse
+from models.deep_learning.datasets import RECOMMENDED_DATASETS, available_datasets, load_dataset
+from models.deep_learning.methods import METHODS, create_imputer
+from models.deep_learning.normalized_metrics import nmae, nrmse
+from data_preprocessing.mask import apply_mask, mcar_mask
+from shared_evaluation.metrics import mae, rmse
 
 
 DEFAULT_RATES = (0.1, 0.2, 0.3, 0.5)
@@ -36,7 +36,7 @@ def run_benchmark(
     max_rows: int | None | str = "spec",
     verbose: bool = False,
     save_models: bool = False,
-    checkpoint_dir: Path = Path("deep_learning/checkpoints"),
+    checkpoint_dir: Path = Path("models/deep_learning/checkpoints"),
 ) -> pd.DataFrame:
     """Run all dataset/method/rate combinations and return a result table."""
 
@@ -154,7 +154,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("deep_learning/results_benchmark.csv"),
+        default=Path("models/deep_learning/results_benchmark.csv"),
         help="Where to save the result table.",
     )
     parser.add_argument(
@@ -165,7 +165,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--checkpoint-dir",
         type=Path,
-        default=Path("deep_learning/checkpoints"),
+        default=Path("models/deep_learning/checkpoints"),
         help="Directory for saved model checkpoints when --save-models is used.",
     )
     parser.add_argument("--verbose", action="store_true", help="Print training progress.")
