@@ -42,13 +42,13 @@ scored with the same hidden-cell mask.
 From the repository root, list configured datasets:
 
 ```bash
-python3 -m deep_learning.run_benchmark --list-datasets
+python3 -m models.deep_learning.run_benchmark --list-datasets
 ```
 
 Prepare the public UCI datasets that can be downloaded directly:
 
 ```bash
-python3 -m deep_learning.prepare_datasets --datasets breast_cancer wine_white yeast
+python3 -m models.deep_learning.prepare_datasets --datasets breast_cancer wine_white yeast
 ```
 
 A good workflow is to run one dataset first, then expand to the others after the
@@ -58,36 +58,36 @@ First run, one dataset and all methods. Add `--save-models` if fitted model
 checkpoints should be kept:
 
 ```bash
-python3 -m deep_learning.run_benchmark \
+python3 -m models.deep_learning.run_benchmark \
   --datasets breast_cancer \
   --methods autoencoder vae gain \
   --rates 0.1 0.2 0.3 0.5 \
   --epochs 100 \
   --save-models \
-  --output deep_learning/results_breast_cancer_first_run.csv
+  --output models/deep_learning/results_breast_cancer_first_run.csv
 ```
 
 Then run the next prepared datasets:
 
 ```bash
-python3 -m deep_learning.run_benchmark \
+python3 -m models.deep_learning.run_benchmark \
   --datasets wine_white yeast \
   --methods autoencoder vae gain \
   --rates 0.1 0.2 0.3 0.5 \
   --epochs 100 \
-  --output deep_learning/results_wine_yeast_first_run.csv
+  --output models/deep_learning/results_wine_yeast_first_run.csv
 ```
 
 Full project settings should use more epochs after all datasets are checked:
 
 ```bash
-python3 -m deep_learning.run_benchmark \
+python3 -m models.deep_learning.run_benchmark \
   --datasets breast_cancer wine_white yeast credit_card_default fred_md energy_efficiency \
   --methods autoencoder vae gain \
   --rates 0.1 0.2 0.3 0.5 \
   --seed 0 \
   --epochs 300 \
-  --output deep_learning/results_benchmark.csv
+  --output models/deep_learning/results_benchmark.csv
 ```
 
 `credit_card_default`, `fred_md`, and `energy_efficiency` are supported by the
@@ -105,7 +105,7 @@ The result CSV contains:
 - runtime
 - checkpoint path, when `--save-models` is used
 
-Saved checkpoints are written to `deep_learning/checkpoints/` and are ignored by
+Saved checkpoints are written to `models/deep_learning/checkpoints/` and are ignored by
 git. Each checkpoint stores the model weights and the preprocessing statistics
 needed for that fitted imputer.
 
@@ -114,7 +114,7 @@ needed for that fitted imputer.
 For quick debugging on any local numeric CSV:
 
 ```bash
-python3 -m deep_learning.run_experiment data/my_dataset.csv \
+python3 -m models.deep_learning.run_experiment data/my_dataset.csv \
   --methods autoencoder vae gain \
   --rates 0.1 0.2 0.3 0.5
 ```
@@ -122,7 +122,7 @@ python3 -m deep_learning.run_experiment data/my_dataset.csv \
 If the file contains labels or IDs, drop them:
 
 ```bash
-python3 -m deep_learning.run_experiment data/breast_cancer.csv \
+python3 -m models.deep_learning.run_experiment data/breast_cancer.csv \
   --drop-column diagnosis \
   --methods autoencoder vae gain
 ```
@@ -130,11 +130,11 @@ python3 -m deep_learning.run_experiment data/breast_cancer.csv \
 ## Python example
 
 ```python
-from shared.mask import apply_mask, mcar_mask
-from shared.metrics import mae, rmse
-from deep_learning.datasets import load_dataset
-from deep_learning.methods import create_imputer
-from deep_learning.normalized_metrics import nmae, nrmse
+from data_preprocessing.mask import apply_mask, mcar_mask
+from shared_evaluation.metrics import mae, rmse
+from models.deep_learning.datasets import load_dataset
+from models.deep_learning.methods import create_imputer
+from models.deep_learning.normalized_metrics import nmae, nrmse
 
 X = load_dataset("breast_cancer")
 mask = mcar_mask(X, rate=0.2, seed=0)

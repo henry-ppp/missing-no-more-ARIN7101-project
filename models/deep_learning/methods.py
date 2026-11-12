@@ -6,9 +6,9 @@ from typing import Protocol
 
 import pandas as pd
 
-from deep_learning.autoencoder_imputer import DeepAutoencoderImputer
-from deep_learning.gain_imputer import GAINImputer
-from deep_learning.vae_imputer import VariationalAutoencoderImputer
+from models.deep_learning.autoencoder_imputer import DeepAutoencoderImputer
+from models.deep_learning.gain_imputer import GAINImputer
+from models.deep_learning.vae_imputer import VariationalAutoencoderImputer
 
 
 class Imputer(Protocol):

@@ -1,21 +1,21 @@
 # Missing No More
 
-Tabular data imputation for ARIN 7101. Work on `dev`. Blith, Hamad, and Henry each have their own folder. Yicheng and Eric share `deep_learning/`.
+Tabular data imputation for ARIN 7101. Work on `dev`. Blith, Hamad, and Henry each have their own folder. Yicheng and Eric share `models/deep_learning/`.
 
 | Folder | Method | Owner |
 | --- | --- | --- |
-| `random_forest/` | Random forest | Blith |
-| `knn/` | k-nearest neighbours | Hamad |
-| `deep_learning/` | Deep learning | Yicheng, Eric |
-| `iterative/` | Iterative model | Henry |
+| `models/random_forest/` | Random forest | Blith |
+| `models/knn/` | k-nearest neighbours | Hamad |
+| `models/deep_learning/` | Deep learning | Yicheng, Eric |
+| `models/iterative/` | Iterative model | Henry |
 
 Put shared datasets in `data/`. Those files are not committed.
 
 Compare methods with the same hidden cells. From the repo root:
 
 ```python
-from shared.mask import apply_mask, mcar_mask
-from shared.metrics import mae, rmse
+from data_preprocessing.mask import apply_mask, mcar_mask
+from shared_evaluation.metrics import mae, rmse
 
 mask = mcar_mask(X, rate=0.2, seed=0)
 X_missing = apply_mask(X, mask)

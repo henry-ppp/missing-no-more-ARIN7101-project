@@ -2,7 +2,7 @@
 
 For the full dataset-design benchmark, prefer:
 
-    python -m deep_learning.run_benchmark
+    python -m models.deep_learning.run_benchmark
 
 This script is kept for quick checks on one local CSV.
 """
@@ -16,10 +16,10 @@ from pathlib import Path
 import pandas as pd
 import torch
 
-from deep_learning.methods import METHODS, create_imputer
-from deep_learning.normalized_metrics import nmae, nrmse
-from shared.mask import apply_mask, mcar_mask
-from shared.metrics import mae, rmse
+from models.deep_learning.methods import METHODS, create_imputer
+from models.deep_learning.normalized_metrics import nmae, nrmse
+from data_preprocessing.mask import apply_mask, mcar_mask
+from shared_evaluation.metrics import mae, rmse
 
 
 DEFAULT_RATES = (0.1, 0.2, 0.3, 0.5)
@@ -56,7 +56,7 @@ def run_experiment(
     batch_size: int = 128,
     verbose: bool = False,
     save_models: bool = False,
-    checkpoint_dir: Path = Path("deep_learning/checkpoints"),
+    checkpoint_dir: Path = Path("models/deep_learning/checkpoints"),
     dataset_name: str = "quick_csv",
 ) -> pd.DataFrame:
     if save_models:
@@ -156,7 +156,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("deep_learning/results_quick.csv"),
+        default=Path("models/deep_learning/results_quick.csv"),
         help="Where to save the result table",
     )
     parser.add_argument(
@@ -167,7 +167,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--checkpoint-dir",
         type=Path,
-        default=Path("deep_learning/checkpoints"),
+        default=Path("models/deep_learning/checkpoints"),
         help="Directory for saved model checkpoints when --save-models is used.",
     )
     parser.add_argument("--verbose", action="store_true", help="Print training progress")

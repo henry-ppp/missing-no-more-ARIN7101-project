@@ -22,4 +22,8 @@ def apply_mask(X: pd.DataFrame, mask: pd.DataFrame) -> pd.DataFrame:
     """Return a copy of ``X`` with masked cells set to NaN."""
     if X.shape != mask.shape:
         raise ValueError("X and mask must have the same shape")
+    if not X.index.equals(mask.index) or not X.columns.equals(mask.columns):
+        raise ValueError("X and mask identifiers must match in order")
+    if not all(dtype == bool for dtype in mask.dtypes):
+        raise ValueError("mask must be Boolean")
     return X.mask(mask)
