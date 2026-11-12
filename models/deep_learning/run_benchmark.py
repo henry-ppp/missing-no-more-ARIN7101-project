@@ -1,6 +1,6 @@
 """Run the dataset-design deep-learning benchmark.
 
-The benchmark follows ``data/DATASETS_MEETING copy.md`` and the project README:
+The benchmark follows ``meeting_notes/DATASETS_MEETING.md`` and the project README:
 use complete numeric tables, hide the same cells with MCAR masks, impute with
 several deep-learning methods, and score only hidden cells with RMSE/MAE.
 """

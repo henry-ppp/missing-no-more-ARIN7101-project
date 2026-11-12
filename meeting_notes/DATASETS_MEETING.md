@@ -1,5 +1,7 @@
 # Datasets for the project
 
+Archived research note. The current dataset specification is `data/README.md`.
+
 The experiment design: Take a complete table, hide some of its values, let each model fill them back in, and measure how far the guesses are from the real values. We compare generative models (e.g. VAE, MIWAE, not-MIWAE and GAIN, etc) with random-forest methods that are known to be hard to beat (MissForest, and MICE with random forests, which we'll call MICE-RF), and KNN.
 
 So we mostly need complete tables, where every true value is known. One of the suggested datasets, FRED-MD, also has real gaps whose true values were published later, which lets us test the models on missing data that nobody simulated.

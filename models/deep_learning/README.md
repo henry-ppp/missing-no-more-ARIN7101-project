@@ -1,7 +1,7 @@
 # Deep learning imputation
 
 This folder contains the deep-learning part of the project. It follows the
-project dataset design in `data/DATASETS_MEETING copy.md`: choose complete
+project dataset design in `meeting_notes/DATASETS_MEETING.md`: choose complete
 benchmark tables, hide cells with the shared MCAR masks, impute them with several
 models, and score only the hidden cells with shared RMSE/MAE.
 

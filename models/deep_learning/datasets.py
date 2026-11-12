@@ -1,6 +1,6 @@
 """Dataset choices and loading rules for the deep-learning experiments.
 
-The choices mirror ``data/DATASETS_MEETING copy.md``. Data files themselves stay
+The choices mirror ``meeting_notes/DATASETS_MEETING.md``. Data files themselves stay
 under ``data/`` and are ignored by git.
 """
 

@@ -80,7 +80,6 @@ use a new --processed-dir. Preparation fails on damaged or incomplete caches.
 
 ```text
 data/
-  DATASETS_MEETING copy.md  # preserved teammate research
   raw/                     # uncleaned source caches
   processed/<dataset>/evaluation_only/X_clean_full.csv
   processed/<dataset>/<quick|full>/rate_0.3_seed_0/
