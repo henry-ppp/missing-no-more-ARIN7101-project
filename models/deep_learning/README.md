@@ -1,15 +1,20 @@
 # Deep learning imputation
 
-This folder contains the deep-learning part of the project. It follows the
-project dataset design in `meeting_notes/DATASETS_MEETING.md`: choose complete
-benchmark tables, hide cells with the shared MCAR masks, impute them with several
-models, and score only the hidden cells with shared RMSE/MAE.
+This folder contains the deep-learning part of the project. Hide cells with the
+shared MCAR masks, impute them with several models, and score only the hidden
+cells with shared RMSE/MAE.
 
-## Dataset choice from the design document
+The current dataset specification is `data/README.md`. The dataset list below
+is from the deprecated note `meeting_notes/DEPRECATED_DATASETS_MEETING.md`.
+Do not use it.
 
-We should not evaluate on an arbitrary single dataset only. The design document
-suggests a suite that covers easy, medium, hard, large/mixed, finance, and quick
-small-data cases:
+## Dataset choice from the deprecated note
+
+This section records an old design. Do not choose datasets from it. Use
+`data/README.md`.
+
+The old note suggested a suite that covers easy, medium, hard, large/mixed,
+finance, and quick small-data cases:
 
 | Dataset key | Why we include it | Expected file in `data/` |
 | --- | --- | --- |
@@ -23,8 +28,8 @@ small-data cases:
 Data files stay in `data/` and are ignored by git. The loader in `datasets.py`
 drops labels/IDs/date columns, keeps numeric columns, removes duplicate and
 incomplete rows, and caps large datasets at 3,000 rows unless told otherwise.
-This matches the design note that experiments should use complete tables and a
-sample of at most 3,000 rows.
+This follows the deprecated note: complete tables and a sample of at most
+3,000 rows. Do not use that note for the current datasets.
 
 ## Deep-learning methods
 
@@ -153,6 +158,6 @@ for method in ["autoencoder", "vae", "gain"]:
 - Credit-card default includes categorical codes. The first pass treats them as
   numeric/coded features; a stronger later version could one-hot encode or use a
   mixed-type neural model.
-- FRED-MD real publication gaps are mentioned in the design document. This code
+- FRED-MD real publication gaps are mentioned in the deprecated note. This code
   covers the simulated complete-table MCAR benchmark first; real-gap evaluation
   can be added once those archived files are available in `data/`.

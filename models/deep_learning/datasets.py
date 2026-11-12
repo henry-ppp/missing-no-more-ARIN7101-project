@@ -1,6 +1,8 @@
 """Dataset choices and loading rules for the deep-learning experiments.
 
-The choices mirror ``meeting_notes/DATASETS_MEETING.md``. Data files themselves stay
+The choices mirror the deprecated note
+``meeting_notes/DEPRECATED_DATASETS_MEETING.md``. Do not use that note.
+Current datasets are specified in ``data/README.md``. Data files themselves stay
 under ``data/`` and are ignored by git.
 """
 

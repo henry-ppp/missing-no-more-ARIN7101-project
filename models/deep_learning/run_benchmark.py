@@ -1,8 +1,10 @@
 """Run the dataset-design deep-learning benchmark.
 
-The benchmark follows ``meeting_notes/DATASETS_MEETING.md`` and the project README:
-use complete numeric tables, hide the same cells with MCAR masks, impute with
-several deep-learning methods, and score only hidden cells with RMSE/MAE.
+Dataset choices came from the deprecated note
+``meeting_notes/DEPRECATED_DATASETS_MEETING.md``. Do not use that note.
+Current datasets are specified in ``data/README.md``. The run uses complete
+numeric tables, hides the same cells with MCAR masks, imputes with several
+deep-learning methods, and scores only hidden cells with RMSE/MAE.
 """
 
 from __future__ import annotations

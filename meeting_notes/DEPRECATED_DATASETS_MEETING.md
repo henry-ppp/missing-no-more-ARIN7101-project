@@ -1,6 +1,14 @@
-# Datasets for the project
+# DEPRECATED
 
-Archived research note. The current dataset specification is `data/README.md`.
+Do not use this note to choose datasets.
+
+The current dataset specification is [`data/README.md`](../data/README.md).
+
+The text below is an old discussion. It is kept as a record only.
+
+---
+
+# Datasets for the project
 
 The experiment design: Take a complete table, hide some of its values, let each model fill them back in, and measure how far the guesses are from the real values. We compare generative models (e.g. VAE, MIWAE, not-MIWAE and GAIN, etc) with random-forest methods that are known to be hard to beat (MissForest, and MICE with random forests, which we'll call MICE-RF), and KNN.
 

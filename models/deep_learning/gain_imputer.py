@@ -40,7 +40,7 @@ class GAINImputer:
 
     GAIN is more expensive and less stable than the autoencoder baselines, but it
     gives the deep-learning section an adversarial method that is directly cited
-    in the dataset design document.
+    in the deprecated note ``meeting_notes/DEPRECATED_DATASETS_MEETING.md``.
     """
 
     hidden_dims: tuple[int, ...] | None = None
