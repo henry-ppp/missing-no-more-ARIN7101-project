@@ -39,4 +39,4 @@ def config_path(root, dataset, mode, rate, seed):
         raise ValueError('Unknown dataset or mode')
     if not 0 < rate < 1:
         raise ValueError('Benchmark rate must be strictly between 0 and 1')
-    return Path(root) / dataset / mode / f'rate_{rate:g}_seed_{seed}'
+    return Path(root) / dataset / mode / f'rate_{float(rate)}_seed_{seed}'

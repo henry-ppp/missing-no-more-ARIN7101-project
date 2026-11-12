@@ -2,6 +2,8 @@
 import argparse
 import json
 import platform
+import csv
+from importlib.metadata import version, PackageNotFoundError
 from dataclasses import asdict
 from pathlib import Path
 import numpy as np
@@ -14,6 +16,10 @@ from .standardize import fit_observed, transform
 from .mean_baseline import mean_impute
 
 def read_matrix(path):
+    with open(path, encoding='utf-8-sig', newline='') as stream:
+        names = next(csv.reader(stream), [])
+    if len(names) != len(set(names)):
+        raise ValueError('Duplicate CSV column names')
     header = pd.read_csv(path, nrows=0)
     if len(header.columns) < 2 or header.columns[0] != 'row_id':
         raise ValueError(f'{path}: first CSV column must be row_id')
@@ -52,6 +58,12 @@ def export_configuration(full, dataset, mode, rate, seed, directory, cleaning, r
     baseline.to_csv(directory / 'X_mean_baseline.csv', index_label='row_id')
     mask.astype(int).to_csv(directory / 'mask_eval.csv', index_label='row_id')
     (directory / 'scaler_stats.json').write_text(json.dumps(stats, indent=2), encoding='utf-8')
+    package_versions = {}
+    for package in ('scikit-learn', 'ucimlrepo'):
+        try:
+            package_versions[package] = version(package)
+        except PackageNotFoundError:
+            package_versions[package] = None
     metadata = {'schema_version': 1, 'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed,
         'dataset_config': asdict(DATASETS[dataset]), 'features': list(selected.columns),
         'row_ids': selected.index.tolist(), 'selected_rows': len(selected),
@@ -59,7 +71,7 @@ def export_configuration(full, dataset, mode, rate, seed, directory, cleaning, r
         'cleaning': cleaning, 'raw_sha256': raw_hashes, 'mask_count': int(mask.to_numpy().sum()),
         'sampling': 'default_rng choice without replacement, sorted original positions',
         'standardization': 'Observed only; population std; zero std uses scale=1; no observed values raises error',
-        'versions': {'python': platform.python_version(), 'numpy': np.__version__, 'pandas': pd.__version__}}
+        'versions': {'python': platform.python_version(), 'numpy': np.__version__, 'pandas': pd.__version__, **package_versions}}
     metadata['artifact_sha256'] = {str(p.relative_to(directory)): sha256(p)
         for p in directory.rglob('*') if p.is_file()}
     (directory / 'metadata.json').write_text(json.dumps(metadata, indent=2), encoding='utf-8')
