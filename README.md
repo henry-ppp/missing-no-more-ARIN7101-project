@@ -82,3 +82,5 @@ python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0
 See [DAE benchmark results](results/summary/dae_v2_benchmark.csv), [training histories and configurations](results/dae_v2/), and the separate [evaluation V2 documentation](shared_evaluation/EVALUATION_V2.md). The initial experiment uses one seed and a transductive missing-cell holdout; these scores do not measure generalization to unseen rows or establish significance across seeds. Credits and change notices for the datasets are in [data/README.md](data/README.md). The project uses NumPy, pandas, PyTorch, SciPy, scikit-learn and ucimlrepo.
 
 California Housing Quick has an unusually large RMSE because one hidden `AveOccup` value is about 1,314 observed standard deviations from its observed mean. That cell contributes 99.35% of the mean baseline's squared error for this configuration. The published data retain this observation; inspect MAE and macro R² alongside RMSE.
+
+All eight initial DAE runs completed on the RTX 4090 Laptop GPU. DAE improved RMSE in all eight runs for this seed. Full-mode improvement ranged from 23.63% (California Housing) to 71.99% (Superconductivity).

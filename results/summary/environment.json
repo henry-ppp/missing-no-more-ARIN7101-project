@@ -1,0 +1,19 @@
+{
+  "python": "3.12.14",
+  "os": "Windows",
+  "environment": "project-local .venv",
+  "packages": {
+    "torch": "2.11.0+cu128",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "ucimlrepo": "0.0.7",
+    "setuptools": "81.0.0"
+  },
+  "torch_cuda": "12.8",
+  "cuda_available": true,
+  "gpu": "NVIDIA GeForce RTX 4090 Laptop GPU",
+  "nvidia_driver": "616.92",
+  "gpu_smoke_test_result": 14
+}

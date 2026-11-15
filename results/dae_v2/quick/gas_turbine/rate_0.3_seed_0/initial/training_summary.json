@@ -1,0 +1,49 @@
+{
+  "config": {
+    "epochs": 150,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "training_mask_rate": 0.3,
+    "validation_fraction": 0.1,
+    "patience": 20,
+    "min_delta": 1e-05,
+    "hidden_dims": null,
+    "latent_dim": null,
+    "dropout": 0.05,
+    "activation": "relu",
+    "seed": 0,
+    "device": "cuda",
+    "threads": 2
+  },
+  "architecture": {
+    "n_features": 11,
+    "hidden_dims": [
+      32,
+      16
+    ],
+    "latent_dim": 5,
+    "dropout": 0.05,
+    "activation": "relu"
+  },
+  "rows": 3000,
+  "features": 11,
+  "device": "cuda",
+  "device_name": "NVIDIA GeForce RTX 4090 Laptop GPU",
+  "torch_version": "2.11.0+cu128",
+  "numpy_version": "2.5.4",
+  "epochs_completed": 150,
+  "best_epoch": 145,
+  "best_validation_loss": 0.40940365557214703,
+  "final_validation_loss": 0.41275374258930164,
+  "initial_validation_loss": 1.1043637396445263,
+  "runtime_seconds": 8.863916999999901,
+  "training_available_cells": 20911,
+  "validation_cells": 2322,
+  "validation_mask_sha256": "a00893c4801eac181218d62fc92a64df2d6ac46feb5462133a2daa98f4e66f7b",
+  "parameter_count": 2352,
+  "validation_policy": "Observed-only per-column heldout cells; excluded from all training inputs and targets. Shared scaler unchanged.",
+  "objective": "MSE only on additional masks of non-validation originally observed cells",
+  "input_sha256": "a105c628becac8cec1c52f675fe2de3f3ad230dbf3699a48c20ebe88e6f01ea4",
+  "benchmark_metadata_sha256": "f835b53a88507af8a95f987041fd0f66e4b2af66d5889fe3ba5f4fe2c07e2870",
+  "code_commit": "b781e997acff598b1aa23480b2d569813bc53000"
+}

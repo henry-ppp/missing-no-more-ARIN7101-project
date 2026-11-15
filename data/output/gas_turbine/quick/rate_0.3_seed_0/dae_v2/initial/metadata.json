@@ -1,0 +1,12 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dae_v2",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "f835b53a88507af8a95f987041fd0f66e4b2af66d5889fe3ba5f4fe2c07e2870",
+  "input_sha256": "a105c628becac8cec1c52f675fe2de3f3ad230dbf3699a48c20ebe88e6f01ea4",
+  "prediction_sha256": "831a683dd8b00762eabd49f548981e1cf6942998f1613823c6bf047415cbdec5",
+  "checkpoint": "results/dae_v2/checkpoints/quick/gas_turbine/rate_0.3_seed_0/initial/best.pt"
+}

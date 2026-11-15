@@ -1,0 +1,12 @@
+{
+  "dataset": "superconductivity",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dae_v2",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "c520a528b96a153828a125ce49770681be23d652cb688280a1b70baeab2153c6",
+  "input_sha256": "471c05add4d63308f15d894f2ada26f717c7b22837cca6cfcd266d6db680ce37",
+  "prediction_sha256": "4fd24f1400058633f09b3db8ee7e0172859e95e5e02f3855b438356f69a36a28",
+  "checkpoint": "results/dae_v2/checkpoints/full/superconductivity/rate_0.3_seed_0/initial/best.pt"
+}

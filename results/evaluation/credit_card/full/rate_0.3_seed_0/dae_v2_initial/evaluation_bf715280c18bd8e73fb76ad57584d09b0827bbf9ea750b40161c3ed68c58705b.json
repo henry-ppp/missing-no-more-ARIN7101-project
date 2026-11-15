@@ -1,0 +1,17 @@
+{
+  "dataset": "credit_card",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dae_v2_initial",
+  "predictions": "data/output/credit_card/full/rate_0.3_seed_0/dae_v2/initial/predictions.csv",
+  "prediction_sha256": "bf715280c18bd8e73fb76ad57584d09b0827bbf9ea750b40161c3ed68c58705b",
+  "benchmark_metadata_sha256": "91ac782994113597a47fcaf897649a4c7783ff0f0ca743b4d65ba973baa94542",
+  "mean_baseline_rmse": 1.0067650118255302,
+  "metrics": {
+    "rmse": 0.7556326848135535,
+    "mae": 0.3014298951108455,
+    "r2": 0.45050322917975605,
+    "relative_improvement": 0.24944482978863924
+  }
+}
