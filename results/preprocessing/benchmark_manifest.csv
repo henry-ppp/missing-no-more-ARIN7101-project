@@ -1,0 +1,9 @@
+dataset,mode,raw_rows,clean_rows,selected_rows,features,realized_missing_rate,metadata
+credit_card,quick,30000,30000,3000,14,0.29569047619047617,data/processed/credit_card/quick/rate_0.3_seed_0/metadata.json
+credit_card,full,30000,30000,30000,14,0.2998452380952381,data/processed/credit_card/full/rate_0.3_seed_0/metadata.json
+california_housing,quick,20640,20640,3000,8,0.29291666666666666,data/processed/california_housing/quick/rate_0.3_seed_0/metadata.json
+california_housing,full,20640,20640,20640,8,0.2997093023255814,data/processed/california_housing/full/rate_0.3_seed_0/metadata.json
+superconductivity,quick,21263,21263,3000,81,0.2991152263374486,data/processed/superconductivity/quick/rate_0.3_seed_0/metadata.json
+superconductivity,full,21263,21263,21263,81,0.30002270216100185,data/processed/superconductivity/full/rate_0.3_seed_0/metadata.json
+gas_turbine,quick,36733,36733,3000,11,0.295969696969697,data/processed/gas_turbine/quick/rate_0.3_seed_0/metadata.json
+gas_turbine,full,36733,36733,36733,11,0.29986660496011763,data/processed/gas_turbine/full/rate_0.3_seed_0/metadata.json

@@ -1,0 +1,9 @@
+{
+  "source": "https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients",
+  "uci_id": 350,
+  "rows": 30000,
+  "sha256": {
+    "source.csv": "45bcf4df62ff2e237a74eb155cabfb4bbbc171219a0637daef44fdad07503dd0"
+  },
+  "storage": "Original yearly CSV bytes for gas; uncleaned API table export otherwise"
+}

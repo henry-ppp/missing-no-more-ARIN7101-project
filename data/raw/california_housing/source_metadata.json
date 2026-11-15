@@ -1,0 +1,11 @@
+{
+  "source": "https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html",
+  "uci_id": null,
+  "rows": 20640,
+  "sha256": {
+    "source.csv": "94ef369b909f5c725340b512b7c9a05c1550a554b6592d29303990e3ba521a1f"
+  },
+  "storage": "Byte-identical Deshpande CSV export of scikit-learn California Housing",
+  "release": "https://doi.org/10.17632/hhb6nwfft8.1",
+  "license": "CC BY 4.0"
+}

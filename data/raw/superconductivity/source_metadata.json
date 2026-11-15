@@ -1,0 +1,9 @@
+{
+  "source": "https://archive.ics.uci.edu/dataset/464/superconductivty+data",
+  "uci_id": 464,
+  "rows": 21263,
+  "sha256": {
+    "source.csv": "35159ac4fc5d4a2219ba14077f3fb8017f9b3bac9ce0b352d6b95e301a9cb0d8"
+  },
+  "storage": "Original yearly CSV bytes for gas; uncleaned API table export otherwise"
+}
