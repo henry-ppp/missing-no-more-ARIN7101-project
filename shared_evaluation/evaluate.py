@@ -14,7 +14,7 @@ def evaluate(X_true, X_pred, mask_eval, X_mean_baseline):
             'r2': r2(X_true, X_pred, mask_eval),
             'relative_improvement': relative_improvement(model_rmse, baseline_rmse)}
 
-def evaluate_files(dataset, mode, rate, seed, predictions, processed_dir='data/processed', output_dir='data/output', model=None):
+def evaluate_files(dataset, mode, rate, seed, predictions, processed_dir='data/processed', output_dir='results/evaluation', model=None):
     directory = config_path(processed_dir, dataset, mode, rate, seed)
     metadata = json.loads((directory / 'metadata.json').read_text(encoding='utf-8'))
     for key, expected in {'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed}.items():
@@ -39,8 +39,9 @@ def evaluate_files(dataset, mode, rate, seed, predictions, processed_dir='data/p
     # Content hash distinguishes different runs of the same model and configuration.
     output = target / f'evaluation_{digest}.json'
     report = {'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed, 'model': name,
-              'predictions': str(Path(predictions).resolve()), 'prediction_sha256': digest,
-              'benchmark_metadata_sha256': sha256(directory / 'metadata.json'), 'metrics': result}
+              'predictions': Path(predictions).as_posix(), 'prediction_sha256': digest,
+              'benchmark_metadata_sha256': sha256(directory / 'metadata.json'),
+              'mean_baseline_rmse': rmse(truth, baseline, mask), 'metrics': result}
     output.write_text(json.dumps(report, indent=2, allow_nan=False), encoding='utf-8')
     return result, output
 
@@ -53,7 +54,7 @@ def main():
     parser.add_argument('--predictions', type=Path, required=True)
     parser.add_argument('--model')
     parser.add_argument('--processed-dir', default='data/processed')
-    parser.add_argument('--output-dir', default='data/output')
+    parser.add_argument('--output-dir', default='results/evaluation', help='Evaluation report root (prediction files remain under data/output)')
     args = parser.parse_args()
     result, output = evaluate_files(**vars(args))
     print(json.dumps(result, allow_nan=False))
