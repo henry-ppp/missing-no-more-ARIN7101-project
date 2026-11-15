@@ -91,9 +91,6 @@ def prepare(dataset, mode='quick', rate=0.3, seed=0, raw_dir='data/raw', process
         download(dataset, raw_dir)
     raw, hashes = load_raw(dataset, raw_dir)
     full, cleaning = clean(dataset, raw)
-    private = Path(processed_dir) / dataset / 'evaluation_only'
-    private.mkdir(parents=True, exist_ok=True)
-    full.to_csv(private / 'X_clean_full.csv', index_label='row_id')
     return export_configuration(full, dataset, mode, rate, seed, destination, cleaning, hashes)
 
 def main():

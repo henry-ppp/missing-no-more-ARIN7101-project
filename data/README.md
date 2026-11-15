@@ -80,7 +80,6 @@ use a new --processed-dir. Preparation fails on damaged or incomplete caches.
 ```text
 data/
   raw/                     # uncleaned source caches
-  processed/<dataset>/evaluation_only/X_clean_full.csv
   processed/<dataset>/<quick|full>/rate_0.3_seed_0/
     X_missing.csv
     X_mean_baseline.csv
@@ -96,7 +95,9 @@ results/evaluation/<dataset>/<mode>/rate_0.3_seed_0/<model>/
   evaluation_<prediction_sha256>.json
 ```
 
-All CSV matrices start with a `row_id` index column. Models use only:
+The Full configuration's `evaluation_only/X_true_original.csv` is the complete
+cleaned dataset in original units. All CSV matrices start with a `row_id` index
+column. Models use only:
 
 ```python
 from data_preprocessing.prepare_all import load_model_input
