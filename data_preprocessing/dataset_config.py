@@ -1,6 +1,9 @@
 """Official benchmark schema; feature order is part of the experiment contract."""
 from dataclasses import dataclass
 
+MODEL_INPUT = 'X_cleaned_masked_standardized.csv'
+EVALUATION_TRUTH = 'X_cleaned_standardized.csv'
+
 @dataclass(frozen=True)
 class DatasetConfig:
     name: str

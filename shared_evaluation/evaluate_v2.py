@@ -46,7 +46,7 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.metrics import r2_score, roc_auc_score
 from sklearn.model_selection import KFold, StratifiedKFold, cross_val_predict
 
-from data_preprocessing.dataset_config import DATASETS, config_path
+from data_preprocessing.dataset_config import DATASETS, EVALUATION_TRUTH, config_path
 from data_preprocessing.download import sha256
 from data_preprocessing.prepare_all import read_matrix
 from .metrics_v2 import mae, r2, relative_improvement, rmse, validate, wasserstein
@@ -240,7 +240,7 @@ def load_benchmark(dataset, mode, rate, seed, processed_dir='data/processed'):
     for filename, digest in metadata['artifact_sha256'].items():
         if sha256(directory / filename) != digest:
             raise ValueError(f'Benchmark artifact was modified: {filename}')
-    truth = read_matrix(directory / 'evaluation_only' / 'X_true_standardized.csv')
+    truth = read_matrix(directory / EVALUATION_TRUTH)
     if truth.index.tolist() != metadata['row_ids'] or list(truth.columns) != metadata['features']:
         raise ValueError('Ground truth identifiers differ from metadata')
     return directory, metadata, truth, read_matrix(directory / 'mask_eval.csv'), read_matrix(directory / 'X_mean_baseline.csv')

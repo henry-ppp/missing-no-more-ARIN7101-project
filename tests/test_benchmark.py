@@ -17,7 +17,7 @@ from data_preprocessing.mask import mcar_mask, apply_mask
 from data_preprocessing.standardize import fit_observed, transform
 from data_preprocessing.mean_baseline import mean_impute
 from data_preprocessing.download import download, load_raw
-from data_preprocessing.prepare_all import export_configuration, load_model_input, prepare
+from data_preprocessing.prepare_all import export_configuration, load_model_input, prepare, read_matrix
 from shared_evaluation.evaluate import evaluate, evaluate_files
 from shared_evaluation.metrics import r2
 
@@ -101,7 +101,7 @@ class BenchmarkTests(unittest.TestCase):
             with patch('data_preprocessing.prepare_all.read_matrix', wraps=__import__('data_preprocessing.prepare_all', fromlist=['read_matrix']).read_matrix) as reader:
                 model_input = load_model_input(directory)
                 self.assertEqual(reader.call_count, 1)
-                self.assertEqual(reader.call_args.args[0].name, 'X_missing.csv')
+                self.assertEqual(reader.call_args.args[0].name, 'X_cleaned_masked_standardized.csv')
             self.assertTrue(model_input.isna().any().any())
             predictions = root / 'mean_predictions.csv'
             model_input.fillna(model_input.mean()).to_csv(predictions)
@@ -119,6 +119,58 @@ class BenchmarkTests(unittest.TestCase):
             (directory / 'mask_eval.csv').write_text('tampered')
             with self.assertRaises(ValueError):
                 evaluate_files('california_housing', 'quick', .3, 0, predictions, processed, root / 'output')
+
+    def test_fresh_layout_in_both_orders(self):
+        dataset = 'california_housing'
+        raw = pd.DataFrame(np.random.default_rng(7).normal(size=(3100, 8)), columns=self.X.columns)
+        expected = {'X_cleaned.csv', 'X_cleaned_masked.csv', 'X_cleaned_masked_standardized.csv',
+                    'X_cleaned_standardized.csv', 'mask_eval.csv', 'X_mean_baseline.csv',
+                    'scaler_stats.json', 'metadata.json'}
+        with TemporaryDirectory(dir=Path.cwd()) as temp:
+            root = Path(temp)
+            raw_file = root / 'raw' / dataset / 'source.csv'
+            raw_file.parent.mkdir(parents=True)
+            raw.to_csv(raw_file, index=False)
+            for order in (('quick', 'full'), ('full', 'quick')):
+                processed = root / order[0]
+                for mode in order:
+                    target = prepare(dataset, mode, raw_dir=root / 'raw', processed_dir=processed,
+                                     skip_download=True)
+                    self.assertEqual({path.name for path in target.iterdir()}, expected)
+                    complete = read_matrix(target / 'X_cleaned.csv')
+                    self.assertEqual(len(complete), 3000 if mode == 'quick' else 3100)
+                    mask = read_matrix(target / 'mask_eval.csv').astype(bool)
+                    pd.testing.assert_frame_equal(mask, mcar_mask(complete, .3, 0))
+                    masked = read_matrix(target / 'X_cleaned_masked.csv')
+                    pd.testing.assert_frame_equal(masked, complete.mask(mask))
+                    stats = json.loads((target / 'scaler_stats.json').read_text())
+                    for key in ('mean', 'scale'):
+                        np.testing.assert_allclose(stats[key], fit_observed(masked)[key], atol=1e-14)
+                    pd.testing.assert_frame_equal(load_model_input(target), transform(masked, stats))
+                    pd.testing.assert_frame_equal(read_matrix(target / 'X_cleaned_standardized.csv'),
+                                                  transform(complete, stats))
+                full = config_path(processed, dataset, 'full', .3, 0)
+                canonical = processed / dataset / 'cleaned' / 'X_cleaned.csv'
+                self.assertEqual(canonical.read_bytes(), (full / 'X_cleaned.csv').read_bytes())
+                self.assertEqual({p.name for p in canonical.parent.parent.iterdir()}, {'cleaned', 'quick', 'full'})
+
+    def test_published_dae_scores_after_layout_migration(self):
+        repo = Path(__file__).resolve().parents[1]
+        processed = repo / 'data' / 'processed'
+        with TemporaryDirectory(dir=Path.cwd()) as temp:
+            for dataset in DATASETS:
+                for mode in ('quick', 'full'):
+                    with self.subTest(dataset=dataset, mode=mode):
+                        relative = config_path(Path(), dataset, mode, .3, 0)
+                        predictions = repo / 'data' / 'output' / relative / 'dae_v2' / 'initial' / 'predictions.csv'
+                        reports = repo / 'results' / 'evaluation' / relative / 'dae_v2_initial'
+                        historical, = reports.glob('evaluation_*.json')
+                        expected = json.loads(historical.read_text(encoding='utf-8'))
+                        scores, report = evaluate_files(dataset, mode, .3, 0, predictions, processed, temp)
+                        for name, score in scores.items():
+                            self.assertAlmostEqual(score, expected['metrics'][name], places=13)
+                        self.assertAlmostEqual(json.loads(report.read_text())['mean_baseline_rmse'],
+                                               expected['mean_baseline_rmse'], places=13)
 
     def test_gas_archive_offline(self):
         payload = io.BytesIO()

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "dataset": "superconductivity",
   "mode": "full",
   "rate": 0.3,
@@ -21475,9 +21475,11 @@
   "artifact_sha256": {
     "mask_eval.csv": "efe7d8338df3db93bf232a8d14c6bb42429518fc5bf081e0bc379c3e5f20e2fb",
     "scaler_stats.json": "b09236513399fc5641f0f31ba64d4ef125363c10f16a550fae56eb4dc236e5bc",
-    "X_mean_baseline.csv": "6f2b18093892706144fd198bbd488bfa11d407c0ea601f059eecdd2e28adb6bb",
-    "X_missing.csv": "471c05add4d63308f15d894f2ada26f717c7b22837cca6cfcd266d6db680ce37",
-    "evaluation_only/X_true_original.csv": "c14c8077852fd5221703c7ed98242392204b702931ddb3f14d66c63a5cef891d",
-    "evaluation_only/X_true_standardized.csv": "17b2bd2c327ba273545befff7d25f5d12d3d00966923c4b74d09412865236ad7"
-  }
+    "X_cleaned.csv": "c14c8077852fd5221703c7ed98242392204b702931ddb3f14d66c63a5cef891d",
+    "X_cleaned_masked.csv": "3fadb4e331e824011e7250d9a9361063ed38c82e2ef48f9587dd5b75143286bf",
+    "X_cleaned_masked_standardized.csv": "471c05add4d63308f15d894f2ada26f717c7b22837cca6cfcd266d6db680ce37",
+    "X_cleaned_standardized.csv": "17b2bd2c327ba273545befff7d25f5d12d3d00966923c4b74d09412865236ad7",
+    "X_mean_baseline.csv": "6f2b18093892706144fd198bbd488bfa11d407c0ea601f059eecdd2e28adb6bb"
+  },
+  "previous_metadata_sha256": "c520a528b96a153828a125ce49770681be23d652cb688280a1b70baeab2153c6"
 }

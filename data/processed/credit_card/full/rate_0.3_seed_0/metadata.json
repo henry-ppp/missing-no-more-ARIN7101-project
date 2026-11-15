@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "dataset": "credit_card",
   "mode": "full",
   "rate": 0.3,
@@ -30087,9 +30087,11 @@
   "artifact_sha256": {
     "mask_eval.csv": "4f459ba33dcdc521b23d382b8a547795fe599dbe833984cf6cadd1ff15667aea",
     "scaler_stats.json": "8bd1be112c5c4a070d1a7fe565d70285ebac17f1e20b30b37bf051e0f20574aa",
-    "X_mean_baseline.csv": "f99541b901cbcf2072e3276331ba279f75d401355dde4ae209b936ef6e27506e",
-    "X_missing.csv": "0d45ed4e3739759f68363f43c61d4f2c8211bb01dc05360c937d7ca43643cda2",
-    "evaluation_only/X_true_original.csv": "2a89668a5221dd34e7e8db698850c66345a0daade42975a0cb40c5d9c8d0e17f",
-    "evaluation_only/X_true_standardized.csv": "feaf67bfa2f7d0516d22848e890613c3f077dec4a9540f4d6c4e8a67c18040e3"
-  }
+    "X_cleaned.csv": "2a89668a5221dd34e7e8db698850c66345a0daade42975a0cb40c5d9c8d0e17f",
+    "X_cleaned_masked.csv": "3424ac1954666d67ecaed170fd563d05edbf44a927785a549e15c19fda1c09c8",
+    "X_cleaned_masked_standardized.csv": "0d45ed4e3739759f68363f43c61d4f2c8211bb01dc05360c937d7ca43643cda2",
+    "X_cleaned_standardized.csv": "feaf67bfa2f7d0516d22848e890613c3f077dec4a9540f4d6c4e8a67c18040e3",
+    "X_mean_baseline.csv": "f99541b901cbcf2072e3276331ba279f75d401355dde4ae209b936ef6e27506e"
+  },
+  "previous_metadata_sha256": "91ac782994113597a47fcaf897649a4c7783ff0f0ca743b4d65ba973baa94542"
 }

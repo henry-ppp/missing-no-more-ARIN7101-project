@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "dataset": "california_housing",
   "mode": "quick",
   "rate": 0.3,
@@ -3065,9 +3065,11 @@
   "artifact_sha256": {
     "mask_eval.csv": "a4d06000d42ba8884974cc27527a0e2d12efd0900cbaa3a7eec4154ec87c2096",
     "scaler_stats.json": "4e44c7d2a88300acbc599b2517cc3d75716973b826e3b19f84760da0d5778b45",
-    "X_mean_baseline.csv": "911785eb7a3d3ed9eeb616030df05ebe782644b44cd1975ce2196b3c4f7b198a",
-    "X_missing.csv": "115948a55dd49d7b0787a9fcb0f76ab465b8dec9ad121b0c580090b52fb1cf44",
-    "evaluation_only/X_true_original.csv": "63e519ed037e7e2b99c7e2f996b0c1320f60dcd96986456f2c061a3bfbdacc4c",
-    "evaluation_only/X_true_standardized.csv": "6f96cff521a05671b23238be78ab887641d46af8c692233be646a50ca5dcf676"
-  }
+    "X_cleaned.csv": "63e519ed037e7e2b99c7e2f996b0c1320f60dcd96986456f2c061a3bfbdacc4c",
+    "X_cleaned_masked.csv": "a9c6464e0020ff4ac4841d60ec4be299a1a7986dec91bb14c672fda4f313beaf",
+    "X_cleaned_masked_standardized.csv": "115948a55dd49d7b0787a9fcb0f76ab465b8dec9ad121b0c580090b52fb1cf44",
+    "X_cleaned_standardized.csv": "6f96cff521a05671b23238be78ab887641d46af8c692233be646a50ca5dcf676",
+    "X_mean_baseline.csv": "911785eb7a3d3ed9eeb616030df05ebe782644b44cd1975ce2196b3c4f7b198a"
+  },
+  "previous_metadata_sha256": "679c7777c608e6e818615a1d58b3c8c895592648aab31bdbb334e6c51d17d5ab"
 }

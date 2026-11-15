@@ -80,24 +80,42 @@ use a new --processed-dir. Preparation fails on damaged or incomplete caches.
 ```text
 data/
   raw/                     # uncleaned source caches
+  processed/<dataset>/cleaned/X_cleaned.csv
   processed/<dataset>/<quick|full>/rate_0.3_seed_0/
-    X_missing.csv
+    X_cleaned.csv
+    X_cleaned_masked.csv
+    X_cleaned_masked_standardized.csv
+    X_cleaned_standardized.csv
     X_mean_baseline.csv
     mask_eval.csv          # 1 = artificially hidden, 0 = observed
     scaler_stats.json
     metadata.json          # schema, row IDs, hashes, versions, cleaning, sampling
-    evaluation_only/
-      X_true_original.csv
-      X_true_standardized.csv
   output/<dataset>/<mode>/rate_0.3_seed_0/<model>/
     predictions.csv
 results/evaluation/<dataset>/<mode>/rate_0.3_seed_0/<model>/
   evaluation_<prediction_sha256>.json
 ```
 
-The Full configuration's `evaluation_only/X_true_original.csv` is the complete
-cleaned dataset in original units. All CSV matrices start with a `row_id` index
-column. Models use only:
+The preprocessing stages are:
+
+1. `cleaned/X_cleaned.csv`: the entire cleaned dataset in original units.
+2. Configuration `X_cleaned.csv`: the selected Quick or Full rows, still complete
+   and in original units. Full intentionally keeps a physical, byte-identical
+   copy of the dataset-level file.
+3. `X_cleaned_masked.csv`: the selected rows with MCAR cells blanked, in original units.
+4. `X_cleaned_masked_standardized.csv`: the model input, with the same missing cells.
+   Fit `scaler_stats.json` exclusively on the visible cells of the masked matrix.
+
+Evaluation uses `X_cleaned_standardized.csv`, the complete selected rows
+transformed with the **same observed-only scaler**, and `mask_eval.csv`.
+`X_mean_baseline.csv` fills the standardized input's missing entries with the
+observed-column means. `metadata.json` records row IDs, features, source hashes,
+and SHA-256 hashes of the other configuration files. For migrated snapshots,
+`previous_metadata_sha256` links to the original metadata digest recorded in
+historical DAE reports; those reports are preserved unchanged.
+
+All matrices start with a `row_id` index column. Models load only the standardized
+incomplete matrix:
 
 ```python
 from data_preprocessing.prepare_all import load_model_input
@@ -112,8 +130,8 @@ standardized scale. Fill all evaluation-hidden entries with finite predictions;
 observed entries may be copied unchanged. Do not sample, remask or fit an external
 scaler independently. Ground truth is accessible only via evaluator code after
 predictions exist; never use it for training or hyperparameter selection. The
-model loader returns only incomplete observations. The evaluation_only directory
-is an API separation, not an operating-system security boundary.
+model loader returns only incomplete observations. This is an API boundary;
+the complete matrices are visible on disk.
 
 Historical scripts in models/deep_learning preserve the earlier experimental
 protocol and datasets/results. They are not runners for this new benchmark. Use
@@ -161,4 +179,4 @@ These source releases are labeled [CC BY 4.0](https://creativecommons.org/licens
 | Superconductivity | Kam Hamidieh, [UCI Superconductivty Data](https://doi.org/10.24432/C53P47) ([source and license](https://archive.ics.uci.edu/dataset/464/superconductivty+data)) | Raw API table exported to CSV. |
 | Gas Turbine | [UCI Gas Turbine CO and NOx Emission Data Set](https://doi.org/10.24432/C5WC95) ([source and license](https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set)) | Five original yearly CSVs retained byte-for-byte. |
 
-For all four sources, the derived files select the documented features, clean and select rows, then mask and scale values. Baseline and DAE prediction matrices additionally fill missing cells. Raw-file checksums and source metadata are next to the CSVs. `evaluation_only/` is publicly visible in Git, so the separation is an experiment protocol: model code may read only the incomplete input and never use truth values for fitting or tuning.
+For all four sources, the derived files select the documented features, clean and select rows, then mask and scale values. Baseline and DAE prediction matrices additionally fill missing cells. Raw-file checksums and source metadata are next to the CSVs. The complete matrices are publicly visible in Git, so the separation is an experiment protocol: model code may read only the incomplete input and never use truth values for fitting or tuning.

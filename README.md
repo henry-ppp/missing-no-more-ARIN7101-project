@@ -18,7 +18,7 @@ Clone or update `dev` to use the **actual shared raw data and prepared Quick/Ful
 ```text
 data/
   raw/                  Source CSVs and provenance metadata
-  processed/            Quick/Full inputs, masks, scalers, mean baseline and evaluation-only truth
+  processed/            Full cleaned source plus Quick/Full inputs, masks, scalers, baseline and ground truth
   output/               Model predictions and run metadata
 data_preprocessing/     Shared dataset preparation
 meeting_notes/          Second/third meeting notes and archived dataset research
@@ -53,7 +53,7 @@ Without an NVIDIA-compatible setup, skip the CUDA installation line; the experim
 
 ## Use the shared benchmark
 
-Read `data/processed/<dataset>/<quick|full>/rate_0.3_seed_0/X_missing.csv` with `data_preprocessing.prepare_all.load_model_input`. Fit only on the incomplete matrix. Export standardized predictions with the exact same feature columns and `row_id` index under `data/output/`; do not use the evaluation-only ground truth for training or model selection.
+Read `data/processed/<dataset>/<quick|full>/rate_0.3_seed_0/X_cleaned_masked_standardized.csv` with `data_preprocessing.prepare_all.load_model_input`. Fit only on the incomplete matrix. Export standardized predictions with the exact same feature columns and `row_id` index under `data/output/`; do not use the evaluation-only ground truth for training or model selection.
 
 To reproduce the data independently, the pipeline loads the checked-in raw CSVs:
 
@@ -63,6 +63,8 @@ python -m data_preprocessing.prepare_all --mode full --skip-download
 ```
 
 These commands verify and reuse the published snapshot. To regenerate into a fresh directory, add `--processed-dir <new-directory>` to both commands. `dataset_config.py` fixes schemas, `download.py` resolves official sources or the pinned California export, and `clean.py` selects numerical columns, drops invalid records and selects Quick/Full rows deterministically. `mask.py` creates the shared evaluation mask, `standardize.py` fits per-feature Z scores using observed cells only, `mean_baseline.py` fills missing cells by observed column mean, and `prepare_all.py` coordinates and exports those steps.
+
+The flow is raw data → dataset-level `cleaned/X_cleaned.csv` → Quick/Full `X_cleaned.csv` → `X_cleaned_masked.csv` → `X_cleaned_masked_standardized.csv`. Evaluation reads the separate complete `X_cleaned_standardized.csv`, transformed with the same scaler fitted to the masked matrix's visible cells. See the [file layout](data/README.md#files-and-commands).
 
 ## Train and evaluate DAE V2
 

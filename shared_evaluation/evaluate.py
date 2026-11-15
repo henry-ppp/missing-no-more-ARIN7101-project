@@ -2,7 +2,7 @@
 import argparse
 import json
 from pathlib import Path
-from data_preprocessing.dataset_config import DATASETS, config_path
+from data_preprocessing.dataset_config import DATASETS, EVALUATION_TRUTH, config_path
 from data_preprocessing.prepare_all import read_matrix
 from data_preprocessing.download import sha256
 from .metrics import rmse, mae, r2, relative_improvement
@@ -23,7 +23,7 @@ def evaluate_files(dataset, mode, rate, seed, predictions, processed_dir='data/p
     for filename, digest in metadata['artifact_sha256'].items():
         if sha256(directory / filename) != digest:
             raise ValueError(f'Benchmark artifact was modified: {filename}')
-    truth = read_matrix(directory / 'evaluation_only' / 'X_true_standardized.csv')
+    truth = read_matrix(directory / EVALUATION_TRUTH)
     if truth.index.tolist() != metadata['row_ids'] or list(truth.columns) != metadata['features']:
         raise ValueError('Ground truth identifiers differ from metadata')
     mask = read_matrix(directory / 'mask_eval.csv')

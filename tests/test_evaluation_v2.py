@@ -42,7 +42,7 @@ def prepared(root, dataset, X, raw_target=None):
         raw_hashes = {'source.csv': sha256(raw / 'source.csv')}
     directory = config_path(root / 'processed', dataset, 'quick', 0.3, 0)
     export_configuration(X, dataset, 'quick', 0.3, 0, directory, {}, raw_hashes)
-    truth = read_matrix(directory / 'evaluation_only' / 'X_true_standardized.csv')   # test-only shortcut
+    truth = read_matrix(directory / 'X_cleaned_standardized.csv')   # test-only shortcut
     return directory, truth, read_matrix(directory / 'mask_eval.csv').astype(bool)
 
 

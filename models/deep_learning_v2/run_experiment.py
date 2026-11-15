@@ -8,7 +8,7 @@ import time
 import traceback
 import pandas as pd
 import torch
-from data_preprocessing.dataset_config import DATASETS, config_path
+from data_preprocessing.dataset_config import DATASETS, MODEL_INPUT, config_path
 from data_preprocessing.download import sha256
 from data_preprocessing.prepare_all import load_model_input
 from .train import TrainConfig, fit
@@ -40,7 +40,7 @@ def run(dataset, mode='quick', rate=0.3, seed=0, config=TrainConfig(),
     incomplete = load_model_input(benchmark)
     if list(incomplete.columns) != metadata['features'] or incomplete.index.tolist() != metadata['row_ids']:
         raise ValueError('Shared input identifiers differ from benchmark metadata')
-    if sha256(benchmark / 'X_missing.csv') != metadata['artifact_sha256']['X_missing.csv']:
+    if sha256(benchmark / MODEL_INPUT) != metadata['artifact_sha256'][MODEL_INPUT]:
         raise ValueError('Shared input file was modified')
     tag = benchmark.name
     result_folder = Path(results_dir) / 'dae_v2' / mode / dataset / tag / run_id
@@ -53,7 +53,7 @@ def run(dataset, mode='quick', rate=0.3, seed=0, config=TrainConfig(),
     print(f'Training {dataset} {mode}: {incomplete.shape}', flush=True)
     model, training, history, validation_mask = fit(incomplete, config)
     model.feature_names = list(incomplete.columns)
-    training['input_sha256'] = sha256(benchmark / 'X_missing.csv')
+    training['input_sha256'] = sha256(benchmark / MODEL_INPUT)
     training['benchmark_metadata_sha256'] = sha256(metadata_file)
     training['code_commit'] = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
     checkpoint = Path(results_dir) / 'dae_v2' / 'checkpoints' / mode / dataset / tag / run_id / 'best.pt'

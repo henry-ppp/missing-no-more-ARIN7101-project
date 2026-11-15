@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "dataset": "gas_turbine",
   "mode": "quick",
   "rate": 0.3,
@@ -3079,9 +3079,11 @@
   "artifact_sha256": {
     "mask_eval.csv": "6d08c7eeb3c58f1b84cd2e9876a8a9941ec5765a0c56f91dde22f92afc0f7b3b",
     "scaler_stats.json": "5ed225e1560662679c5c2aa877601f46739e4c4d9dcd8bb73d9884fe851aa0d1",
-    "X_mean_baseline.csv": "17c8fb85fa68687bf21abdf9d09bcd87eda20ad5f9c3e3cbaee571e2d62be57c",
-    "X_missing.csv": "a105c628becac8cec1c52f675fe2de3f3ad230dbf3699a48c20ebe88e6f01ea4",
-    "evaluation_only/X_true_original.csv": "bf2173e2c017cbb958f6937d338ee0bca8e981c1788aeb32de4cbe4b76018f0b",
-    "evaluation_only/X_true_standardized.csv": "2605ca757c19c6e79a132c337c53f290022dd0611c9a8adbea6bf419e6946e91"
-  }
+    "X_cleaned.csv": "bf2173e2c017cbb958f6937d338ee0bca8e981c1788aeb32de4cbe4b76018f0b",
+    "X_cleaned_masked.csv": "d204098d6478de04c2b9a20ab568a85af99eb451321a843e582eb2431fa22797",
+    "X_cleaned_masked_standardized.csv": "a105c628becac8cec1c52f675fe2de3f3ad230dbf3699a48c20ebe88e6f01ea4",
+    "X_cleaned_standardized.csv": "2605ca757c19c6e79a132c337c53f290022dd0611c9a8adbea6bf419e6946e91",
+    "X_mean_baseline.csv": "17c8fb85fa68687bf21abdf9d09bcd87eda20ad5f9c3e3cbaee571e2d62be57c"
+  },
+  "previous_metadata_sha256": "f835b53a88507af8a95f987041fd0f66e4b2af66d5889fe3ba5f4fe2c07e2870"
 }

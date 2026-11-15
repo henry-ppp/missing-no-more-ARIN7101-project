@@ -3,12 +3,13 @@ import argparse
 import json
 import platform
 import csv
+from shutil import copyfile
 from importlib.metadata import version, PackageNotFoundError
 from dataclasses import asdict
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from .dataset_config import DATASETS, config_path
+from .dataset_config import DATASETS, EVALUATION_TRUTH, MODEL_INPUT, config_path
 from .download import download, load_raw, sha256
 from .clean import clean, select_rows
 from .mask import mcar_mask, apply_mask
@@ -31,10 +32,10 @@ def read_matrix(path):
 def load_model_input(directory):
     """Return only incomplete standardized input. Never opens evaluator files.
 
-    This API boundary is not OS access control. Do not give training code the
-    evaluation_only directories or use hidden values in model selection.
+    This API boundary is not OS access control. Do not use complete matrices
+    or hidden values in training or model selection.
     """
-    return read_matrix(Path(directory) / 'X_missing.csv')
+    return read_matrix(Path(directory) / MODEL_INPUT)
 
 def export_configuration(full, dataset, mode, rate, seed, directory, cleaning, raw_hashes):
     config_path('.', dataset, mode, rate, seed)
@@ -49,12 +50,20 @@ def export_configuration(full, dataset, mode, rate, seed, directory, cleaning, r
     stats = fit_observed(missing)
     standardized = transform(missing, stats)
     baseline = mean_impute(standardized)
+    cleaned = directory.parent.parent / 'cleaned' / 'X_cleaned.csv'
+    if cleaned.exists():
+        pd.testing.assert_frame_equal(read_matrix(cleaned), full, check_dtype=False, rtol=1e-14, atol=1e-14)
+    else:
+        cleaned.parent.mkdir(parents=True, exist_ok=True)
+        full.to_csv(cleaned, index_label='row_id')
     directory.mkdir(parents=True)
-    private = directory / 'evaluation_only'
-    private.mkdir()
-    selected.to_csv(private / 'X_true_original.csv', index_label='row_id')
-    transform(selected, stats).to_csv(private / 'X_true_standardized.csv', index_label='row_id')
-    standardized.to_csv(directory / 'X_missing.csv', index_label='row_id')
+    if mode == 'full':
+        copyfile(cleaned, directory / 'X_cleaned.csv')
+    else:
+        selected.to_csv(directory / 'X_cleaned.csv', index_label='row_id')
+    missing.to_csv(directory / 'X_cleaned_masked.csv', index_label='row_id')
+    transform(selected, stats).to_csv(directory / EVALUATION_TRUTH, index_label='row_id')
+    standardized.to_csv(directory / MODEL_INPUT, index_label='row_id')
     baseline.to_csv(directory / 'X_mean_baseline.csv', index_label='row_id')
     mask.astype(int).to_csv(directory / 'mask_eval.csv', index_label='row_id')
     (directory / 'scaler_stats.json').write_text(json.dumps(stats, indent=2), encoding='utf-8')
@@ -64,7 +73,7 @@ def export_configuration(full, dataset, mode, rate, seed, directory, cleaning, r
             package_versions[package] = version(package)
         except PackageNotFoundError:
             package_versions[package] = None
-    metadata = {'schema_version': 1, 'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed,
+    metadata = {'schema_version': 2, 'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed,
         'dataset_config': asdict(DATASETS[dataset]), 'features': list(selected.columns),
         'row_ids': selected.index.tolist(), 'selected_rows': len(selected),
         'quick_under_limit': mode == 'quick' and len(full) < 3000,
@@ -81,11 +90,16 @@ def prepare(dataset, mode='quick', rate=0.3, seed=0, raw_dir='data/raw', process
     destination = config_path(processed_dir, dataset, mode, rate, seed)
     if destination.exists():
         metadata = json.loads((destination / 'metadata.json').read_text(encoding='utf-8'))
+        if metadata.get('schema_version') != 2:
+            raise ValueError('Unsupported cached schema; use the migrated snapshot or a fresh processed root')
         if any(metadata[k] != v for k, v in {'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed}.items()):
             raise ValueError('Cached metadata mismatch')
         for filename, digest in metadata['artifact_sha256'].items():
             if sha256(destination / filename) != digest:
                 raise ValueError(f'Changed artifact {filename}; use a fresh processed root')
+        cleaned = destination.parent.parent / 'cleaned' / 'X_cleaned.csv'
+        if not cleaned.is_file() or (mode == 'full' and sha256(cleaned) != metadata['artifact_sha256']['X_cleaned.csv']):
+            raise ValueError('Dataset-level cleaned file is missing or differs from Full')
         return destination
     if not skip_download:
         download(dataset, raw_dir)
