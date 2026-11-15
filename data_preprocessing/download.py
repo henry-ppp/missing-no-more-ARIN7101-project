@@ -8,6 +8,10 @@ from io import BytesIO
 import pandas as pd
 from .dataset_config import DATASETS
 
+CALIFORNIA_RELEASE = 'https://doi.org/10.17632/hhb6nwfft8.1'
+CALIFORNIA_CSV = 'https://data.mendeley.com/public-files/datasets/hhb6nwfft8/files/891e5207-9af4-48d6-b52d-1786310ef8a5/file_downloaded'
+CALIFORNIA_SHA256 = '94ef369b909f5c725340b512b7c9a05c1550a554b6592d29303990e3ba521a1f'
+
 def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -35,6 +39,7 @@ def download(dataset, raw_dir='data/raw'):
         clean(dataset, frame)
         return folder
     folder.mkdir(parents=True, exist_ok=True)
+    release = {}
     try:
         if dataset == 'gas_turbine':
             url = 'https://archive.ics.uci.edu/static/public/551/gas+turbine+co+and+nox+emission+data+set.zip'
@@ -52,9 +57,14 @@ def download(dataset, raw_dir='data/raw'):
                     (folder / name).write_bytes(data)
             (folder / 'original.zip').write_bytes(content)
         elif dataset == 'california_housing':
-            from sklearn.datasets import fetch_california_housing
-            bunch = fetch_california_housing(data_home=str(folder / 'sklearn_cache'), as_frame=True)
-            bunch.frame.to_csv(folder / 'source.csv', index=False)
+            # Licensed, versioned CSV export of the same scikit-learn dataset.
+            with urlopen(CALIFORNIA_CSV, timeout=120) as response:
+                content = response.read()
+            if hashlib.sha256(content).hexdigest() != CALIFORNIA_SHA256:
+                raise ValueError('California Housing release checksum mismatch')
+            (folder / 'source.csv').write_bytes(content)
+            release = {'release': CALIFORNIA_RELEASE, 'license': 'CC BY 4.0',
+                       'storage': 'Byte-identical Deshpande CSV export of scikit-learn California Housing'}
         else:
             try:
                 from ucimlrepo import fetch_ucirepo
@@ -66,7 +76,8 @@ def download(dataset, raw_dir='data/raw'):
         clean(dataset, frame)
         (folder / 'source_metadata.json').write_text(json.dumps({
             'source': config.source, 'uci_id': config.uci_id, 'rows': len(frame),
-            'sha256': hashes, 'storage': 'Original yearly CSV bytes for gas; uncleaned API table export otherwise'
+            'sha256': hashes, 'storage': 'Original yearly CSV bytes for gas; uncleaned API table export otherwise',
+            **release
         }, indent=2), encoding='utf-8')
     except Exception as exc:
         raise RuntimeError(f'Download/validation failed for {dataset} from {config.source}: {exc}') from exc

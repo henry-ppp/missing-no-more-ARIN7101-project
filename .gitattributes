@@ -1,0 +1,3 @@
+data/raw/** -text
+data/processed/** -text
+data/output/** -text

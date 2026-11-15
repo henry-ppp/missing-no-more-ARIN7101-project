@@ -72,7 +72,7 @@ def export_configuration(full, dataset, mode, rate, seed, directory, cleaning, r
         'sampling': 'default_rng choice without replacement, sorted original positions',
         'standardization': 'Observed only; population std; zero std uses scale=1; no observed values raises error',
         'versions': {'python': platform.python_version(), 'numpy': np.__version__, 'pandas': pd.__version__, **package_versions}}
-    metadata['artifact_sha256'] = {str(p.relative_to(directory)): sha256(p)
+    metadata['artifact_sha256'] = {p.relative_to(directory).as_posix(): sha256(p)
         for p in directory.rglob('*') if p.is_file()}
     (directory / 'metadata.json').write_text(json.dumps(metadata, indent=2), encoding='utf-8')
     return directory
