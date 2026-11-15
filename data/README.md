@@ -1,7 +1,7 @@
 # Shared imputation benchmark data
 
 The four datasets below are fixed. Numbers are original published row counts;
-complete-case cleaning can reduce them. No dataset has been downloaded in this change.
+complete-case cleaning retained every row in the published snapshot. The raw CSVs, Quick and Full benchmark files (30% MCAR, seed 0), and DAE predictions are included in Git. Teammates should use the shared matrices directly; no download or preprocessing is required.
 Full ordered schemas and exclusions live in `data_preprocessing/dataset_config.py`.
 
 | Key | Official dataset / source | Original rows | Inputs | Raw cache |
@@ -33,9 +33,9 @@ Full ordered schemas and exclusions live in `data_preprocessing/dataset_config.p
   MCAR reconstruction and does not claim comparable supervised results.
 
 For credit/superconductivity use ucimlrepo.fetch_ucirepo IDs 350/464; California
-uses sklearn.datasets.fetch_california_housing. Raw API tables are exported
+uses the pinned [Deshpande v1 export](https://doi.org/10.17632/hhb6nwfft8.1), verified value-for-value against scikit-learn fetch_california_housing. Raw UCI API tables are exported
 without cleaning (not claimed to be byte-identical source spreadsheets).
-Gas yearly bytes and original ZIP are preserved. Source URL, row count and raw
+Gas yearly bytes are preserved; the redundant ZIP is kept in the local cache only. Source URL, row count and raw
 SHA256 fingerprints identify the downloaded snapshot; upstream datasets are not
 pinned to an immutable server version. Downloads are explicit and never run on
 import. A complete valid local cache is reused; incomplete caches are refetched.
@@ -73,8 +73,7 @@ python -m data_preprocessing.prepare_all --mode full --datasets credit_card gas_
 python -m data_preprocessing.prepare_all --mode quick --skip-download --raw-dir data/raw --processed-dir data/processed
 ```
 
-These commands download data unless --skip-download is given. They are for future
-use and were not run against real data during this task. Existing processed
+On a checkout, the source CSVs are already present. The commands reuse them and only download missing sources when --skip-download is absent. Existing processed
 configurations are verified and reused, never remasked for each model. To rebuild,
 use a new --processed-dir. Preparation fails on damaged or incomplete caches.
 
@@ -93,7 +92,8 @@ data/
       X_true_standardized.csv
   output/<dataset>/<mode>/rate_0.3_seed_0/<model>/
     predictions.csv
-    evaluation_<prediction_sha256>.json
+results/evaluation/<dataset>/<mode>/rate_0.3_seed_0/<model>/
+  evaluation_<prediction_sha256>.json
 ```
 
 All CSV matrices start with a `row_id` index column. Models use only:
@@ -118,10 +118,10 @@ Historical scripts in models/deep_learning preserve the earlier experimental
 protocol and datasets/results. They are not runners for this new benchmark. Use
 the shared loader and evaluator for all new comparisons. Existing imputer classes
 are unchanged; any internal scaling must return predictions in input scale.
-Deep learning V2 is deliberately empty.
+DAE V2 uses the shared loader. See the [project README](../README.md) for commands.
 
 ```bash
-python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --model dae --predictions data/output/credit_card/quick/rate_0.3_seed_0/dae/predictions.csv
+python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --model dae_v2 --predictions data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv
 ```
 
 The CLI supports --processed-dir and --output-dir, verifies metadata/artifact
@@ -144,8 +144,20 @@ hidden predictions, invalid masks, empty masks and mismatched IDs are errors.
 temporary synthetic fixtures; no downloading or training. Original shared MCAR
 and RMSE/MAE code was adopted and extended. NumPy, pandas, scikit-learn,
 ucimlrepo, PyTorch and the linked dataset authors must be acknowledged in the
-presentation. This infrastructure and benchmark design do not constitute real
-experimental results. Course guidance requires original contributions and clear
+presentation. Actual DAE experiment results are in [results/](../results/). Course guidance requires original contributions and clear
 external attribution, appropriate statistics, a 15-20 minute group video and PDF
 slides. Additional statistical analysis across repeated seeds belongs to future
 experiments; do not treat a single run as evidence of significance.
+
+## Dataset redistribution and attribution
+
+These source releases are labeled [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The license applies to the datasets under their respective terms; the corresponding derived artifacts are marked as modified below.
+
+| Dataset | Attribution and release | Changes in this repository |
+| --- | --- | --- |
+| Credit Card Default | I-Cheng Yeh, [UCI Default of Credit Card Clients](https://doi.org/10.24432/C55S3H) ([source and license](https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients)) | Raw API table exported to CSV. |
+| California Housing | R. Kelley Pace and Ronald Barry (1997), StatLib / 1990 U.S. Census; Vrushali Deshpande, [Scikit-learn CSV Export, v1](https://data.mendeley.com/datasets/hhb6nwfft8/1) | Raw CSV retained byte-for-byte from the licensed release. |
+| Superconductivity | Kam Hamidieh, [UCI Superconductivty Data](https://doi.org/10.24432/C53P47) ([source and license](https://archive.ics.uci.edu/dataset/464/superconductivty+data)) | Raw API table exported to CSV. |
+| Gas Turbine | [UCI Gas Turbine CO and NOx Emission Data Set](https://doi.org/10.24432/C5WC95) ([source and license](https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set)) | Five original yearly CSVs retained byte-for-byte. |
+
+For all four sources, the derived files select the documented features, clean and select rows, then mask and scale values. Baseline and DAE prediction matrices additionally fill missing cells. Raw-file checksums and source metadata are next to the CSVs. `evaluation_only/` is publicly visible in Git, so the separation is an experiment protocol: model code may read only the incomplete input and never use truth values for fitting or tuning.

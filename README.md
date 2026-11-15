@@ -1,27 +1,84 @@
 # Missing No More
 
-Tabular data imputation for ARIN 7101. Work on `dev`. Blith, Hamad, and Henry each have their own folder. Yicheng and Eric share `models/deep_learning/`.
+HKU ARIN7101: Statistics in Artificial Intelligence group project. We compare numerical tabular imputation methods by hiding observed cells completely at random (MCAR). Each method receives the same incomplete matrix and is scored on the same hidden cells. Work is shared on `dev`.
 
-| Folder | Method | Owner |
-| --- | --- | --- |
-| `models/random_forest/` | Random forest | Blith |
-| `models/knn/` | k-nearest neighbours | Hamad |
-| `models/deep_learning/` | Deep learning | Yicheng, Eric |
-| `models/iterative/` | Iterative model | Henry |
+Clone or update `dev` to use the **actual shared raw data and prepared Quick/Full matrices**. The published benchmark uses 30% MCAR and seed 0. Teammates can load the prepared matrices directly without downloading or rerunning preprocessing.
 
-Put shared datasets in `data/`. Those files are not committed.
+| Data | Published rows | Cleaned rows | Features | Quick rows |
+| --- | ---: | ---: | ---: | ---: |
+| Credit Card Default | 30,000 | 30,000 | 14 | 3,000 |
+| California Housing | 20,640 | 20,640 | 8 | 3,000 |
+| Superconductivity | 21,263 | 21,263 | 81 | 3,000 |
+| Gas Turbine CO & NOx | 36,733 | 36,733 | 11 | 3,000 |
 
-Compare methods with the same hidden cells. From the repo root:
+[Dataset sources, licenses, feature lists and CSV contract](data/README.md) · [Preprocessing manifest](results/preprocessing/benchmark_manifest.csv)
 
-```python
-from data_preprocessing.mask import apply_mask, mcar_mask
-from shared_evaluation.metrics import mae, rmse
+## Repository map
 
-mask = mcar_mask(X, rate=0.2, seed=0)
-X_missing = apply_mask(X, mask)
-# Impute X_missing with your own method, then score against the original X.
-rmse(X, imputed, mask)
-mae(X, imputed, mask)
+```text
+data/
+  raw/                  Source CSVs and provenance metadata
+  processed/            Quick/Full inputs, masks, scalers, mean baseline and evaluation-only truth
+  output/               Model predictions and run metadata
+data_preprocessing/     Shared dataset preparation
+meeting_notes/          Second/third meeting notes and archived dataset research
+models/
+  deep_learning/        Existing AE, VAE and GAIN implementations (Yicheng and Eric)
+  deep_learning_v2/     Mask-trained Denoising Autoencoder (DAE V2)
+  iterative/            Implemented iterative imputer and historical results (Henry)
+  knn/                  K-nearest neighbours placeholder (Hamad)
+  random_forest/        Random Forest / MissForest placeholder (Blith)
+shared_evaluation/      Four-metric evaluator and separate teammate evaluation V2
+results/                Training histories, evaluations and summaries; checkpoints stay local
+tests/                  Automated data, model and evaluation checks
 ```
 
-Use seed `0` and missing rates `0.1`, `0.2`, `0.3`, and `0.5`. Pass numeric columns. `rmse` and `mae` score only the cells the mask hid.
+[Meeting notes](meeting_notes/) record group decisions. The [archived dataset research](meeting_notes/DEPRECATED_DATASETS_MEETING.md) was moved by the team; [data/README.md](data/README.md) is the active dataset specification.
+
+## Environment
+
+Use Python 3.12. The benchmark ran on Windows with Python 3.12.14, PyTorch 2.11.0+cu128, NumPy 2.5.4, pandas 3.1.1, scikit-learn 1.9.1, SciPy 1.18.1 and ucimlrepo 0.0.7. On Windows PowerShell:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+# Optional: choose a CUDA build compatible with your NVIDIA driver before installing the other requirements.
+python -m pip install "torch==2.11.0+cu128" --index-url https://download.pytorch.org/whl/cu128
+python -m pip install -r requirements.txt
+python -c "import torch; print(torch.__version__, torch.version.cuda); print(torch.cuda.get_device_name(0), torch.ones(2, device='cuda').sum().item()) if torch.cuda.is_available() else print('CUDA unavailable')"
+python -m unittest discover -s tests -v
+```
+
+Without an NVIDIA-compatible setup, skip the CUDA installation line; the experiment runner uses CPU automatically when CUDA is unavailable, or accepts `--device cpu`.
+
+## Use the shared benchmark
+
+Read `data/processed/<dataset>/<quick|full>/rate_0.3_seed_0/X_missing.csv` with `data_preprocessing.prepare_all.load_model_input`. Fit only on the incomplete matrix. Export standardized predictions with the exact same feature columns and `row_id` index under `data/output/`; do not use the evaluation-only ground truth for training or model selection.
+
+To reproduce the data independently, the pipeline loads the checked-in raw CSVs:
+
+```bash
+python -m data_preprocessing.prepare_all --mode quick --skip-download
+python -m data_preprocessing.prepare_all --mode full --skip-download
+```
+
+These commands verify and reuse the published snapshot. To regenerate into a fresh directory, add `--processed-dir <new-directory>` to both commands. `dataset_config.py` fixes schemas, `download.py` resolves official sources or the pinned California export, and `clean.py` selects numerical columns, drops invalid records and selects Quick/Full rows deterministically. `mask.py` creates the shared evaluation mask, `standardize.py` fits per-feature Z scores using observed cells only, `mean_baseline.py` fills missing cells by observed column mean, and `prepare_all.py` coordinates and exports those steps.
+
+## Train and evaluate DAE V2
+
+```bash
+python -m models.deep_learning_v2.run_experiment --mode quick --rate 0.3 --seed 0 --run-id reproduction
+python -m models.deep_learning_v2.run_experiment --mode full --rate 0.3 --seed 0 --run-id reproduction
+```
+
+The MLP encoder-decoder receives zero-filled standardized values and a visibility mask. Each training batch hides more originally observed cells; only those extra hidden cells contribute to masked MSE. Early stopping uses a separate fixed holdout of observed cells excluded from training inputs and targets. At inference only missing cells are replaced. Default settings: Adam, learning rate 0.001, batch size 256, 30% extra training masking, 10% observed validation holdout, ReLU, dropout 0.05, and at most 150 epochs with patience 20. Hidden widths and bottleneck vary with feature count. `--run-id` prevents overwriting earlier runs.
+
+The shared evaluator loads the configuration's truth, evaluation mask and mean baseline directly from `data/processed/`. Given an aligned CSV it computes standardized RMSE and MAE, macro per-feature R², and relative RMSE improvement against mean imputation. Results only use hidden cells and are saved to `results/evaluation/`. Use the `evaluate()` Python API for in-memory matrices, or run:
+
+```bash
+python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --model dae_v2 --predictions data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv
+```
+
+See [DAE benchmark results](results/summary/dae_v2_benchmark.csv), [training histories and configurations](results/dae_v2/), and the separate [evaluation V2 documentation](shared_evaluation/EVALUATION_V2.md). The initial experiment uses one seed and a transductive missing-cell holdout; these scores do not measure generalization to unseen rows or establish significance across seeds. Credits and change notices for the datasets are in [data/README.md](data/README.md). The project uses NumPy, pandas, PyTorch, SciPy, scikit-learn and ucimlrepo.
+
+California Housing Quick has an unusually large RMSE because one hidden `AveOccup` value is about 1,314 observed standard deviations from its observed mean. That cell contributes 99.35% of the mean baseline's squared error for this configuration. The published data retain this observation; inspect MAE and macro R² alongside RMSE.
