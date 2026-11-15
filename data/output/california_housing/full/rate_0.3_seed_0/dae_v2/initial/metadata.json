@@ -8,5 +8,5 @@
   "benchmark_metadata_sha256": "2fbda2cdce1e56785f6af8aa72dff41ad158b5abcc7af24cf8fb408b625c7fca",
   "input_sha256": "706fc2d3788631efc800c865f6d638eb5fba94d1c83c8fef070b5a5a6ad5b600",
   "prediction_sha256": "159ff64a44f44787a17ead4740f8bed9e901e99b742231f36992266792eeea37",
-  "checkpoint": "results/dae_v2/checkpoints/full/california_housing/rate_0.3_seed_0/initial/best.pt"
+  "checkpoint": "results/dae_v2/training/checkpoints/california_housing/full/rate_0.3_seed_0/initial/best.pt"
 }

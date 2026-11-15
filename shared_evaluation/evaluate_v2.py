@@ -26,7 +26,8 @@ Command line, from the repository root, once predictions.csv files exist (one or
         --downstream
 
 A model is named after its folder, or give NAME=PATH. Results go to
-data/output/<dataset>/<mode>/rate_<r>_seed_<s>/evaluation_v2_<hash>.json.
+data/output/<dataset>/<mode>/rate_<r>_seed_<s>/evaluation_v2_<hash>.json for standalone comparisons.
+For a formal report, add --model MODEL --run-id ID to save under results/MODEL/evaluation/.
 
 In Python:
 
@@ -49,6 +50,7 @@ from sklearn.model_selection import KFold, StratifiedKFold, cross_val_predict
 from data_preprocessing.dataset_config import DATASETS, EVALUATION_TRUTH, config_path
 from data_preprocessing.download import sha256
 from data_preprocessing.prepare_all import read_matrix
+from .result_paths import evaluation_directory, write_report
 from .metrics_v2 import mae, r2, relative_improvement, rmse, validate, wasserstein
 
 SCORES = ('rmse', 'mae', 'r2', 'relative_improvement', 'wasserstein', 'wasserstein_improvement')
@@ -246,8 +248,8 @@ def load_benchmark(dataset, mode, rate, seed, processed_dir='data/processed'):
     return directory, metadata, truth, read_matrix(directory / 'mask_eval.csv'), read_matrix(directory / 'X_mean_baseline.csv')
 
 
-def evaluate_files(dataset, mode, rate, seed, predictions, processed_dir='data/processed', output_dir='data/output',
-                   n_boot=1000, boot_seed=0, level=0.95, run_downstream=False, raw_dir='data/raw', n_splits=5):
+def evaluate_files(dataset, mode, rate, seed, predictions, processed_dir='data/processed', output_dir=None,
+                   n_boot=1000, boot_seed=0, level=0.95, run_downstream=False, raw_dir='data/raw', n_splits=5, *, model=None, run_id='standalone'):
     """Scores saved prediction files ({model name: path}) for one configuration and writes one JSON report."""
     if not predictions:
         raise ValueError('Give at least one prediction file')
@@ -273,10 +275,14 @@ def evaluate_files(dataset, mode, rate, seed, predictions, processed_dir='data/p
     settings = {'predictions': {n: v['sha256'] for n, v in report['predictions'].items()}, 'n_boot': n_boot,
                 'boot_seed': boot_seed, 'level': level, 'downstream': run_downstream, 'n_splits': n_splits}
     digest = hashlib.sha256(json.dumps(settings, sort_keys=True).encode()).hexdigest()[:16]
-    target = config_path(output_dir, dataset, mode, rate, seed)
-    target.mkdir(parents=True, exist_ok=True)
+    if model is None:
+        target = config_path('data/output' if output_dir is None else output_dir, dataset, mode, rate, seed)
+    else:
+        target = evaluation_directory('results' if output_dir is None else output_dir,
+                                      model, dataset, mode, rate, seed, run_id)
+        report.update(model=model, run_id=run_id)
     output = target / f'evaluation_v2_{digest}.json'
-    output.write_text(json.dumps(report, indent=2, allow_nan=False), encoding='utf-8')
+    write_report(output, report)
     return report, output
 
 
@@ -330,7 +336,9 @@ def main():
     parser.add_argument('--n-splits', type=int, default=5)
     parser.add_argument('--raw-dir', default='data/raw')
     parser.add_argument('--processed-dir', default='data/processed')
-    parser.add_argument('--output-dir', default='data/output')
+    parser.add_argument('--model', help='Store a formal report under this model; omit for a standalone comparison')
+    parser.add_argument('--run-id', default='standalone')
+    parser.add_argument('--output-dir', help='Override the results root, or the standalone output root if no model is given')
     args = parser.parse_args()
     try:
         predictions = parse_predictions(args.predictions)
@@ -338,7 +346,7 @@ def main():
         parser.error(str(exc))
     report, output = evaluate_files(args.dataset, args.mode, args.rate, args.seed, predictions, args.processed_dir,
                                     args.output_dir, args.n_boot, args.boot_seed, args.level, args.downstream,
-                                    args.raw_dir, args.n_splits)
+                                    args.raw_dir, args.n_splits, model=args.model, run_id=args.run_id)
     print(summary_table(report))
     print(f'Saved {output}')
 

@@ -8,5 +8,5 @@
   "benchmark_metadata_sha256": "96e518dbc4dadc3232b241f893cf6ce4a8740c9b9063b7a695d5bd8080396417",
   "input_sha256": "da34bcae72d0dc193f864a144ce46e7d5a583b110dadd30d9956786e293fb3fe",
   "prediction_sha256": "afb888142c60946eff49a24858141097da7a73f436b5c19234afe6e451592074",
-  "checkpoint": "results/dae_v2/checkpoints/quick/superconductivity/rate_0.3_seed_0/initial/best.pt"
+  "checkpoint": "results/dae_v2/training/checkpoints/superconductivity/quick/rate_0.3_seed_0/initial/best.pt"
 }

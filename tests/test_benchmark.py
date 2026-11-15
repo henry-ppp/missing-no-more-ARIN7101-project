@@ -105,12 +105,12 @@ class BenchmarkTests(unittest.TestCase):
             self.assertTrue(model_input.isna().any().any())
             predictions = root / 'mean_predictions.csv'
             model_input.fillna(model_input.mean()).to_csv(predictions)
-            results, output = evaluate_files('california_housing', 'quick', .3, 0, predictions, processed, root / 'output')
+            results, output = evaluate_files('california_housing', 'quick', .3, 0, predictions, processed, root / 'output', model='mean')
             self.assertAlmostEqual(results['relative_improvement'], 0, places=12)
             self.assertTrue(output.exists())
             cli = subprocess.run([sys.executable, '-m', 'shared_evaluation.evaluate',
                 '--dataset', 'california_housing', '--predictions', str(predictions),
-                '--processed-dir', str(processed), '--output-dir', str(root / 'cli-output')],
+                '--model', 'mean', '--processed-dir', str(processed), '--output-dir', str(root / 'cli-output')],
                 capture_output=True, text=True)
             self.assertEqual(cli.returncode, 0, cli.stderr)
             self.assertEqual(set(json.loads(output.read_text())['metrics']), {'rmse', 'mae', 'r2', 'relative_improvement'})
@@ -118,7 +118,7 @@ class BenchmarkTests(unittest.TestCase):
                 self.assertEqual(prepare('california_housing', processed_dir=processed), directory)
             (directory / 'mask_eval.csv').write_text('tampered')
             with self.assertRaises(ValueError):
-                evaluate_files('california_housing', 'quick', .3, 0, predictions, processed, root / 'output')
+                evaluate_files('california_housing', 'quick', .3, 0, predictions, processed, root / 'output', model='mean')
 
     def test_fresh_layout_in_both_orders(self):
         dataset = 'california_housing'
@@ -163,10 +163,10 @@ class BenchmarkTests(unittest.TestCase):
                     with self.subTest(dataset=dataset, mode=mode):
                         relative = config_path(Path(), dataset, mode, .3, 0)
                         predictions = repo / 'data' / 'output' / relative / 'dae_v2' / 'initial' / 'predictions.csv'
-                        reports = repo / 'results' / 'evaluation' / relative / 'dae_v2_initial'
-                        historical, = reports.glob('evaluation_*.json')
+                        reports = repo / 'results' / 'dae_v2' / 'evaluation' / relative / 'initial'
+                        historical, = reports.glob('evaluation_v1_*.json')
                         expected = json.loads(historical.read_text(encoding='utf-8'))
-                        scores, report = evaluate_files(dataset, mode, .3, 0, predictions, processed, temp)
+                        scores, report = evaluate_files(dataset, mode, .3, 0, predictions, processed, temp, model='dae_v2', run_id='initial')
                         for name, score in scores.items():
                             self.assertAlmostEqual(score, expected['metrics'][name], places=13)
                         self.assertAlmostEqual(json.loads(report.read_text())['mean_baseline_rmse'],

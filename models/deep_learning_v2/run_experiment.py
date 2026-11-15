@@ -11,20 +11,22 @@ import torch
 from data_preprocessing.dataset_config import DATASETS, MODEL_INPUT, config_path
 from data_preprocessing.download import sha256
 from data_preprocessing.prepare_all import load_model_input
+from shared_evaluation.result_paths import validate_identifier
 from .train import TrainConfig, fit
 from .predict import predict, save_checkpoint
 
 
 def write_summary(results_dir):
-    root = Path(results_dir)
+    root = Path(results_dir) / 'dae_v2'
     rows = []
-    for file in sorted((root / 'dae_v2').glob('*/*/rate_*/*/experiment.json')):
+    for file in sorted((root / 'training').glob('*/*/rate_*/*/experiment.json')):
         report = json.loads(file.read_text(encoding='utf-8'))
         rows.append({key: report[key] for key in (
             'dataset', 'mode', 'rate', 'seed', 'run_id', 'rows', 'features',
             'rmse', 'mae', 'r2', 'relative_improvement', 'mean_baseline_rmse',
             'best_epoch', 'epochs_completed', 'best_validation_loss', 'runtime_seconds', 'device')})
-    target = root / 'summary' / 'dae_v2_benchmark.csv'
+    rows.sort(key=lambda row: (row['mode'], row['dataset'], row['rate'], row['seed'], row['run_id']))
+    target = root / 'evaluation' / 'summary' / 'benchmark_summary.csv'
     target.parent.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(rows).to_csv(target, index=False)
     return target
@@ -32,8 +34,7 @@ def write_summary(results_dir):
 
 def run(dataset, mode='quick', rate=0.3, seed=0, config=TrainConfig(),
         processed_dir='data/processed', output_dir='data/output', results_dir='results', run_id='initial'):
-    if not run_id or any(c not in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-' for c in run_id):
-        raise ValueError('Use a simple alphanumeric, underscore or hyphen run ID')
+    validate_identifier(run_id, 'Run ID')
     benchmark = config_path(processed_dir, dataset, mode, rate, seed)
     metadata_file = benchmark / 'metadata.json'
     metadata = json.loads(metadata_file.read_text(encoding='utf-8'))
@@ -43,7 +44,7 @@ def run(dataset, mode='quick', rate=0.3, seed=0, config=TrainConfig(),
     if sha256(benchmark / MODEL_INPUT) != metadata['artifact_sha256'][MODEL_INPUT]:
         raise ValueError('Shared input file was modified')
     tag = benchmark.name
-    result_folder = Path(results_dir) / 'dae_v2' / mode / dataset / tag / run_id
+    result_folder = Path(results_dir) / 'dae_v2' / 'training' / dataset / mode / tag / run_id
     prediction_folder = config_path(output_dir, dataset, mode, rate, seed) / 'dae_v2' / run_id
     if result_folder.exists() or prediction_folder.exists():
         raise FileExistsError('Run ID already exists; choose a new --run-id to preserve artifacts')
@@ -56,7 +57,7 @@ def run(dataset, mode='quick', rate=0.3, seed=0, config=TrainConfig(),
     training['input_sha256'] = sha256(benchmark / MODEL_INPUT)
     training['benchmark_metadata_sha256'] = sha256(metadata_file)
     training['code_commit'] = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
-    checkpoint = Path(results_dir) / 'dae_v2' / 'checkpoints' / mode / dataset / tag / run_id / 'best.pt'
+    checkpoint = Path(results_dir) / 'dae_v2' / 'training' / 'checkpoints' / dataset / mode / tag / run_id / 'best.pt'
     checkpoint.parent.mkdir(parents=True, exist_ok=True)
     save_checkpoint(checkpoint, model, incomplete.columns, training)
     pd.DataFrame(history).to_csv(result_folder / 'training_history.csv', index=False)
@@ -74,7 +75,7 @@ def run(dataset, mode='quick', rate=0.3, seed=0, config=TrainConfig(),
     # Only now import the evaluator, after predictions and checkpoint exist.
     from shared_evaluation.evaluate import evaluate_files
     scores, evaluation_path = evaluate_files(dataset, mode, rate, seed, prediction_path,
-        processed_dir, Path(results_dir) / 'evaluation', model=f'dae_v2_{run_id}')
+        processed_dir, results_dir, model='dae_v2', run_id=run_id)
     evaluation = json.loads(evaluation_path.read_text(encoding='utf-8'))
     report = {'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed, 'run_id': run_id,
         'rows': len(incomplete), 'features': incomplete.shape[1], **scores,
@@ -112,6 +113,7 @@ def main():
     parser.add_argument('--threads', type=int, default=2)
     args = parser.parse_args()
     config = TrainConfig(**{key: getattr(args, key) for key in TrainConfig.__dataclass_fields__ if hasattr(args, key)})
+    validate_identifier(args.run_id, 'Run ID')
     failures = []
     for dataset in args.datasets:
         try:
@@ -121,7 +123,7 @@ def main():
             traceback.print_exc()
             failures.append({'dataset': dataset, 'mode': args.mode, 'error': repr(exc)})
     if failures:
-        target = Path(args.results_dir) / 'summary' / f'failures_{args.mode}_{args.run_id}_{time.time_ns()}.json'
+        target = Path(args.results_dir) / 'dae_v2' / 'training' / 'failures' / f'failures_{args.mode}_{args.run_id}_{time.time_ns()}.json'
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(json.dumps(failures, indent=2), encoding='utf-8')
         raise SystemExit(1)

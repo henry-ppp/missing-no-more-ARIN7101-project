@@ -69,7 +69,7 @@ python3 -m models.deep_learning.run_benchmark \
   --rates 0.1 0.2 0.3 0.5 \
   --epochs 100 \
   --save-models \
-  --output models/deep_learning/results_breast_cancer_first_run.csv
+  --output results/deep_learning/evaluation/legacy/results_breast_cancer_first_run.csv
 ```
 
 Then run the next prepared datasets:
@@ -80,7 +80,7 @@ python3 -m models.deep_learning.run_benchmark \
   --methods autoencoder vae gain \
   --rates 0.1 0.2 0.3 0.5 \
   --epochs 100 \
-  --output models/deep_learning/results_wine_yeast_first_run.csv
+  --output results/deep_learning/evaluation/legacy/results_wine_yeast_first_run.csv
 ```
 
 Full project settings should use more epochs after all datasets are checked:
@@ -92,7 +92,7 @@ python3 -m models.deep_learning.run_benchmark \
   --rates 0.1 0.2 0.3 0.5 \
   --seed 0 \
   --epochs 300 \
-  --output models/deep_learning/results_benchmark.csv
+  --output results/deep_learning/evaluation/legacy/results_benchmark.csv
 ```
 
 `credit_card_default`, `fred_md`, and `energy_efficiency` are supported by the

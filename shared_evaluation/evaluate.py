@@ -5,6 +5,7 @@ from pathlib import Path
 from data_preprocessing.dataset_config import DATASETS, EVALUATION_TRUTH, config_path
 from data_preprocessing.prepare_all import read_matrix
 from data_preprocessing.download import sha256
+from .result_paths import evaluation_directory, write_report
 from .metrics import rmse, mae, r2, relative_improvement
 
 def evaluate(X_true, X_pred, mask_eval, X_mean_baseline):
@@ -14,7 +15,11 @@ def evaluate(X_true, X_pred, mask_eval, X_mean_baseline):
             'r2': r2(X_true, X_pred, mask_eval),
             'relative_improvement': relative_improvement(model_rmse, baseline_rmse)}
 
-def evaluate_files(dataset, mode, rate, seed, predictions, processed_dir='data/processed', output_dir='results/evaluation', model=None):
+def evaluate_files(dataset, mode, rate, seed, predictions, processed_dir='data/processed', output_dir=None, model=None, *, run_id='standalone'):
+    if model is None:
+        raise ValueError('Specify a model identifier for this report')
+    target = evaluation_directory('results' if output_dir is None else output_dir,
+                                  model, dataset, mode, rate, seed, run_id)
     directory = config_path(processed_dir, dataset, mode, rate, seed)
     metadata = json.loads((directory / 'metadata.json').read_text(encoding='utf-8'))
     for key, expected in {'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed}.items():
@@ -31,18 +36,13 @@ def evaluate_files(dataset, mode, rate, seed, predictions, processed_dir='data/p
     prediction = read_matrix(predictions)
     result = evaluate(truth, prediction, mask, baseline)
     digest = sha256(predictions)
-    name = model or Path(predictions).stem
-    if not name or any(c not in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-' for c in name):
-        raise ValueError('Model name must contain only letters, digits, underscore or hyphen')
-    target = config_path(output_dir, dataset, mode, rate, seed) / name
-    target.mkdir(parents=True, exist_ok=True)
     # Content hash distinguishes different runs of the same model and configuration.
-    output = target / f'evaluation_{digest}.json'
-    report = {'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed, 'model': name,
+    output = target / f'evaluation_v1_{digest}.json'
+    report = {'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed, 'model': model, 'run_id': run_id,
               'predictions': Path(predictions).as_posix(), 'prediction_sha256': digest,
               'benchmark_metadata_sha256': sha256(directory / 'metadata.json'),
               'mean_baseline_rmse': rmse(truth, baseline, mask), 'metrics': result}
-    output.write_text(json.dumps(report, indent=2, allow_nan=False), encoding='utf-8')
+    write_report(output, report)
     return result, output
 
 def main():
@@ -52,9 +52,10 @@ def main():
     parser.add_argument('--rate', type=float, default=0.3)
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--predictions', type=Path, required=True)
-    parser.add_argument('--model')
+    parser.add_argument('--model', required=True)
+    parser.add_argument('--run-id', default='standalone')
     parser.add_argument('--processed-dir', default='data/processed')
-    parser.add_argument('--output-dir', default='results/evaluation', help='Evaluation report root (prediction files remain under data/output)')
+    parser.add_argument('--output-dir', help='Override the model results root (default: results)')
     args = parser.parse_args()
     result, output = evaluate_files(**vars(args))
     print(json.dumps(result, allow_nan=False))

@@ -59,7 +59,12 @@ python -m shared_evaluation.evaluate_v2 --dataset credit_card --mode quick --rat
     --predictions data/output/credit_card/quick/rate_0.3_seed_0/<model>/predictions.csv [more files] --downstream
 ```
 
-It prints a table and saves `evaluation_v2_<hash>.json` in that setting's output folder. Leave out `--downstream` to skip the prediction check.
+It prints a table. Standalone comparisons write to
+`data/output/<dataset>/<mode>/<configuration>/evaluation_v2_<hash>.json`.
+For a formal report owned by a model, supply `--model MODEL --run-id ID` to
+write to `results/<model>/evaluation/<dataset>/<mode>/<configuration>/<run_id>/evaluation_v2_<hash>.json`.
+`--output-dir` overrides the corresponding root. Leave out `--downstream`
+to skip the prediction check.
 
 ## What we need to decide
 

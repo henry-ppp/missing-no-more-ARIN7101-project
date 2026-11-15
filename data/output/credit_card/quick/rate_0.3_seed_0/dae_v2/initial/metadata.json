@@ -8,5 +8,5 @@
   "benchmark_metadata_sha256": "4eba264265f4436f0b0ba7d6e3f2a554158a8946b86e224fb301983bca057eed",
   "input_sha256": "386bcdd483170952cdd272553508a53865ec8e8f2040095b464a964eb500da23",
   "prediction_sha256": "27ffe03f94c82b49f08711f9826f51b70f19d23b538a1be2305aced322a29a1e",
-  "checkpoint": "results/dae_v2/checkpoints/quick/credit_card/rate_0.3_seed_0/initial/best.pt"
+  "checkpoint": "results/dae_v2/training/checkpoints/credit_card/quick/rate_0.3_seed_0/initial/best.pt"
 }

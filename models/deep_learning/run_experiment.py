@@ -156,7 +156,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("models/deep_learning/results_quick.csv"),
+        default=Path("results/deep_learning/evaluation/legacy/results_quick.csv"),
         help="Where to save the result table",
     )
     parser.add_argument(

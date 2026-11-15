@@ -114,7 +114,7 @@ def main() -> None:
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("models/iterative/results_energy_efficiency.csv"),
+        default=Path("results/iterative/evaluation/legacy/energy_efficiency_latest.csv"),
     )
     args = parser.parse_args()
 

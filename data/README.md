@@ -92,8 +92,8 @@ data/
     metadata.json          # schema, row IDs, hashes, versions, cleaning, sampling
   output/<dataset>/<mode>/rate_0.3_seed_0/<model>/
     predictions.csv
-results/evaluation/<dataset>/<mode>/rate_0.3_seed_0/<model>/
-  evaluation_<prediction_sha256>.json
+results/<model>/evaluation/<dataset>/<mode>/rate_0.3_seed_0/<run_id>/
+  evaluation_v1_<prediction_sha256>.json
 ```
 
 The preprocessing stages are:
@@ -140,10 +140,10 @@ are unchanged; any internal scaling must return predictions in input scale.
 DAE V2 uses the shared loader. See the [project README](../README.md) for commands.
 
 ```bash
-python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --model dae_v2 --predictions data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv
+python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --model dae_v2 --run-id verification --predictions data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv
 ```
 
-The CLI supports --processed-dir and --output-dir, verifies metadata/artifact
+The CLI requires --model, defaults --run-id to standalone, and supports --processed-dir and --output-dir (override the results root), verifies metadata/artifact
 hashes, rejects misalignment without reordering, prints metrics and writes JSON.
 Output names include configuration, model and full prediction hash to distinguish
 runs. Model names accept letters, digits, underscore and hyphen. The programmatic

@@ -11,7 +11,7 @@ Clone or update `dev` to use the **actual shared raw data and prepared Quick/Ful
 | Superconductivity | 21,263 | 21,263 | 81 | 3,000 |
 | Gas Turbine CO & NOx | 36,733 | 36,733 | 11 | 3,000 |
 
-[Dataset sources, licenses, feature lists and CSV contract](data/README.md) · [Preprocessing manifest](results/preprocessing/benchmark_manifest.csv)
+[Dataset sources, licenses, feature lists and CSV contract](data/README.md) · Sample counts and mask statistics are stored in each configuration's `metadata.json`.
 
 ## Repository map
 
@@ -29,7 +29,7 @@ models/
   knn/                  K-nearest neighbours placeholder (Hamad)
   random_forest/        Random Forest / MissForest placeholder (Blith)
 shared_evaluation/      Four-metric evaluator and separate teammate evaluation V2
-results/                Training histories, evaluations and summaries; checkpoints stay local
+results/                Model-owned training and evaluation directories; checkpoints stay local
 tests/                  Automated data, model and evaluation checks
 ```
 
@@ -68,6 +68,16 @@ The flow is raw data → dataset-level `cleaned/X_cleaned.csv` → Quick/Full `X
 
 ## Train and evaluate DAE V2
 
+DAE V2 owns its results under `results/dae_v2/`. The `training/` directory holds
+environment information, histories, settings, and experiment records. The
+`evaluation/` directory holds V1 or V2 reports and the consolidated benchmark
+in `evaluation/summary/`. Both organize runs by dataset, then Quick or Full,
+configuration, and run ID. Checkpoints under `training/checkpoints/` are local
+and are not published to Git. Predictions remain in `data/output/`; raw and
+processed data remain under `data/`. Historical teammate CSVs are retained
+under `results/deep_learning/evaluation/legacy/` and
+`results/iterative/evaluation/legacy/`.
+
 ```bash
 python -m models.deep_learning_v2.run_experiment --mode quick --rate 0.3 --seed 0 --run-id reproduction
 python -m models.deep_learning_v2.run_experiment --mode full --rate 0.3 --seed 0 --run-id reproduction
@@ -75,13 +85,13 @@ python -m models.deep_learning_v2.run_experiment --mode full --rate 0.3 --seed 0
 
 The MLP encoder-decoder receives zero-filled standardized values and a visibility mask. Each training batch hides more originally observed cells; only those extra hidden cells contribute to masked MSE. Early stopping uses a separate fixed holdout of observed cells excluded from training inputs and targets. At inference only missing cells are replaced. Default settings: Adam, learning rate 0.001, batch size 256, 30% extra training masking, 10% observed validation holdout, ReLU, dropout 0.05, and at most 150 epochs with patience 20. Hidden widths and bottleneck vary with feature count. `--run-id` prevents overwriting earlier runs.
 
-The shared evaluator loads the configuration's truth, evaluation mask and mean baseline directly from `data/processed/`. Given an aligned CSV it computes standardized RMSE and MAE, macro per-feature R², and relative RMSE improvement against mean imputation. Results only use hidden cells and are saved to `results/evaluation/`. Use the `evaluate()` Python API for in-memory matrices, or run:
+The shared evaluator loads the configuration's truth, evaluation mask and mean baseline directly from `data/processed/`. Given an aligned CSV it computes standardized RMSE and MAE, macro per-feature R², and relative RMSE improvement against mean imputation. Results only use hidden cells and are saved to `results/<model>/evaluation/<dataset>/<mode>/<configuration>/<run_id>/`. Use the `evaluate()` Python API for in-memory matrices, or run:
 
 ```bash
-python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --model dae_v2 --predictions data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv
+python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --model dae_v2 --run-id verification --predictions data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv
 ```
 
-See [DAE benchmark results](results/summary/dae_v2_benchmark.csv), [training histories and configurations](results/dae_v2/), and the separate [evaluation V2 documentation](shared_evaluation/EVALUATION_V2.md). The initial experiment uses one seed and a transductive missing-cell holdout; these scores do not measure generalization to unseen rows or establish significance across seeds. Credits and change notices for the datasets are in [data/README.md](data/README.md). The project uses NumPy, pandas, PyTorch, SciPy, scikit-learn and ucimlrepo.
+See [DAE benchmark results](results/dae_v2/evaluation/summary/benchmark_summary.csv), [training histories and configurations](results/dae_v2/training/), and the separate [evaluation V2 documentation](shared_evaluation/EVALUATION_V2.md). The initial experiment uses one seed and a transductive missing-cell holdout; these scores do not measure generalization to unseen rows or establish significance across seeds. Credits and change notices for the datasets are in [data/README.md](data/README.md). The project uses NumPy, pandas, PyTorch, SciPy, scikit-learn and ucimlrepo.
 
 California Housing Quick has an unusually large RMSE because one hidden `AveOccup` value is about 1,314 observed standard deviations from its observed mean. That cell contributes 99.35% of the mean baseline's squared error for this configuration. The published data retain this observation; inspect MAE and macro R² alongside RMSE.
 
