@@ -15,3 +15,6 @@ results/dae_v2/training/checkpoints/
 *.tmp
 *.zip
 sklearn_cache/
+
+# Fitted-model artefacts (training curves, importances, tuning trials); kept locally, never pushed
+local_models/
