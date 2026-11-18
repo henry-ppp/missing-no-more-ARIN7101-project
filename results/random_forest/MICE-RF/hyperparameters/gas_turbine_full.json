@@ -1,0 +1,81 @@
+{
+  "model": "MICE-RF",
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 1
+  },
+  "default_params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 2
+  },
+  "grid": {
+    "max_features": [
+      0.5,
+      1.0
+    ],
+    "min_samples_leaf": [
+      2,
+      1
+    ]
+  },
+  "tuned_on": {
+    "rate": 0.3,
+    "seed": 0,
+    "configuration": "rate_0.3_seed_0"
+  },
+  "tuning": {
+    "rows": 36733,
+    "check_share": 0.1,
+    "check_cells": 28183,
+    "n_trees": 100,
+    "max_rounds": 10,
+    "trials": "local_models/random_forest/MICE-RF/tuning/gas_turbine/full/rate_0.3_seed_0"
+  },
+  "candidates": [
+    {
+      "params": {
+        "max_features": 0.5,
+        "min_samples_leaf": 2
+      },
+      "rmse": 0.4475314095302714,
+      "mae": 0.2512104299103704,
+      "rounds": 10,
+      "seconds": 348.61220949999915
+    },
+    {
+      "params": {
+        "max_features": 0.5,
+        "min_samples_leaf": 1
+      },
+      "rmse": 0.4393332471046755,
+      "mae": 0.24542906240746598,
+      "rounds": 10,
+      "seconds": 482.70844383299846
+    },
+    {
+      "params": {
+        "max_features": 1.0,
+        "min_samples_leaf": 2
+      },
+      "rmse": 0.45600263099961946,
+      "mae": 0.2551502080873581,
+      "rounds": 10,
+      "seconds": 537.172084875001
+    },
+    {
+      "params": {
+        "max_features": 1.0,
+        "min_samples_leaf": 1
+      },
+      "rmse": 0.45243127269760397,
+      "mae": 0.25155066488648115,
+      "rounds": 10,
+      "seconds": 706.087333083
+    }
+  ],
+  "default_rmse": 0.4475314095302714,
+  "chosen_rmse": 0.4393332471046755,
+  "gain_percent": 1.8318630270444447
+}

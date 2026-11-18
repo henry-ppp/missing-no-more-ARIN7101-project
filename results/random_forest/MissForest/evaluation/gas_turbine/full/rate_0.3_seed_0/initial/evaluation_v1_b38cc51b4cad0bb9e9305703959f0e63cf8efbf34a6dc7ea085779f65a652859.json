@@ -1,0 +1,18 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "MissForest",
+  "run_id": "initial",
+  "predictions": "data/output/gas_turbine/full/rate_0.3_seed_0/MissForest/initial/predictions.csv",
+  "prediction_sha256": "b38cc51b4cad0bb9e9305703959f0e63cf8efbf34a6dc7ea085779f65a652859",
+  "benchmark_metadata_sha256": "0566878878e49617ff1ca8bcf7e81676bb24a15f360763e0d8578b2912e9b095",
+  "mean_baseline_rmse": 0.9990947162837363,
+  "metrics": {
+    "rmse": 0.4321069425294121,
+    "mae": 0.2353049357584463,
+    "r2": 0.8147386204045,
+    "relative_improvement": 0.5675015236426326
+  }
+}

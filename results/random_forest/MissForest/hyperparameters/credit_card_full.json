@@ -1,0 +1,81 @@
+{
+  "model": "MissForest",
+  "dataset": "credit_card",
+  "mode": "full",
+  "params": {
+    "max_features": 0.3333333333333333,
+    "min_samples_leaf": 1
+  },
+  "default_params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "grid": {
+    "max_features": [
+      "sqrt",
+      0.3333333333333333
+    ],
+    "min_samples_leaf": [
+      1,
+      5
+    ]
+  },
+  "tuned_on": {
+    "rate": 0.3,
+    "seed": 0,
+    "configuration": "rate_0.3_seed_0"
+  },
+  "tuning": {
+    "rows": 30000,
+    "check_share": 0.1,
+    "check_cells": 29301,
+    "n_trees": 100,
+    "max_rounds": 10,
+    "trials": "local_models/random_forest/MissForest/tuning/credit_card/full/rate_0.3_seed_0"
+  },
+  "candidates": [
+    {
+      "params": {
+        "max_features": "sqrt",
+        "min_samples_leaf": 1
+      },
+      "rmse": 0.7533712449858607,
+      "mae": 0.2585051021234484,
+      "rounds": 6,
+      "seconds": 549.4264100419969
+    },
+    {
+      "params": {
+        "max_features": "sqrt",
+        "min_samples_leaf": 5
+      },
+      "rmse": 0.7528331153020035,
+      "mae": 0.257979628273854,
+      "rounds": 6,
+      "seconds": 421.253879459
+    },
+    {
+      "params": {
+        "max_features": 0.3333333333333333,
+        "min_samples_leaf": 1
+      },
+      "rmse": 0.7464703885123778,
+      "mae": 0.25473293631020566,
+      "rounds": 6,
+      "seconds": 713.0427063749994
+    },
+    {
+      "params": {
+        "max_features": 0.3333333333333333,
+        "min_samples_leaf": 5
+      },
+      "rmse": 0.7484365527413408,
+      "mae": 0.2555166889135297,
+      "rounds": 7,
+      "seconds": 639.9998177919988
+    }
+  ],
+  "default_rmse": 0.7533712449858607,
+  "chosen_rmse": 0.7464703885123778,
+  "gain_percent": 0.9159967969858518
+}

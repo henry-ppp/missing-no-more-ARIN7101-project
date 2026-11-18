@@ -1,0 +1,61 @@
+{
+  "model": "MissForest",
+  "dataset": "california_housing",
+  "mode": "full",
+  "params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 5
+  },
+  "default_params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "grid": {
+    "max_features": [
+      "sqrt",
+      0.3333333333333333
+    ],
+    "min_samples_leaf": [
+      1,
+      5
+    ]
+  },
+  "tuned_on": {
+    "rate": 0.3,
+    "seed": 0,
+    "configuration": "rate_0.3_seed_0"
+  },
+  "tuning": {
+    "rows": 20640,
+    "check_share": 0.1,
+    "check_cells": 11397,
+    "n_trees": 100,
+    "max_rounds": 10,
+    "trials": "local_models/random_forest/MissForest/tuning/california_housing/full/rate_0.3_seed_0"
+  },
+  "candidates": [
+    {
+      "params": {
+        "max_features": "sqrt",
+        "min_samples_leaf": 1
+      },
+      "rmse": 0.6850223617634679,
+      "mae": 0.3924518691718173,
+      "rounds": 5,
+      "seconds": 149.5265527920019
+    },
+    {
+      "params": {
+        "max_features": "sqrt",
+        "min_samples_leaf": 5
+      },
+      "rmse": 0.6794463638837762,
+      "mae": 0.3964926362743178,
+      "rounds": 9,
+      "seconds": 184.57526449999932
+    }
+  ],
+  "default_rmse": 0.6850223617634679,
+  "chosen_rmse": 0.6794463638837762,
+  "gain_percent": 0.813987716450193
+}

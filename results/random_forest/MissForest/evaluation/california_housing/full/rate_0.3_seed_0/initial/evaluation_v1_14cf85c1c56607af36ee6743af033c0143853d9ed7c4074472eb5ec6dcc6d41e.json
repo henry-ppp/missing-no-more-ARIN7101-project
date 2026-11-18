@@ -1,0 +1,18 @@
+{
+  "dataset": "california_housing",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "MissForest",
+  "run_id": "initial",
+  "predictions": "data/output/california_housing/full/rate_0.3_seed_0/MissForest/initial/predictions.csv",
+  "prediction_sha256": "14cf85c1c56607af36ee6743af033c0143853d9ed7c4074472eb5ec6dcc6d41e",
+  "benchmark_metadata_sha256": "d1c115c7951daf7e81f29ead4708ef0626f49b388931e03b3aad782564eac755",
+  "mean_baseline_rmse": 0.9138195644567092,
+  "metrics": {
+    "rmse": 0.6739008183938869,
+    "mae": 0.36436731394748617,
+    "r2": 0.42373996213589127,
+    "relative_improvement": 0.26254498742917654
+  }
+}

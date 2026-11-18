@@ -1,0 +1,18 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "MICE-RF",
+  "run_id": "initial",
+  "predictions": "data/output/gas_turbine/full/rate_0.3_seed_0/MICE-RF/initial/predictions.csv",
+  "prediction_sha256": "2326e39c0fdb65ffed295802d1fb33361ea219d9af49c16cd151a96d948ca2fa",
+  "benchmark_metadata_sha256": "0566878878e49617ff1ca8bcf7e81676bb24a15f360763e0d8578b2912e9b095",
+  "mean_baseline_rmse": 0.9990947162837363,
+  "metrics": {
+    "rmse": 0.4187541502200987,
+    "mae": 0.2246590591002255,
+    "r2": 0.8260885282623267,
+    "relative_improvement": 0.5808664149704348
+  }
+}

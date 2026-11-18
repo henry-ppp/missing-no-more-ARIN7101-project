@@ -1,0 +1,81 @@
+{
+  "model": "MICE-RF",
+  "dataset": "credit_card",
+  "mode": "full",
+  "params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 1
+  },
+  "default_params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 2
+  },
+  "grid": {
+    "max_features": [
+      0.5,
+      1.0
+    ],
+    "min_samples_leaf": [
+      2,
+      1
+    ]
+  },
+  "tuned_on": {
+    "rate": 0.3,
+    "seed": 0,
+    "configuration": "rate_0.3_seed_0"
+  },
+  "tuning": {
+    "rows": 30000,
+    "check_share": 0.1,
+    "check_cells": 29301,
+    "n_trees": 100,
+    "max_rounds": 10,
+    "trials": "local_models/random_forest/MICE-RF/tuning/credit_card/full/rate_0.3_seed_0"
+  },
+  "candidates": [
+    {
+      "params": {
+        "max_features": 0.5,
+        "min_samples_leaf": 2
+      },
+      "rmse": 0.7252391342465615,
+      "mae": 0.24730343560199985,
+      "rounds": 10,
+      "seconds": 406.518486500001
+    },
+    {
+      "params": {
+        "max_features": 0.5,
+        "min_samples_leaf": 1
+      },
+      "rmse": 0.7105674963402495,
+      "mae": 0.24899416957726317,
+      "rounds": 10,
+      "seconds": 562.2486103330011
+    },
+    {
+      "params": {
+        "max_features": 1.0,
+        "min_samples_leaf": 2
+      },
+      "rmse": 0.7241632181472311,
+      "mae": 0.24607348448724958,
+      "rounds": 10,
+      "seconds": 593.6580828330007
+    },
+    {
+      "params": {
+        "max_features": 1.0,
+        "min_samples_leaf": 1
+      },
+      "rmse": 0.7180743614800077,
+      "mae": 0.24975655636566196,
+      "rounds": 10,
+      "seconds": 848.3442803750004
+    }
+  ],
+  "default_rmse": 0.7252391342465615,
+  "chosen_rmse": 0.7105674963402495,
+  "gain_percent": 2.023006924682036
+}

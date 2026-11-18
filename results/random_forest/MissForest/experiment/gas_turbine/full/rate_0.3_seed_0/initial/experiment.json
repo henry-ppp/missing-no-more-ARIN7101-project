@@ -1,0 +1,72 @@
+{
+  "model": "MissForest",
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "default_params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/random_forest/MissForest/hyperparameters/gas_turbine_full.json",
+    "tuned_on": {
+      "rate": 0.3,
+      "seed": 0,
+      "configuration": "rate_0.3_seed_0"
+    },
+    "tuning_rows": 36733,
+    "gain_percent": 0.0
+  },
+  "settings": {
+    "n_trees": 100,
+    "max_rounds": 10,
+    "n_boot": 1000
+  },
+  "kept_round": 7,
+  "rounds_run": 8,
+  "stopped_early": true,
+  "fit_seconds": 586.2019465000012,
+  "metrics_v1": {
+    "rmse": 0.4321069425294121,
+    "mae": 0.2353049357584463,
+    "r2": 0.8147386204045,
+    "relative_improvement": 0.5675015236426326
+  },
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.5675015236426326,
+      "ci": [
+        0.5606809457590729,
+        0.57549583179438
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.8897336451840981,
+      "ci": [
+        0.8873523956575495,
+        0.8926361802164626
+      ]
+    }
+  },
+  "predictions": "data/output/gas_turbine/full/rate_0.3_seed_0/MissForest/initial/predictions.csv",
+  "prediction_sha256": "b38cc51b4cad0bb9e9305703959f0e63cf8efbf34a6dc7ea085779f65a652859",
+  "evaluation_v1": "results/random_forest/MissForest/evaluation/gas_turbine/full/rate_0.3_seed_0/initial/evaluation_v1_b38cc51b4cad0bb9e9305703959f0e63cf8efbf34a6dc7ea085779f65a652859.json",
+  "evaluation_v2": "results/random_forest/MissForest/evaluation/gas_turbine/full/rate_0.3_seed_0/initial/evaluation_v2_219fd85624ffccb4.json",
+  "local_artifacts": "local_models/random_forest/MissForest/training/gas_turbine/full/rate_0.3_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "cab39e3a2e36551e00b52fa5833cd3b53a3ee52b"
+  }
+}

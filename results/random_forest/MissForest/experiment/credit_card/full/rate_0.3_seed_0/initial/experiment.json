@@ -1,0 +1,79 @@
+{
+  "model": "MissForest",
+  "dataset": "credit_card",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "max_features": 0.3333333333333333,
+    "min_samples_leaf": 1
+  },
+  "default_params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/random_forest/MissForest/hyperparameters/credit_card_full.json",
+    "tuned_on": {
+      "rate": 0.3,
+      "seed": 0,
+      "configuration": "rate_0.3_seed_0"
+    },
+    "tuning_rows": 30000,
+    "gain_percent": 0.9159967969858518
+  },
+  "settings": {
+    "n_trees": 100,
+    "max_rounds": 10,
+    "n_boot": 1000
+  },
+  "kept_round": 6,
+  "rounds_run": 7,
+  "stopped_early": true,
+  "fit_seconds": 643.1898514169989,
+  "metrics_v1": {
+    "rmse": 0.6809110577736127,
+    "mae": 0.24247699780541465,
+    "r2": 0.5545451318317278,
+    "relative_improvement": 0.3236643608234442
+  },
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.3236643608234442,
+      "ci": [
+        0.29927990289680684,
+        0.35009645509810006
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.7851021205114018,
+      "ci": [
+        0.7813489263924897,
+        0.7913691544700323
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.4773434578090759,
+      "ci": [
+        0.373137951054361,
+        0.5888481725025736
+      ]
+    }
+  },
+  "predictions": "data/output/credit_card/full/rate_0.3_seed_0/MissForest/initial/predictions.csv",
+  "prediction_sha256": "d8f1ba790ee656c0cd28534a72acefa5344c808b148a2dd4e0afb48978188649",
+  "evaluation_v1": "results/random_forest/MissForest/evaluation/credit_card/full/rate_0.3_seed_0/initial/evaluation_v1_d8f1ba790ee656c0cd28534a72acefa5344c808b148a2dd4e0afb48978188649.json",
+  "evaluation_v2": "results/random_forest/MissForest/evaluation/credit_card/full/rate_0.3_seed_0/initial/evaluation_v2_9072b15cf8018948.json",
+  "local_artifacts": "local_models/random_forest/MissForest/training/credit_card/full/rate_0.3_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "cab39e3a2e36551e00b52fa5833cd3b53a3ee52b"
+  }
+}

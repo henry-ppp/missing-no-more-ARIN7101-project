@@ -1,0 +1,15 @@
+{
+  "dataset": "credit_card",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "MissForest",
+  "run_id": "initial",
+  "params": {
+    "max_features": 0.3333333333333333,
+    "min_samples_leaf": 1
+  },
+  "input_sha256": "0d45ed4e3739759f68363f43c61d4f2c8211bb01dc05360c937d7ca43643cda2",
+  "prediction_sha256": "d8f1ba790ee656c0cd28534a72acefa5344c808b148a2dd4e0afb48978188649",
+  "local_artifacts": "local_models/random_forest/MissForest/training/credit_card/full/rate_0.3_seed_0/initial"
+}

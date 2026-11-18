@@ -1,0 +1,79 @@
+{
+  "model": "MICE-RF",
+  "dataset": "california_housing",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 2
+  },
+  "default_params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 2
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/random_forest/MICE-RF/hyperparameters/california_housing_full.json",
+    "tuned_on": {
+      "rate": 0.3,
+      "seed": 0,
+      "configuration": "rate_0.3_seed_0"
+    },
+    "tuning_rows": 20640,
+    "gain_percent": 0.0
+  },
+  "settings": {
+    "n_trees": 100,
+    "max_rounds": 10,
+    "n_boot": 1000
+  },
+  "kept_round": 10,
+  "rounds_run": 10,
+  "stopped_early": false,
+  "fit_seconds": 85.8354871670017,
+  "metrics_v1": {
+    "rmse": 0.6479491664149304,
+    "mae": 0.35847710475907485,
+    "r2": 0.4607640786644392,
+    "relative_improvement": 0.2909440861006801
+  },
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.2909440861006801,
+      "ci": [
+        0.25992362360288696,
+        0.3277917753072301
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.7192095121419809,
+      "ci": [
+        0.7135658559333745,
+        0.7262485502318283
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.6086128733405332,
+      "ci": [
+        0.5483524297618407,
+        0.7049042749969309
+      ]
+    }
+  },
+  "predictions": "data/output/california_housing/full/rate_0.3_seed_0/MICE-RF/initial/predictions.csv",
+  "prediction_sha256": "bf97f9b6ceb7d5bbf7790622409520a69dd8ed192384f14d59298ca41dd56013",
+  "evaluation_v1": "results/random_forest/MICE-RF/evaluation/california_housing/full/rate_0.3_seed_0/initial/evaluation_v1_bf97f9b6ceb7d5bbf7790622409520a69dd8ed192384f14d59298ca41dd56013.json",
+  "evaluation_v2": "results/random_forest/MICE-RF/evaluation/california_housing/full/rate_0.3_seed_0/initial/evaluation_v2_115824b3bf563fcb.json",
+  "local_artifacts": "local_models/random_forest/MICE-RF/training/california_housing/full/rate_0.3_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "cab39e3a2e36551e00b52fa5833cd3b53a3ee52b"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "model": "MICE-RF",
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 1
+  },
+  "default_params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 2
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/random_forest/MICE-RF/hyperparameters/gas_turbine_full.json",
+    "tuned_on": {
+      "rate": 0.3,
+      "seed": 0,
+      "configuration": "rate_0.3_seed_0"
+    },
+    "tuning_rows": 36733,
+    "gain_percent": 1.8318630270444447
+  },
+  "settings": {
+    "n_trees": 100,
+    "max_rounds": 10,
+    "n_boot": 1000
+  },
+  "kept_round": 10,
+  "rounds_run": 10,
+  "stopped_early": false,
+  "fit_seconds": 420.1117117499998,
+  "metrics_v1": {
+    "rmse": 0.4187541502200987,
+    "mae": 0.2246590591002255,
+    "r2": 0.8260885282623267,
+    "relative_improvement": 0.5808664149704348
+  },
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.5808664149704348,
+      "ci": [
+        0.5738743927234501,
+        0.5890548632825929
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.896124009315675,
+      "ci": [
+        0.893968952834656,
+        0.8990325368764046
+      ]
+    }
+  },
+  "predictions": "data/output/gas_turbine/full/rate_0.3_seed_0/MICE-RF/initial/predictions.csv",
+  "prediction_sha256": "2326e39c0fdb65ffed295802d1fb33361ea219d9af49c16cd151a96d948ca2fa",
+  "evaluation_v1": "results/random_forest/MICE-RF/evaluation/gas_turbine/full/rate_0.3_seed_0/initial/evaluation_v1_2326e39c0fdb65ffed295802d1fb33361ea219d9af49c16cd151a96d948ca2fa.json",
+  "evaluation_v2": "results/random_forest/MICE-RF/evaluation/gas_turbine/full/rate_0.3_seed_0/initial/evaluation_v2_6d334e9b548f50a7.json",
+  "local_artifacts": "local_models/random_forest/MICE-RF/training/gas_turbine/full/rate_0.3_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "cab39e3a2e36551e00b52fa5833cd3b53a3ee52b"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "dataset": "california_housing",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "MissForest",
+  "run_id": "initial",
+  "params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 5
+  },
+  "input_sha256": "706fc2d3788631efc800c865f6d638eb5fba94d1c83c8fef070b5a5a6ad5b600",
+  "prediction_sha256": "14cf85c1c56607af36ee6743af033c0143853d9ed7c4074472eb5ec6dcc6d41e",
+  "local_artifacts": "local_models/random_forest/MissForest/training/california_housing/full/rate_0.3_seed_0/initial"
+}
