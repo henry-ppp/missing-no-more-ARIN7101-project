@@ -14,7 +14,7 @@ from data_preprocessing.download import sha256
 from data_preprocessing.mask import apply_mask, mcar_mask
 from data_preprocessing.mean_baseline import mean_impute
 from data_preprocessing.prepare_all import export_configuration, read_matrix
-from shared_evaluation.evaluate_v2 import (bootstrap, downstream, evaluate, evaluate_files, holm, load_target,
+from shared_evaluation.evaluate import (bootstrap, downstream, evaluate, evaluate_files, holm, load_target,
                                            parse_predictions)
 from shared_evaluation.metrics_v2 import rmse, wasserstein
 
@@ -52,20 +52,10 @@ class EvaluationV2Tests(unittest.TestCase):
         self.mask = mcar_mask(self.X, 0.3, 0)
         self.baseline = mean_impute(apply_mask(self.X, self.mask))
 
-    def test_independent_of_version_1(self):
-        blocked = ("import sys; sys.modules['shared_evaluation.metrics'] = None; "
-                   "sys.modules['shared_evaluation.evaluate'] = None; import shared_evaluation.evaluate_v2")
+    def test_does_not_import_version_1_metrics(self):
+        blocked = "import sys; sys.modules['shared_evaluation.metrics'] = None; import shared_evaluation.evaluate"
         run = subprocess.run([sys.executable, '-c', blocked], capture_output=True, text=True)
         self.assertEqual(run.returncode, 0, run.stderr)
-
-    def test_matches_version_1_while_it_exists(self):
-        try:
-            from shared_evaluation.evaluate import evaluate as evaluate_v1
-        except ImportError:
-            self.skipTest('version 1 has been removed')
-        good = noisy(self.X, self.mask, 0.3, 1)
-        v1, v2 = evaluate_v1(self.X, good, self.mask, self.baseline), evaluate(self.X, good, self.mask, self.baseline)
-        self.assertEqual(v1, {k: v2[k] for k in v1})
 
     def test_wasserstein_basics(self):
         self.assertEqual(wasserstein(self.X, self.X, self.mask), 0.0)
@@ -209,7 +199,7 @@ class EvaluationV2Tests(unittest.TestCase):
                                               {'MedHouseVal': X.to_numpy() @ np.linspace(1, -1, len(features))})
             (root / 'dae').mkdir()
             noisy(truth, mask, 0.3, 1).to_csv(root / 'dae' / 'predictions.csv', index_label='row_id')
-            cli = subprocess.run([sys.executable, '-m', 'shared_evaluation.evaluate_v2', '--dataset', 'california_housing',
+            cli = subprocess.run([sys.executable, '-m', 'shared_evaluation.evaluate', '--dataset', 'california_housing',
                                   '--predictions', str(root / 'dae' / 'predictions.csv'), '--n-boot', '20',
                                   '--downstream', '--raw-dir', str(root / 'raw'),
                                   '--processed-dir', str(root / 'processed'), '--output-dir', str(root / 'output')],

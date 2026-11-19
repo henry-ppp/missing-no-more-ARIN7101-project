@@ -26,7 +26,7 @@ Every model's results go into the same five figures, drawn from saved evaluation
 - **Plain marks.** Thin marks, a solid light grid, one y-axis per chart.
 - **Slide-ready output.** Sized for a 16:9 slide at real size: text at least 14 pt, the source note 11 pt. Each figure is saved as PDF/SVG (stays sharp when scaled) and as a 300-dpi PNG, plus a CSV of exactly what it shows.
 - **Source note.** A one-line note under each figure gives the data source (UCI; Deshpande for California; CC BY 4.0), any outside method (e.g. scikit-learn's `IterativeImputer`), and the statistical method used. The course requires this split between outside work and ours.
-- **One source of numbers.** Numbers come only from the saved reports. The exception is figure 1, which needs the values themselves. Nothing re-computes a score, so slides and reports always agree. Wasserstein scores are shown bias-corrected and the others as plain estimates, as in the table `evaluate_v2` prints.
+- **One source of numbers.** Numbers come only from the saved reports. The exception is figure 1, which needs the values themselves. Nothing re-computes a score, so slides and reports always agree. Wasserstein scores are shown bias-corrected and the others as plain estimates, as in the table `evaluate` prints.
 
 ## The five figures, in the order the talk uses them
 
@@ -40,10 +40,10 @@ Every model's results go into the same five figures, drawn from saved evaluation
 ### 2. Scoreboard (Results slide)
 
 - **Question:** on each dataset, how much better than mean imputation is each method on each headline score, and which differences are real?
-- **Form:** each method gets a dot with its 95% interval from evaluate_v2's bootstrap.
+- **Form:** each method gets a dot with its 95% interval from evaluate's bootstrap.
   - Grid of panels: datasets go across (4) and the headline scores go down (3: RMSE improvement, Wasserstein improvement, downstream gap closed).
   - Methods are rows in the table order above, traditional above deep learning, and the order never changes between panels.
-- **Significance:** a filled dot means "not significantly worse than the best method in this panel"; a hollow dot means significantly worse. This uses evaluate_v2's paired p-values with the Holm correction inside each panel. We mark it because two intervals can overlap even when the paired difference is significant, so readers can't judge this by eye (Schenker & Gentleman, 2001).
+- **Significance:** a filled dot means "not significantly worse than the best method in this panel"; a hollow dot means significantly worse. This uses evaluate's paired p-values with the Holm correction inside each panel. We mark it because two intervals can overlap even when the paired difference is significant, so readers can't judge this by eye (Schenker & Gentleman, 2001).
 - **Why dots and not bars:** position along a shared scale is read most accurately (Cleveland & McGill, 1984).
 - Gas turbine has no prediction target, so its downstream panel says "Not available". A panel whose score exists but is undefined (California quick's gap closed, below) says "Not defined".
 
@@ -62,7 +62,7 @@ Every model's results go into the same five figures, drawn from saved evaluation
 - **Checked on our data:** the floor held in all 228 columns of the 8 DAE v2 runs. Use the plain Wasserstein value (`estimate` in the JSON), not the bias-corrected one. The floor is exact for the plain value, and the correction can push a dot slightly below the line.
 - **What counts as evidence** that accuracy is not enough: dots far above the diagonal, and pairs of methods that swap order between the two axes. A weak correlation does not count, because the floor builds part of the correlation in.
 - **Hypothesis to write down before the runs:** random-forest imputers average many trees, which pulls their guesses towards the middle of each column, so their dots sit closer to the floor than the deep models' dots.
-- The figure uses the MAE that evaluate_v2 saves, which is pooled over all cells rather than averaged by column, so it needs no prediction files and computes no score of its own. On the DAE v2 runs the two versions differ by at most 0.005, so a dot can sit up to about that much below the line. If evaluate_v2 later saves a column-averaged MAE improvement as `mae_improvement`, the figure uses it automatically.
+- The figure uses the MAE that evaluate saves, which is pooled over all cells rather than averaged by column, so it needs no prediction files and computes no score of its own. On the DAE v2 runs the two versions differ by at most 0.005, so a dot can sit up to about that much below the line. If evaluate later saves a column-averaged MAE improvement as `mae_improvement`, the figure uses it automatically.
 
 ### 4. Effect of the missing rate (Results slide)
 
@@ -80,7 +80,7 @@ Every model's results go into the same five figures, drawn from saved evaluation
 
 ## Optional, for the appendix
 
-- **Per-column heatmap (not built yet).** Rows are methods, columns are features, and the colour shows each column's RMSE improvement: blue better than mean, red worse, grey equal. It would show where a method fails, such as the California `AveOccup` outlier below. No evaluator writes per-column scores yet, and computing them here would duplicate the evaluation code. It can be added once evaluate_v2 saves them.
+- **Per-column heatmap (not built yet).** Rows are methods, columns are features, and the colour shows each column's RMSE improvement: blue better than mean, red worse, grey equal. It would show where a method fails, such as the California `AveOccup` outlier below. No evaluator writes per-column scores yet, and computing them here would duplicate the evaluation code. It can be added once evaluate saves them.
 - **Training curves (built).** Loss against epoch, one small panel per dataset. Training and validation lines use two shades of the model's colour, and the best epoch is marked. DAE v2 already writes `training_history.csv` (`epoch, train_masked_mse, validation_masked_mse`) under `results/<model>/training/<dataset>/<mode>/<configuration>/<run_id>/`.
   - **Request to every model owner:** write the same file shape. That means a step column (`epoch`, or the round number for MissForest and iterative ridge) plus one or more named loss or change columns. MissForest's "change between rounds" (its stopping rule) fits directly, so one chart works for every model.
 
@@ -96,13 +96,13 @@ Every model's results go into the same five figures, drawn from saved evaluation
 - Downstream check: the true table predicts house value *worse* than the mean-imputed table (R² −1.28 against 0.39), so "gap closed" can't be computed. Dropping that one row brings the true table back to 0.55.
 - California **full** has neither problem: true 0.60, mean 0.37, and DAE v2 closes 45% [42%, 47%] of the gap.
 
-**Bare prediction paths collide.** Under the new results layout, a bare path such as `.../dae_v2/initial/predictions.csv` is named after its run-ID folder (`initial`). Two models in one evaluate_v2 call then clash. Until it's fixed, pass `NAME=PATH`. The fix is one line in `parse_predictions`: name a bare path after the folder above the run ID.
+**Bare prediction paths collide.** Under the new results layout, a bare path such as `.../dae_v2/initial/predictions.csv` is named after its run-ID folder (`initial`). Two models in one evaluate call then clash. Until it's fixed, pass `NAME=PATH`. The fix is one line in `parse_predictions`: name a bare path after the folder above the run ID.
 
 ## What we need to decide
 
 1. **Prepare rates 0.1, 0.2 and 0.5?** It's deterministic and uses the committed raw files: `python -m data_preprocessing.prepare_all --mode quick --skip-download --rate 0.1 0.2 0.5` (and `--mode full` if that's the headline). Figures 4 and 5 need it, and figure 3 gets four times as many dots.
 2. **Which mode is the headline, quick or full?** Full avoids both California quick problems but costs the most runtime, especially for random forest on superconductivity.
-3. **Run evaluate_v2 once per setting with every model's predictions together**, so the paired bootstrap covers every pair of models.
+3. **Run evaluate once per setting with every model's predictions together**, so the paired bootstrap covers every pair of models.
 
 `matplotlib` and `scipy`, which these figures use, are now listed in `requirements.txt`.
 

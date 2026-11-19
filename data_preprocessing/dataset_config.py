@@ -35,21 +35,21 @@ DATASETS = {
          'tract-level census summaries (identical for every loan in a tract)',
          'cost fields mostly NA or Exempt: total_loan_costs, total_points_and_fees, origination_charges, discount_points, lender_credits'),
         'https://ffiec.cfpb.gov/data-browser/', raw_files=('source.csv',)),
+    'superconductivity': DatasetConfig('Superconductivty Data', 21263,
+        ('number_of_elements',) + tuple(f'{s}_{p}' for p in _properties for s in _summaries),
+        ('critical_temp', 'unique_m.csv (alternative representation, not additional rows)'),
+        'https://archive.ics.uci.edu/dataset/464/superconductivty+data', 464, ('source.csv',)),
     'gas_turbine': DatasetConfig('Gas Turbine CO and NOx Emission Data Set', 36733,
         ('AT', 'AP', 'AH', 'AFDP', 'GTEP', 'TIT', 'TAT', 'TEY', 'CDP', 'CO', 'NOX'), ('year',),
         'https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set', 551,
         tuple(f'gt_{y}.csv' for y in range(2011, 2016))),
 }
 
-# Replaced by hmda_ri_2023 on 18 November 2026 (see data/LEGACY_README.md). It is not prepared, evaluated or run by
-# default any more, but its committed files can still be used by naming it explicitly (the team wanted it back on
-# 19 November 2026 for its collinear features; see meeting_notes/4th_meeting.md).
+# Nothing is retired. On 19 November 2026 Superconductivity came back and HMDA stayed; both are required.
+# See data/README.md and meeting_notes/4th_meeting.md. Kept so older callers of RETIRED still import.
 RETIRED = {
-    'superconductivity': DatasetConfig('Superconductivty Data', 21263,
-        ('number_of_elements',) + tuple(f'{s}_{p}' for p in _properties for s in _summaries),
-        ('critical_temp', 'unique_m.csv (alternative representation, not additional rows)'),
-        'https://archive.ics.uci.edu/dataset/464/superconductivty+data', 464, ('source.csv',)),
 }
+
 
 def config_path(root, dataset, mode, rate, seed):
     from pathlib import Path

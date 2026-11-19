@@ -11,7 +11,7 @@ python -m models.random_forest.run_experiment --plan      # what is done, what i
 caffeinate -is python -m models.random_forest.run_experiment
 ```
 
-The second command runs both models on all four datasets in `full` mode, for every missing rate prepared with seed 0 (currently 0.3), using 8 worker processes with one thread each. `caffeinate` keeps a Mac awake; plug the laptop in and keep the lid open.
+The second command runs both models on all five datasets in `full` mode, for every missing rate prepared with seed 0 (currently 0.3), using 8 worker processes with one thread each. `caffeinate` keeps a Mac awake; plug the laptop in and keep the lid open. If full Superconductivity is too slow, the meeting note says to use its Quick configuration.
 
 The command can be stopped and restarted. Each tuning trial, final fit and evaluation is saved as soon as it finishes, and a rerun skips work saved with the same settings. Reusing a `--run-id` with different settings is refused before anything runs, so saved results are never mixed or overwritten. Pick a new run ID instead.
 
@@ -68,7 +68,7 @@ The file holds the chosen hyperparameters, the rate and rows they were tuned on,
 ## What else it does
 
 1. **Final fit.** The hyperparameters fill the full model input. Visible cells are kept unchanged, and the run checks that the input matches the hash in its `metadata.json`.
-2. **Evaluation.** Shared evaluation version 2 scores the predictions only after they are saved: RMSE, MAE, R², the Wasserstein distance and their improvements over mean imputation, with 95% bootstrap intervals, plus the downstream check. The code doesn't use version 1.
+2. **Evaluation.** `shared_evaluation.evaluate` scores the predictions only after they are saved: RMSE, MAE, R², the Wasserstein distance and their improvements over mean imputation, with 95% bootstrap intervals, plus the downstream check.
 3. **Paired comparison.** Version 2 scores both models of each setting together, so the MissForest-vs-MICE-RF difference gets a p-value.
 
 **Models.**

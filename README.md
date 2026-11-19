@@ -8,6 +8,7 @@ Clone or update `dev` to use the **actual shared raw data and prepared Quick/Ful
 | --- | ---: | ---: | ---: | ---: |
 | Credit Card Default | 30,000 | 30,000 | 14 | 3,000 |
 | California Housing | 20,640 | 20,640 | 8 | 3,000 |
+| HMDA Rhode Island 2023 | 20,714 | 17,809 | 7 | 3,000 |
 | Superconductivity | 21,263 | 21,263 | 81 | 3,000 |
 | Gas Turbine CO & NOx | 36,733 | 36,733 | 11 | 3,000 |
 
@@ -28,7 +29,7 @@ models/
   iterative/            Implemented iterative imputer and historical results (Henry)
   knn/                  K-nearest neighbours placeholder (Hamad)
   random_forest/        Random Forest / MissForest placeholder (Blith)
-shared_evaluation/      Evaluation version 2 (main protocol); version 1 kept for runners that still call it
+shared_evaluation/      The project evaluator: python -m shared_evaluation.evaluate
 results/                Model-owned training and evaluation directories; checkpoints stay local
 tests/                  Automated data, model and evaluation checks
 ```
@@ -68,7 +69,7 @@ The flow is raw data → dataset-level `cleaned/X_cleaned.csv` → Quick/Full `X
 
 ## Evaluate
 
-Evaluation version 2 (`shared_evaluation/evaluate_v2.py`) is the main protocol for every model. It loads the configuration's truth, evaluation mask and mean baseline from `data/processed/`, checks their hashes, and scores only the hidden cells. The three headline scores are all measured against mean imputation (0 = mean imputation, higher is better):
+`shared_evaluation/evaluate.py` is the evaluator for every model. It loads the configuration's truth, evaluation mask and mean baseline from `data/processed/`, checks their hashes, and scores only the hidden cells. The three headline scores are all measured against mean imputation (0 = mean imputation, higher is better):
 
 - accuracy: RMSE improvement (`relative_improvement`);
 - distribution: Wasserstein improvement (`wasserstein_improvement`);
@@ -79,14 +80,14 @@ RMSE, MAE and macro per-feature R² are saved too, computed exactly as in versio
 Score all models of one configuration in one call, naming each file `NAME=PATH`:
 
 ```bash
-python -m shared_evaluation.evaluate_v2 --dataset credit_card --mode full --rate 0.3 --seed 0 --downstream \
+python -m shared_evaluation.evaluate --dataset credit_card --mode full --rate 0.3 --seed 0 --downstream \
     --predictions MissForest=data/output/credit_card/full/rate_0.3_seed_0/MissForest/initial/predictions.csv \
                   dae_v2=data/output/credit_card/full/rate_0.3_seed_0/dae_v2/initial/predictions.csv
 ```
 
-It prints a table and writes `data/output/<dataset>/<mode>/<configuration>/evaluation_v2_<hash>.json`. Add `--model MODEL --run-id ID` to save a report under `results/<model>/evaluation/<dataset>/<mode>/<configuration>/<run_id>/` instead. In Python, use `evaluate_files`, `evaluate` or `bootstrap` from `shared_evaluation.evaluate_v2`. The reasons for each score are in [EVALUATION_V2.md](shared_evaluation/EVALUATION_V2.md), and figures are drawn from the reports by [shared_visualization](shared_visualization/README.md).
+It prints a table and writes `data/output/<dataset>/<mode>/<configuration>/evaluation_v2_<hash>.json`. Add `--model MODEL --run-id ID` to save a report under `results/<model>/evaluation/<dataset>/<mode>/<configuration>/<run_id>/` instead. In Python, use `evaluate_files`, `evaluate` or `bootstrap` from `shared_evaluation.evaluate`. Pass predictions as `{name: path}`. The reasons for each score are in [EVALUATION_V2.md](shared_evaluation/EVALUATION_V2.md), and figures are drawn from the reports by [shared_visualization](shared_visualization/README.md).
 
-Version 1 (`shared_evaluation/evaluate.py`: RMSE, MAE, R² and RMSE improvement, without intervals) is kept only because existing runners, including DAE V2's, still call it. Their predictions are saved, so score them with version 2 as above; nothing has to be retrained.
+Older `evaluation_v1_*.json` files stay where they are. New reports are `evaluation_v2_<hash>.json`.
 
 ## Train and evaluate DAE V2
 
@@ -107,7 +108,7 @@ python -m models.deep_learning_v2.run_experiment --mode full --rate 0.3 --seed 0
 
 The MLP encoder-decoder receives zero-filled standardized values and a visibility mask. Each training batch hides more originally observed cells; only those extra hidden cells contribute to masked MSE. Early stopping uses a separate fixed holdout of observed cells excluded from training inputs and targets. At inference only missing cells are replaced. Default settings: Adam, learning rate 0.001, batch size 256, 30% extra training masking, 10% observed validation holdout, ReLU, dropout 0.05, and at most 150 epochs with patience 20. Hidden widths and bottleneck vary with feature count. `--run-id` prevents overwriting earlier runs.
 
-The runner writes a version 1 report for each run. Score its predictions with version 2 as described in [Evaluate](#evaluate).
+The runner scores each run with `shared_evaluation.evaluate` and writes `evaluation_v2_<hash>.json`. The same command is in [Evaluate](#evaluate).
 
 See [DAE benchmark results](results/dae_v2/evaluation/summary/benchmark_summary.csv) (version 1 scores) and [training histories and configurations](results/dae_v2/training/). The initial experiment uses one seed and a transductive missing-cell holdout; these scores do not measure generalization to unseen rows or establish significance across seeds. Credits and change notices for the datasets are in [data/README.md](data/README.md). The project uses NumPy, pandas, PyTorch, SciPy, scikit-learn and ucimlrepo.
 

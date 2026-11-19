@@ -24,7 +24,7 @@ import shared_visualization as sv  # noqa: E402
 from data_preprocessing.dataset_config import DATASETS, config_path  # noqa: E402
 from data_preprocessing.download import sha256  # noqa: E402
 from data_preprocessing.prepare_all import export_configuration, read_matrix  # noqa: E402
-from shared_evaluation.evaluate_v2 import evaluate_files as evaluate_v2_files  # noqa: E402
+from shared_evaluation.evaluate import evaluate_files  # noqa: E402
 from shared_visualization import style  # noqa: E402
 from shared_visualization.results import Results, one_setting, point_values  # noqa: E402
 from shared_visualization.stats import (cliques, holm, pairwise_wilcoxon, rank_matrix,  # noqa: E402
@@ -60,7 +60,7 @@ def real_report(root, noise=None, n_boot=40):
         (truth + np.where(hidden, rng.normal(scale=sd, size=truth.shape), 0.0)).to_csv(
             root / name / 'predictions.csv', index_label='row_id')
         paths[name] = root / name / 'predictions.csv'
-    report, path = evaluate_v2_files('california_housing', 'quick', 0.3, 0, paths, root / 'processed', root / 'output',
+    report, path = evaluate_files('california_housing', 'quick', 0.3, 0, paths, root / 'processed', root / 'output',
                                      n_boot=n_boot, run_downstream=True, raw_dir=root / 'raw')
     return report, path, directory
 

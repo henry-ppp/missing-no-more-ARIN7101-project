@@ -74,12 +74,13 @@ def run(dataset, mode='quick', rate=0.3, seed=0, config=TrainConfig(),
         'checkpoint': checkpoint.as_posix()}, indent=2), encoding='utf-8')
     # Only now import the evaluator, after predictions and checkpoint exist.
     from shared_evaluation.evaluate import evaluate_files
-    scores, evaluation_path = evaluate_files(dataset, mode, rate, seed, prediction_path,
-        processed_dir, results_dir, model='dae_v2', run_id=run_id)
-    evaluation = json.loads(evaluation_path.read_text(encoding='utf-8'))
+    saved, evaluation_path = evaluate_files(dataset, mode, rate, seed, {'dae_v2': prediction_path},
+        processed_dir, results_dir, n_boot=0, model='dae_v2', run_id=run_id)
+    point = saved['accuracy_and_distribution']['methods']['dae_v2']
+    scores = {name: point[name]['estimate'] for name in ('rmse', 'mae', 'r2', 'relative_improvement')}
     report = {'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed, 'run_id': run_id,
         'rows': len(incomplete), 'features': incomplete.shape[1], **scores,
-        'mean_baseline_rmse': evaluation['mean_baseline_rmse'],
+        'mean_baseline_rmse': saved['accuracy_and_distribution']['methods']['mean']['rmse']['estimate'],
         **{key: training[key] for key in ('best_epoch', 'epochs_completed', 'best_validation_loss', 'runtime_seconds', 'device')},
         'checkpoint': checkpoint.as_posix(), 'predictions': prediction_path.as_posix(), 'evaluation': evaluation_path.as_posix(),
         'training_summary': (result_folder / 'training_summary.json').as_posix(), 'config': asdict(config)}

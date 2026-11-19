@@ -1,6 +1,6 @@
 # Evaluation v2: the main protocol
 
-Every model is scored on three core criteria: accuracy, distribution and usefulness for prediction. Each one is measured against mean imputation and comes with a 95% confidence interval. Version 2 is the project's main evaluation protocol; version 1 (`evaluate.py`) is kept only for runners that still call it.
+Every model is scored on three core criteria: accuracy, distribution and usefulness for prediction. Each one is measured against mean imputation and comes with a 95% confidence interval. The command is `python -m shared_evaluation.evaluate`.
 
 ## Why change
 
@@ -49,14 +49,13 @@ MAE, R² and raw RMSE are still computed and saved, for an appendix.
 
 ## What's in the repo
 
-- `metrics_v2.py`, `evaluate_v2.py` and `tests/test_evaluation_v2.py`. RMSE, MAE, R² and RMSE improvement are computed exactly as in version 1, so the two versions agree on those four.
-- Version 2 doesn't import version 1. `evaluate.py` and `metrics.py` stay while runners still call them (DAE V2, `models/deep_learning`, iterative ridge). The random forest runner and `shared_visualization` don't need them. Those runners save their predictions, so version 2 can score them without retraining. Once no runner calls version 1, delete both files, the version 1 note in `data/README.md` and the version 1 checks in `tests/test_benchmark.py`.
-- It reads only `predictions.csv` files, so it works for every model.
+- `evaluate.py`, `metrics_v2.py` and `tests/test_evaluation_v2.py`. RMSE, MAE, R² and RMSE improvement match the older four-score reports. Wasserstein and its improvement are in the same call.
+- It reads only `predictions.csv` files, so it works for every model. Older `evaluation_v1_*.json` files stay where they are.
 
 Run it from the repo root with every model of one configuration, so all pairs share the same resamples. Name each file `NAME=PATH`:
 
 ```bash
-python -m shared_evaluation.evaluate_v2 --dataset credit_card --mode quick --rate 0.3 --seed 0 --downstream \
+python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --downstream \
     --predictions dae_v2=data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv \
                   <model>=data/output/credit_card/quick/rate_0.3_seed_0/<model>/<run_id>/predictions.csv
 ```

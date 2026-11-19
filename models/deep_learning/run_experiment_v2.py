@@ -318,18 +318,20 @@ def run(
 
     from shared_evaluation.evaluate import evaluate_files
 
-    scores, evaluation_path = evaluate_files(
+    saved, evaluation_path = evaluate_files(
         dataset,
         mode,
         rate,
         seed,
-        prediction_path,
+        {model_id: prediction_path},
         processed_dir,
         results_dir,
+        n_boot=0,
         model=model_id,
         run_id=run_id,
     )
-    evaluation = json.loads(evaluation_path.read_text(encoding="utf-8"))
+    point = saved["accuracy_and_distribution"]["methods"][model_id]
+    scores = {name: point[name]["estimate"] for name in ("rmse", "mae", "r2", "relative_improvement")}
     report = {
         "dataset": dataset,
         "mode": mode,
@@ -339,7 +341,7 @@ def run(
         "rows": len(incomplete),
         "features": incomplete.shape[1],
         **scores,
-        "mean_baseline_rmse": evaluation["mean_baseline_rmse"],
+        "mean_baseline_rmse": saved["accuracy_and_distribution"]["methods"]["mean"]["rmse"]["estimate"],
         "best_epoch": training_summary["best_epoch"],
         "epochs_completed": training_summary["epochs_completed"],
         "best_validation_loss": training_summary["best_validation_loss"],

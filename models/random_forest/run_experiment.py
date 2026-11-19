@@ -314,9 +314,9 @@ def _fit_and_save(job: Job, X: pd.DataFrame, params: dict, key: dict, settings: 
 
 def _evaluate(job: Job, run: dict, params: dict, source: dict, settings: Settings, paths: Paths) -> dict:
     # Imported only now, after the predictions exist, so the model code never touches evaluation files.
-    from shared_evaluation.evaluate_v2 import evaluate_files as evaluate_v2
+    from shared_evaluation.evaluate import evaluate_files
     prediction = Path(run['prediction'])
-    v2, v2_path = evaluate_v2(job.dataset, job.mode, job.rate, job.seed, {job.model: prediction}, paths.processed,
+    v2, v2_path = evaluate_files(job.dataset, job.mode, job.rate, job.seed, {job.model: prediction}, paths.processed,
                               paths.results, n_boot=settings.n_boot, boot_seed=job.seed, run_downstream=True,
                               raw_dir=paths.raw, model=job.model, run_id=job.run_id)
     accuracy = v2['accuracy_and_distribution']['methods'][job.model]
@@ -362,9 +362,9 @@ def comparison_done(members: list[Job], settings: Settings, paths: Paths) -> boo
 def compare(members: list[Job], settings: Settings, paths: Paths) -> dict:
     """Evaluate the models of one setting together, so the bootstrap pairs them and gives their differences a p-value.
     Saved under results/random_forest/comparison/evaluation/<run>/."""
-    from shared_evaluation.evaluate_v2 import evaluate_files as evaluate_v2
+    from shared_evaluation.evaluate import evaluate_files
     job = members[0]
-    report, _ = evaluate_v2(job.dataset, job.mode, job.rate, job.seed,
+    report, _ = evaluate_files(job.dataset, job.mode, job.rate, job.seed,
                             {m.model: m.prediction_path(paths) for m in members}, paths.processed, paths.results,
                             n_boot=settings.n_boot, boot_seed=job.seed, run_downstream=True, raw_dir=paths.raw,
                             model=COMPARISON, run_id=job.run_id)
@@ -390,10 +390,12 @@ def write_summaries(paths: Paths, models) -> list[Path]:
             rows.append(row)
         if rows:
             target = paths.results / model / 'evaluation' / 'summary' / 'benchmark_summary.csv'
-            text = pd.DataFrame(rows).sort_values(['mode', 'dataset', 'rate', 'run_id']).to_csv(index=False)
-            if not target.is_file() or target.read_text() != text:     # leave an unchanged file untouched
+            text = pd.DataFrame(rows).sort_values(['mode', 'dataset', 'rate', 'run_id']).to_csv(
+                index=False, lineterminator='\n')
+            current = target.read_text(encoding='utf-8').replace('\r\n', '\n') if target.is_file() else None
+            if current != text:     # leave an unchanged file untouched
                 target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_text(text)
+                target.write_bytes(text.encode('utf-8'))
             written.append(target)
     return written
 
@@ -540,7 +542,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--models', nargs='+', choices=list(METHODS), default=list(METHODS))
     parser.add_argument('--datasets', nargs='+', choices=[*DATASETS, *RETIRED], default=list(DATASETS),
-                        help='Default: every current dataset; a retired one (superconductivity) runs only when named')
+                        help='Default: every dataset in data/README.md, including HMDA and superconductivity')
     parser.add_argument('--mode', choices=['quick', 'full'], default='full')
     parser.add_argument('--rates', nargs='+', type=float, help='Default: every rate prepared for the seed')
     parser.add_argument('--seed', type=int, default=SEED, help='The one shared seed (default 0)')

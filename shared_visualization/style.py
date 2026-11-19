@@ -147,7 +147,7 @@ DATASETS = {
     'california_housing': 'California housing',
     'hmda_ri_2023': 'HMDA mortgages (RI)',
     'gas_turbine': 'Gas turbine',
-    'superconductivity': 'Superconductivity',     # retired from the benchmark; kept for old reports
+    'superconductivity': 'Superconductivity',
 }
 DATASET_SOURCES = {
     'credit_card': 'UCI Default of Credit Card Clients (Yeh)',

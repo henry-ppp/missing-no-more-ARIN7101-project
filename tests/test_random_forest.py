@@ -1,11 +1,9 @@
 """Offline tests for models.random_forest: synthetic tables, tiny forests, temporary folders only."""
 import json
-import sys
 import unittest
 import warnings
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
@@ -166,9 +164,7 @@ class Experiment(unittest.TestCase):
             paths = self.prepare(Path(temp))
             jobs = plan(['MissForest', 'MICE-RF'], ['california_housing'], 'full', None, 0, 'test', paths)
             self.assertEqual([(j.model, j.rate) for j in jobs], [('MissForest', 0.3), ('MICE-RF', 0.3)])
-            # Evaluation version 1 is blocked: the pipeline must only need version 2 (one worker runs in this process).
-            with patch.dict(sys.modules, {'shared_evaluation.evaluate': None, 'shared_evaluation.metrics': None}):
-                experiments = run(jobs, SMALL, TUNE, paths, **QUIET)
+            experiments = run(jobs, SMALL, TUNE, paths, **QUIET)
             for job, experiment in zip(jobs, experiments):
                 with self.subTest(job.model):
                     self.assertEqual(experiment['seed'], 0)

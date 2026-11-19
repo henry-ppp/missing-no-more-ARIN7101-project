@@ -105,20 +105,24 @@ class BenchmarkTests(unittest.TestCase):
             self.assertTrue(model_input.isna().any().any())
             predictions = root / 'mean_predictions.csv'
             model_input.fillna(model_input.mean()).to_csv(predictions)
-            results, output = evaluate_files('california_housing', 'quick', .3, 0, predictions, processed, root / 'output', model='mean')
-            self.assertAlmostEqual(results['relative_improvement'], 0, places=12)
+            results, output = evaluate_files('california_housing', 'quick', .3, 0, {'column_mean': predictions},
+                                             processed, root / 'output', n_boot=0, model='column_mean')
+            point = results['accuracy_and_distribution']['methods']['column_mean']
+            self.assertAlmostEqual(point['relative_improvement']['estimate'], 0, places=12)
             self.assertTrue(output.exists())
             cli = subprocess.run([sys.executable, '-m', 'shared_evaluation.evaluate',
-                '--dataset', 'california_housing', '--predictions', str(predictions),
-                '--model', 'mean', '--processed-dir', str(processed), '--output-dir', str(root / 'cli-output')],
+                '--dataset', 'california_housing', '--predictions', f'column_mean={predictions}',
+                '--n-boot', '0', '--model', 'column_mean', '--processed-dir', str(processed),
+                '--output-dir', str(root / 'cli-output')],
                 capture_output=True, text=True)
             self.assertEqual(cli.returncode, 0, cli.stderr)
-            self.assertEqual(set(json.loads(output.read_text())['metrics']), {'rmse', 'mae', 'r2', 'relative_improvement'})
+            self.assertEqual(set(point), {'rmse', 'mae', 'r2', 'relative_improvement', 'wasserstein', 'wasserstein_improvement'})
             with patch('data_preprocessing.prepare_all.download', side_effect=AssertionError('Must reuse cache')):
                 self.assertEqual(prepare('california_housing', processed_dir=processed), directory)
             (directory / 'mask_eval.csv').write_text('tampered')
             with self.assertRaises(ValueError):
-                evaluate_files('california_housing', 'quick', .3, 0, predictions, processed, root / 'output', model='mean')
+                evaluate_files('california_housing', 'quick', .3, 0, {'column_mean': predictions},
+                               processed, root / 'output', n_boot=0, model='column_mean')
 
     def test_fresh_layout_in_both_orders(self):
         dataset = 'california_housing'
@@ -157,8 +161,7 @@ class BenchmarkTests(unittest.TestCase):
     def test_published_dae_scores_after_layout_migration(self):
         repo = Path(__file__).resolve().parents[1]
         processed = repo / 'data' / 'processed'
-        # Datasets with published DAE runs that are still in the benchmark (HMDA was added after those runs,
-        # superconductivity has been retired).
+        # Datasets with published DAE runs. HMDA was added after those runs, so it is absent here.
         published = sorted({p.relative_to(repo / 'data' / 'output').parts[0] for p in
                             (repo / 'data' / 'output').glob('*/*/rate_0.3_seed_0/dae_v2/initial/predictions.csv')}
                            & set(DATASETS))
@@ -172,10 +175,12 @@ class BenchmarkTests(unittest.TestCase):
                         reports = repo / 'results' / 'dae_v2' / 'evaluation' / relative / 'initial'
                         historical, = reports.glob('evaluation_v1_*.json')
                         expected = json.loads(historical.read_text(encoding='utf-8'))
-                        scores, report = evaluate_files(dataset, mode, .3, 0, predictions, processed, temp, model='dae_v2', run_id='initial')
-                        for name, score in scores.items():
-                            self.assertAlmostEqual(score, expected['metrics'][name], places=13)
-                        self.assertAlmostEqual(json.loads(report.read_text())['mean_baseline_rmse'],
+                        saved, _ = evaluate_files(dataset, mode, .3, 0, {'dae_v2': predictions}, processed, temp,
+                                                  n_boot=0, model='dae_v2', run_id='initial')
+                        point = saved['accuracy_and_distribution']['methods']['dae_v2']
+                        for name, score in expected['metrics'].items():
+                            self.assertAlmostEqual(point[name]['estimate'], score, places=13)
+                        self.assertAlmostEqual(saved['accuracy_and_distribution']['methods']['mean']['rmse']['estimate'],
                                                expected['mean_baseline_rmse'], places=13)
 
     def test_gas_archive_offline(self):

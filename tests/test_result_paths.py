@@ -9,8 +9,7 @@ from unittest.mock import patch
 import pandas as pd
 
 from models.deep_learning_v2.run_experiment import run
-from shared_evaluation.evaluate import evaluate_files as evaluate_v1
-from shared_evaluation.evaluate_v2 import evaluate_files as evaluate_v2
+from shared_evaluation.evaluate import evaluate_files
 from shared_evaluation.result_paths import evaluation_directory, write_report
 
 
@@ -30,7 +29,7 @@ class ResultPathsTests(unittest.TestCase):
                 write_report(report, {'rmse': 2})
             self.assertEqual(json.loads(report.read_bytes()), {'rmse': 1})
 
-    def test_runner_and_both_evaluators_with_no_training(self):
+    def test_runner_writes_one_evaluation(self):
         benchmark = Path('data/processed/credit_card/quick/rate_0.3_seed_0')
         with TemporaryDirectory(dir=Path.cwd()) as tmp:
             root = Path(tmp)
@@ -54,16 +53,12 @@ class ResultPathsTests(unittest.TestCase):
             self.assertEqual(summary['run_id'].tolist(), ['smoke'])
             out = results / 'dae_v2/evaluation' / relative
             self.assertEqual(Path(report['evaluation']).parent, out)
-            self.assertTrue(Path(report['evaluation']).name.startswith('evaluation_v1_'))
+            self.assertTrue(Path(report['evaluation']).name.startswith('evaluation_v2_'))
             predictions = Path(report['predictions'])
-            _, repeated = evaluate_v1('credit_card', 'quick', .3, 0, predictions,
-                                        output_dir=results, model='dae_v2', run_id='smoke')
+            _, repeated = evaluate_files('credit_card', 'quick', .3, 0, {'dae_v2': predictions},
+                                         output_dir=results, n_boot=0, model='dae_v2', run_id='smoke')
             self.assertEqual(repeated, Path(report['evaluation']))
-            _, formal = evaluate_v2('credit_card', 'quick', .3, 0, {'dae_v2': predictions},
-                                      output_dir=results, n_boot=0, model='dae_v2', run_id='smoke')
-            self.assertEqual(formal.parent, out)
-            self.assertTrue(formal.name.startswith('evaluation_v2_'))
-            _, standalone = evaluate_v2('credit_card', 'quick', .3, 0, {'mean_probe': benchmark / 'X_mean_baseline.csv'},
-                                          output_dir=root / 'standalone', n_boot=0)
+            _, standalone = evaluate_files('credit_card', 'quick', .3, 0, {'mean_probe': benchmark / 'X_mean_baseline.csv'},
+                                           output_dir=root / 'standalone', n_boot=0)
             self.assertEqual(standalone.parent, root / 'standalone/credit_card/quick/rate_0.3_seed_0')
             self.assertEqual({p.name for p in results.iterdir()}, {'dae_v2'})

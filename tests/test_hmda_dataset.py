@@ -42,9 +42,9 @@ class Response(io.BytesIO):
 
 
 class HMDADataset(unittest.TestCase):
-    def test_schema_replaces_superconductivity(self):
-        self.assertEqual(list(DATASETS), ['credit_card', 'california_housing', 'hmda_ri_2023', 'gas_turbine'])
-        self.assertIn('superconductivity', RETIRED)
+    def test_schema_includes_hmda_and_superconductivity(self):
+        self.assertEqual(list(DATASETS), ['credit_card', 'california_housing', 'hmda_ri_2023', 'superconductivity', 'gas_turbine'])
+        self.assertEqual(RETIRED, {})
         self.assertEqual(FEATURES, ('loan_amount', 'loan_to_value_ratio', 'interest_rate', 'rate_spread', 'loan_term',
                                     'property_value', 'income'))
 

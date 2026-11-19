@@ -74,7 +74,8 @@ def write_summary(results_dir) -> Path:
         row = {key: report[key] for key in (
             "dataset", "mode", "rate", "seed", "run_id", "rows", "features",
             "max_iter", "tol", "alpha", "n_iter", "fit_seconds")}
-        row.update({f"v1_{key}": value for key, value in report["metrics_v1"].items()})
+        point = report.get("metrics") or report.get("metrics_v1")
+        row.update({f"v1_{key}": value for key, value in point.items()})
         row["mean_baseline_rmse"] = report["mean_baseline_rmse"]
         for name in HEADLINE:
             value = report["headline"].get(name)
@@ -128,24 +129,24 @@ def run(dataset, mode="full", rate=0.3, seed=0, *, max_iter=50, tol=1e-3, alpha=
     print(f"{dataset}: {model.n_iter_} rounds, {elapsed:.1f}s", flush=True)
 
     # Imported only now, after predictions exist, so fitting never opens evaluation files.
-    from shared_evaluation.evaluate import evaluate_files as evaluate_v1
-    from shared_evaluation.evaluate_v2 import evaluate_files as evaluate_v2
+    from shared_evaluation.evaluate import evaluate_files
 
-    scores, evaluation_v1 = evaluate_v1(
-        dataset, mode, rate, seed, predictions, processed_dir, results_dir, model=MODEL, run_id=run_id)
-    version2, evaluation_v2 = evaluate_v2(
+    saved, evaluation_path = evaluate_files(
         dataset, mode, rate, seed, {MODEL: predictions}, processed_dir, results_dir,
         n_boot=n_boot, boot_seed=seed, run_downstream=True, model=MODEL, run_id=run_id)
+    methods = saved["accuracy_and_distribution"]["methods"]
+    scores = {name: methods[MODEL][name]["estimate"] for name in (
+        "rmse", "mae", "r2", "relative_improvement", "wasserstein", "wasserstein_improvement")}
     report = {
         "dataset": dataset, "mode": mode, "rate": rate, "seed": seed, "run_id": run_id,
         "rows": int(incomplete.shape[0]), "features": int(incomplete.shape[1]),
         "max_iter": max_iter, "tol": tol, "alpha": alpha, "n_iter": model.n_iter_, "fit_seconds": elapsed,
-        "metrics_v1": scores, "mean_baseline_rmse": json.loads(evaluation_v1.read_text(encoding="utf-8"))["mean_baseline_rmse"],
-        "headline": _headline(version2), "predictions": predictions.as_posix(), "prediction_sha256": prediction_sha,
-        "input_sha256": input_sha, "evaluation_v1": evaluation_v1.as_posix(), "evaluation_v2": evaluation_v2.as_posix()}
+        "metrics": scores, "mean_baseline_rmse": methods["mean"]["rmse"]["estimate"],
+        "headline": _headline(saved), "predictions": predictions.as_posix(), "prediction_sha256": prediction_sha,
+        "input_sha256": input_sha, "evaluation": evaluation_path.as_posix()}
     _write_json(experiment_dir / "experiment.json", report)
     write_summary(results_dir)
-    print(json.dumps({"dataset": dataset, "metrics_v1": scores, "headline": report["headline"]}, allow_nan=False), flush=True)
+    print(json.dumps({"dataset": dataset, "metrics": scores, "headline": report["headline"]}, allow_nan=False), flush=True)
     return report
 
 

@@ -12,7 +12,7 @@ From the repository root, after `pip install -r requirements.txt`:
 2. Score **all models of one setting together**, so the bootstrap pairs every model with every other:
 
    ```bash
-   python -m shared_evaluation.evaluate_v2 --dataset credit_card --mode quick --rate 0.3 --seed 0 --downstream \
+   python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --downstream \
        --predictions missforest=data/output/credit_card/quick/rate_0.3_seed_0/missforest/run1/predictions.csv \
                      dae_v2=data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv
    ```
@@ -71,7 +71,7 @@ distribution_figure(truth, imputed, 'BILL_AMT1', dataset='credit_card').save('fi
 - `scores.csv`: `dataset, mode, rate, seed, method, metric, estimate`, plus optional `bias_corrected, ci_low, ci_high`. One row per setting, method and score. Include the `mean` baseline's raw scores, so improvements can be derived.
 - `pairs.csv` (optional): `dataset, mode, rate, seed, method_a, method_b, metric, difference, p_value`. One row per paired comparison, with `difference = method_a - method_b`. The scoreboard uses it to mark significance.
 
-Score names the figures know: `relative_improvement` (RMSE), `wasserstein_improvement`, `gap_closed`, `mae_improvement` (derived from `mae` when missing), `downstream_score`, `rmse`, `mae`, `r2`, `wasserstein`. Wasserstein scores are plotted bias-corrected and the others as plain estimates, matching the table `evaluate_v2` prints.
+Score names the figures know: `relative_improvement` (RMSE), `wasserstein_improvement`, `gap_closed`, `mae_improvement` (derived from `mae` when missing), `downstream_score`, `rmse`, `mae`, `r2`, `wasserstein`. Wasserstein scores are plotted bias-corrected and the others as plain estimates, matching the table `evaluate` prints.
 
 ## Models, colours and shapes
 

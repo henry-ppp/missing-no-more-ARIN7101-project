@@ -1,27 +1,18 @@
 # Shared imputation benchmark data
 
-The four datasets below are fixed. On 18 November 2026 HMDA Rhode Island 2023 (mortgage loans) replaced
-Superconductivity, whose 81 columns made random-forest runs about ten times slower than the other tables; the earlier
-specification is kept in [LEGACY_README.md](LEGACY_README.md).
+The five datasets below are fixed. On 19 November 2026 the group put Superconductivity back and kept HMDA Rhode Island 2023. Both are required. Superconductivity's 81 collinear columns stay because they show how traditional methods and deep learning differ. HMDA is not an optional extra. The 18 November snapshot, which had replaced Superconductivity with HMDA, is in [LEGACY_README.md](LEGACY_README.md).
 
-Numbers are original row counts. Complete-case cleaning retained every row of credit card, California and gas turbine,
-and 17,809 of the 20,714 HMDA loans. The raw CSVs and Quick and Full benchmark files (30% MCAR, seed 0) of all four
-datasets, and DAE predictions of credit card, California and gas turbine, are in the repository. Teammates should use the
-shared matrices directly; no download or preprocessing is required.
+Numbers are original row counts. Complete-case cleaning retained every row of credit card, California, Superconductivity and gas turbine, and 17,809 of the 20,714 HMDA loans. The raw CSVs and Quick and Full benchmark files (30% MCAR, seed 0) of all five datasets are in the repository. Teammates should use the shared matrices directly; no download or preprocessing is required. If a full Superconductivity run is too slow, use the Quick configuration already in the repo.
 Full ordered schemas and exclusions live in `data_preprocessing/dataset_config.py`.
 
-**Status of the HMDA change (19 November 2026).** `dataset_config.py` lists `hmda_ri_2023` and `download.py` fetches it;
-its raw file and Quick and Full configurations are in `data/raw/` and `data/processed/`. Superconductivity moved to
-`RETIRED` in `dataset_config.py`: its committed files stay as a record but are no longer prepared, evaluated or run by
-default. HMDA's downstream target in `evaluate_v2 --downstream` is whether a loan is government-backed (FHA, VA or
-USDA, from the raw `loan_type` column); gas turbine has no target and is skipped.
-No model has HMDA results yet.
+HMDA's downstream target in `evaluate --downstream` is whether a loan is government-backed (FHA, VA or USDA, from the raw `loan_type` column). Superconductivity's target is critical temperature. Gas turbine has no target and is skipped. No model has HMDA results yet.
 
 | Key | Official dataset / source | Original rows | Inputs | Raw cache |
 | --- | --- | ---: | ---: | --- |
 | credit_card | [UCI Default of Credit Card Clients, ID 350](https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients) | 30,000 | 14 | credit_card/source.csv |
 | california_housing | [scikit-learn California Housing](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html) | 20,640 | 8 | california_housing/source.csv |
 | hmda_ri_2023 | [FFIEC HMDA Data Browser](https://ffiec.cfpb.gov/data-browser/): Rhode Island, 2023, originated loans | 20,714 | 7 | hmda_ri_2023/source.csv |
+| superconductivity | [UCI Superconductivty Data, ID 464](https://archive.ics.uci.edu/dataset/464/superconductivty+data) | 21,263 | 81 | superconductivity/source.csv |
 | gas_turbine | [UCI Gas Turbine CO and NOx Emission, ID 551](https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set) | 36,733 | 11 | gas_turbine/gt_2011.csv through gt_2015.csv |
 
 ## Feature and source contract
@@ -54,6 +45,12 @@ No model has HMDA results yet.
   - loan_to_value_ratio: the reported combined loan-to-value ratio, in percent.
   "NA" and "Exempt" are nonnumeric, so the cleaning rule drops those rows; 17,809 remain.
   The 2023 data were published by the CFPB in 2024.
+- Superconductivity: number_of_elements followed by ten summaries (mean,
+  wtd_mean, gmean, wtd_gmean, entropy, wtd_entropy, range, wtd_range, std,
+  wtd_std) for each property in official order: atomic_mass, fie, atomic_radius,
+  Density, ElectronAffinity, FusionHeat, ThermalConductivity, Valence. Exclude
+  critical_temp. unique_m.csv is an alternative representation, never extra rows.
+  UCI donation: 2018-10-11.
 - Gas: AT, AP, AH, AFDP, GTEP, TIT, TAT, TEY, CDP, CO, NOX. Exclude year.
   Download URL: https://archive.ics.uci.edu/static/public/551/gas+turbine+co+and+nox+emission+data+set.zip
   Require exactly one member for each of five years; concatenate ascending year
@@ -62,7 +59,7 @@ No model has HMDA results yet.
   supervised emission prediction; this benchmark instead studies transductive
   MCAR reconstruction and does not claim comparable supervised results.
 
-For credit use ucimlrepo.fetch_ucirepo ID 350; California
+For credit and Superconductivity use ucimlrepo.fetch_ucirepo IDs 350 and 464. California
 uses the pinned [Deshpande v1 export](https://doi.org/10.17632/hhb6nwfft8.1), verified value-for-value against scikit-learn fetch_california_housing. Raw UCI API tables are exported
 without cleaning (not claimed to be byte-identical source spreadsheets).
 HMDA uses the Data Browser API, https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=RI&years=2023&actions_taken=1,
@@ -125,10 +122,10 @@ data/
     metadata.json          # schema, row IDs, hashes, versions, cleaning, sampling
   output/<dataset>/<mode>/rate_0.3_seed_0/<model>/
     predictions.csv
-  output/<dataset>/<mode>/rate_0.3_seed_0/evaluation_v2_<hash>.json   # standalone version 2 comparison
+  output/<dataset>/<mode>/rate_0.3_seed_0/evaluation_v2_<hash>.json   # standalone comparison
 results/<model>/evaluation/<dataset>/<mode>/rate_0.3_seed_0/<run_id>/
-  evaluation_v2_<hash>.json                  # version 2 report saved with --model
-  evaluation_v1_<prediction_sha256>.json     # version 1, from runners that still call it
+  evaluation_v2_<hash>.json                  # report saved with --model
+  evaluation_v1_<prediction_sha256>.json     # older reports, left in place
 ```
 
 The preprocessing stages are:
@@ -174,11 +171,11 @@ the shared loader and evaluator for all new comparisons. Existing imputer classe
 are unchanged; any internal scaling must return predictions in input scale.
 DAE V2 uses the shared loader. See the [project README](../README.md) for commands.
 
-The main evaluation protocol is version 2, `shared_evaluation/evaluate_v2.py`.
+Score predictions with `python -m shared_evaluation.evaluate`.
 Score every model of one configuration in one call:
 
 ```bash
-python -m shared_evaluation.evaluate_v2 --dataset credit_card --mode quick --rate 0.3 --seed 0 --downstream \
+python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --downstream \
     --predictions dae_v2=data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv \
                   my_model=data/output/credit_card/quick/rate_0.3_seed_0/my_model/initial/predictions.csv
 ```
@@ -189,7 +186,7 @@ report is a standalone comparison under `data/output/`; with `--model MODEL
 --run-id ID` it goes under `results/MODEL/evaluation/`. `--processed-dir`,
 `--raw-dir` and `--output-dir` override the roots. Name each file `NAME=PATH`;
 model names accept letters, digits, underscore and hyphen, but not `mean` or
-`true`. The programmatic API is `shared_evaluation.evaluate_v2.evaluate(X_true,
+`true`. The programmatic API is `shared_evaluation.evaluate.evaluate(X_true,
 X_pred, mask_eval, X_mean_baseline)` for point scores and `bootstrap(...)` for
 intervals; use all DataFrames or all arrays (array callers own alignment).
 
@@ -206,10 +203,7 @@ are null/None for a zero baseline. NaN/infinite hidden predictions, invalid
 masks, empty masks and mismatched IDs are errors. Details are in
 [EVALUATION_V2.md](../shared_evaluation/EVALUATION_V2.md).
 
-Version 1 (`python -m shared_evaluation.evaluate ... --model MODEL`) is kept
-for runners that still call it. It reports exactly four of the same metrics,
-computed identically: RMSE, MAE, macro per-feature R2 and RMSE improvement,
-without intervals.
+Older `evaluation_v1_*.json` files stay where they are. New reports are `evaluation_v2_<hash>.json`.
 
 ## Verification and attribution
 
@@ -224,7 +218,7 @@ experiments; do not treat a single run as evidence of significance.
 
 ## Dataset redistribution and attribution
 
-The credit card, California and gas turbine source releases are labeled [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The license applies to the datasets under their respective terms; the corresponding derived artifacts are marked as modified below.
+The credit card, California, Superconductivity and gas turbine source releases are labeled [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The license applies to the datasets under their respective terms; the corresponding derived artifacts are marked as modified below.
 The HMDA data have no dataset license, and they don't need one: they are in the public domain. The CFPB's
 [legal notice](https://www.consumerfinance.gov/privacy/website-privacy-policy/) (revised December 2023) says "Information
 created by the CFPB is in the public domain and you may reproduce, publish, or otherwise use it without the Bureau's
@@ -239,6 +233,7 @@ normally all rights reserved. Here they come from the public-domain notice.)
 | Credit Card Default | I-Cheng Yeh, [UCI Default of Credit Card Clients](https://doi.org/10.24432/C55S3H) ([source and license](https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients)) | Raw API table exported to CSV. |
 | California Housing | R. Kelley Pace and Ronald Barry (1997), StatLib / 1990 U.S. Census; Vrushali Deshpande, [Scikit-learn CSV Export, v1](https://data.mendeley.com/datasets/hhb6nwfft8/1) | Raw CSV retained byte-for-byte from the licensed release. |
 | HMDA Rhode Island 2023 | Consumer Financial Protection Bureau for the Federal Financial Institutions Examination Council, [HMDA Data Browser](https://ffiec.cfpb.gov/data-browser/), 2023 loan-level data, Rhode Island, originated loans ([public domain](https://www.consumerfinance.gov/privacy/website-privacy-policy/)) | Data Browser CSV retained byte-for-byte. |
+| Superconductivity | Kam Hamidieh, [UCI Superconductivty Data](https://doi.org/10.24432/C53P47) ([source and license](https://archive.ics.uci.edu/dataset/464/superconductivty+data)) | Raw API table exported to CSV. |
 | Gas Turbine | [UCI Gas Turbine CO and NOx Emission Data Set](https://doi.org/10.24432/C5WC95) ([source and license](https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set)) | Five original yearly CSVs retained byte-for-byte. |
 
 For all four sources, the derived files select the documented features, clean and select rows, then mask and scale values. Baseline and DAE prediction matrices additionally fill missing cells. Raw-file checksums and source metadata are next to the CSVs. The complete matrices are publicly visible in Git, so the separation is an experiment protocol: model code may read only the incomplete input and never use truth values for fitting or tuning.

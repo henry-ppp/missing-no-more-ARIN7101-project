@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 
 import shared_evaluation.evaluate
-import shared_evaluation.evaluate_v2
 from data_preprocessing.download import sha256
 from data_preprocessing.dataset_config import MODEL_INPUT
 from models.iterative.imputer import IterativeModel
@@ -52,40 +51,32 @@ class IterativeRunnerTests(unittest.TestCase):
                 "features": ["a", "b"], "row_ids": ["r0", "r1", "r2", "r3"],
                 "artifact_sha256": {MODEL_INPUT: sha256(matrix)}}
             (benchmark / "metadata.json").write_text(json.dumps(metadata), encoding="utf-8")
-            v1_report = root / "v1.json"
-            v1_report.write_text(json.dumps({"mean_baseline_rmse": 1.25}), encoding="utf-8")
             seen = {}
 
-            def fake_v1(dataset, mode, rate, seed, predictions, processed_dir, output_dir, model=None, *, run_id="standalone"):
-                seen["v1"] = Path(predictions)
-                self.assertTrue(Path(predictions).is_file())
-                self.assertEqual((dataset, mode, rate, seed, model, run_id), ("credit_card", "quick", 0.3, 0, "iterative", "initial"))
-                return {"rmse": 0.4, "mae": 0.2, "r2": 0.5, "relative_improvement": 0.3}, v1_report
-
-            def fake_v2(dataset, mode, rate, seed, predictions, *args, **kwargs):
-                seen["v2"] = predictions
+            def fake_evaluate(dataset, mode, rate, seed, predictions, *args, **kwargs):
+                seen["predictions"] = predictions
                 self.assertEqual(kwargs["model"], "iterative")
                 self.assertEqual(kwargs["run_id"], "initial")
                 self.assertTrue(kwargs["run_downstream"])
+                point = {"rmse": 0.4, "mae": 0.2, "r2": 0.5, "wasserstein": 0.2}
+                methods = {"iterative": {
+                    **{name: {"estimate": value, "ci": [None, None]} for name, value in point.items()},
+                    "relative_improvement": {"estimate": 0.3, "ci": [0.1, 0.4]},
+                    "wasserstein_improvement": {"estimate": 0.5, "ci": [0.4, 0.6]},
+                }, "mean": {"rmse": {"estimate": 1.25, "ci": [None, None]}}}
                 return {
-                    "accuracy_and_distribution": {"methods": {"iterative": {
-                        "relative_improvement": {"estimate": 0.3, "ci": [0.1, 0.4]},
-                        "wasserstein_improvement": {"estimate": 0.5, "ci": [0.4, 0.6]}}}},
+                    "accuracy_and_distribution": {"methods": methods},
                     "downstream": {"skipped": "synthetic fixture has no target rows"},
-                }, root / "v2.json"
+                }, root / "evaluation.json"
 
-            with (
-                patch.object(shared_evaluation.evaluate, "evaluate_files", side_effect=fake_v1),
-                patch.object(shared_evaluation.evaluate_v2, "evaluate_files", side_effect=fake_v2),
-            ):
+            with patch.object(shared_evaluation.evaluate, "evaluate_files", side_effect=fake_evaluate):
                 report = run("credit_card", mode="quick", rate=0.3, seed=0, max_iter=5,
                              processed_dir=root / "processed", output_dir=root / "output",
                              results_dir=root / "results", run_id="initial", n_boot=0)
 
             expected = prediction_path(root / "output", "credit_card", "quick", 0.3, 0, "initial")
             self.assertEqual(expected, root / "output/credit_card/quick/rate_0.3_seed_0/iterative/initial/predictions.csv")
-            self.assertEqual(seen["v1"], expected)
-            self.assertEqual(seen["v2"], {"iterative": expected})
+            self.assertEqual(seen["predictions"], {"iterative": expected})
             saved = pd.read_csv(expected).set_index("row_id")
             self.assertEqual(list(saved.columns), ["a", "b"])
             self.assertEqual(saved.index.tolist(), ["r0", "r1", "r2", "r3"])
@@ -98,10 +89,7 @@ class IterativeRunnerTests(unittest.TestCase):
             self.assertEqual(summary["run_id"].tolist(), ["initial"])
             self.assertTrue((benchmark / "X_cleaned_standardized.csv").exists() is False)
 
-            with (
-                patch.object(shared_evaluation.evaluate, "evaluate_files", side_effect=fake_v1),
-                patch.object(shared_evaluation.evaluate_v2, "evaluate_files", side_effect=fake_v2),
-            ):
+            with patch.object(shared_evaluation.evaluate, "evaluate_files", side_effect=fake_evaluate):
                 with self.assertRaises(FileExistsError):
                     run("credit_card", mode="quick", rate=0.3, seed=0, processed_dir=root / "processed",
                         output_dir=root / "output", results_dir=root / "results", run_id="initial")
