@@ -1,9 +1,9 @@
 # Shared imputation benchmark data
 
-The five datasets below are fixed. On 19 November 2026 the group put Superconductivity back and kept HMDA Rhode Island 2023. Both are required. Superconductivity's 81 collinear columns stay because they show how traditional methods and deep learning differ. HMDA is not an optional extra. The 18 November snapshot, which had replaced Superconductivity with HMDA, is in [LEGACY_README.md](LEGACY_README.md).
+The four datasets below are required. On 19 November 2026 the group put Superconductivity back. Its 81 collinear columns stay because they show how traditional methods and deep learning differ. HMDA Rhode Island 2023 is an optional fifth dataset: start it only after these four are done, and only if it supports a result. The 18 November snapshot, which had replaced Superconductivity with HMDA, is in [LEGACY_README.md](LEGACY_README.md).
 
-Numbers are original row counts. Complete-case cleaning retained every row of credit card, California, Superconductivity and gas turbine, and 17,809 of the 20,714 HMDA loans. The raw CSVs and Quick and Full benchmark files (30% MCAR, seed 0) of all five datasets are in the repository. Teammates should use the shared matrices directly; no download or preprocessing is required. If a full Superconductivity run is too slow, use the Quick configuration already in the repo.
-Full ordered schemas and exclusions live in `data_preprocessing/dataset_config.py`.
+Numbers are original row counts. Complete-case cleaning retained every row of credit card, California, Superconductivity and gas turbine, and 17,809 of the 20,714 HMDA loans. The raw CSVs and Quick and Full benchmark files (30% MCAR, seed 0) are in the repository. Teammates should use the shared matrices directly; no download or preprocessing is required. If a full Superconductivity run is too slow, use the Quick configuration already in the repo.
+Full ordered schemas and exclusions live in `data_preprocessing/dataset_config.py`. A default run uses `DATASETS`. Name `hmda_ri_2023` to include the optional dataset.
 
 HMDA's downstream target in `evaluate --downstream` is whether a loan is government-backed (FHA, VA or USDA, from the raw `loan_type` column). Superconductivity's target is critical temperature. Gas turbine has no target and is skipped. No model has HMDA results yet.
 
@@ -11,9 +11,14 @@ HMDA's downstream target in `evaluate --downstream` is whether a loan is governm
 | --- | --- | ---: | ---: | --- |
 | credit_card | [UCI Default of Credit Card Clients, ID 350](https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients) | 30,000 | 14 | credit_card/source.csv |
 | california_housing | [scikit-learn California Housing](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html) | 20,640 | 8 | california_housing/source.csv |
-| hmda_ri_2023 | [FFIEC HMDA Data Browser](https://ffiec.cfpb.gov/data-browser/): Rhode Island, 2023, originated loans | 20,714 | 7 | hmda_ri_2023/source.csv |
 | superconductivity | [UCI Superconductivty Data, ID 464](https://archive.ics.uci.edu/dataset/464/superconductivty+data) | 21,263 | 81 | superconductivity/source.csv |
 | gas_turbine | [UCI Gas Turbine CO and NOx Emission, ID 551](https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set) | 36,733 | 11 | gas_turbine/gt_2011.csv through gt_2015.csv |
+
+Optional, not part of a default run:
+
+| Key | Official dataset / source | Original rows | Inputs | Raw cache |
+| --- | --- | ---: | ---: | --- |
+| hmda_ri_2023 | [FFIEC HMDA Data Browser](https://ffiec.cfpb.gov/data-browser/): Rhode Island, 2023, originated loans | 20,714 | 7 | hmda_ri_2023/source.csv |
 
 ## Feature and source contract
 

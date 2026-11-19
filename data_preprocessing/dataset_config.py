@@ -28,13 +28,6 @@ DATASETS = {
     'california_housing': DatasetConfig('California Housing', 20640,
         ('MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'Latitude', 'Longitude'),
         ('MedHouseVal',), 'https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html', raw_files=('source.csv',)),
-    'hmda_ri_2023': DatasetConfig('HMDA loan-level data, Rhode Island 2023, originated loans', 20714,
-        ('loan_amount', 'loan_to_value_ratio', 'interest_rate', 'rate_spread', 'loan_term', 'property_value', 'income'),
-        ('every other Data Browser column', 'identifiers and geography: lei, census_tract, county_code, derived_msa-md',
-         'applicant demographics', 'coded categories and denial reasons',
-         'tract-level census summaries (identical for every loan in a tract)',
-         'cost fields mostly NA or Exempt: total_loan_costs, total_points_and_fees, origination_charges, discount_points, lender_credits'),
-        'https://ffiec.cfpb.gov/data-browser/', raw_files=('source.csv',)),
     'superconductivity': DatasetConfig('Superconductivty Data', 21263,
         ('number_of_elements',) + tuple(f'{s}_{p}' for p in _properties for s in _summaries),
         ('critical_temp', 'unique_m.csv (alternative representation, not additional rows)'),
@@ -45,15 +38,34 @@ DATASETS = {
         tuple(f'gt_{y}.csv' for y in range(2011, 2016))),
 }
 
-# Nothing is retired. On 19 November 2026 Superconductivity came back and HMDA stayed; both are required.
-# See data/README.md and meeting_notes/4th_meeting.md. Kept so older callers of RETIRED still import.
+# Optional fifth dataset. Use it after the four required datasets, and only when it supports a result.
+# See data/README.md and meeting_notes/4th_meeting.md.
+OPTIONAL = {
+    'hmda_ri_2023': DatasetConfig('HMDA loan-level data, Rhode Island 2023, originated loans', 20714,
+        ('loan_amount', 'loan_to_value_ratio', 'interest_rate', 'rate_spread', 'loan_term', 'property_value', 'income'),
+        ('every other Data Browser column', 'identifiers and geography: lei, census_tract, county_code, derived_msa-md',
+         'applicant demographics', 'coded categories and denial reasons',
+         'tract-level census summaries (identical for every loan in a tract)',
+         'cost fields mostly NA or Exempt: total_loan_costs, total_points_and_fees, origination_charges, discount_points, lender_credits'),
+        'https://ffiec.cfpb.gov/data-browser/', raw_files=('source.csv',)),
+}
+
+# Kept so older callers still import it. Nothing is retired.
 RETIRED = {
 }
 
 
+def get_dataset(name):
+    """Required, optional, or retired configuration. Raises KeyError for an unknown name."""
+    for group in (DATASETS, OPTIONAL, RETIRED):
+        if name in group:
+            return group[name]
+    raise KeyError(name)
+
+
 def config_path(root, dataset, mode, rate, seed):
     from pathlib import Path
-    if (dataset not in DATASETS and dataset not in RETIRED) or mode not in ('quick', 'full'):
+    if (dataset not in DATASETS and dataset not in OPTIONAL and dataset not in RETIRED) or mode not in ('quick', 'full'):
         raise ValueError('Unknown dataset or mode')
     if not 0 < rate < 1:
         raise ValueError('Benchmark rate must be strictly between 0 and 1')

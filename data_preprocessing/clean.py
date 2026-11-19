@@ -1,10 +1,10 @@
 """Deterministic complete-case cleaning, separate from sampling and masking."""
 import numpy as np
 import pandas as pd
-from .dataset_config import DATASETS
+from .dataset_config import get_dataset
 
 def clean(dataset, raw):
-    config = DATASETS[dataset]
+    config = get_dataset(dataset)
     raw = raw.copy()
     if dataset == 'credit_card':
         aliases = {'X1': 'LIMIT_BAL', 'X5': 'AGE'}

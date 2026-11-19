@@ -48,7 +48,7 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.metrics import r2_score, roc_auc_score
 from sklearn.model_selection import KFold, StratifiedKFold, cross_val_predict
 
-from data_preprocessing.dataset_config import DATASETS, EVALUATION_TRUTH, RETIRED, config_path
+from data_preprocessing.dataset_config import DATASETS, EVALUATION_TRUTH, OPTIONAL, RETIRED, config_path
 from data_preprocessing.download import sha256
 from data_preprocessing.prepare_all import read_matrix
 from .result_paths import evaluation_directory, write_report
@@ -336,7 +336,7 @@ def summary_table(report):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('--dataset', choices=[*DATASETS, *RETIRED], required=True)
+    parser.add_argument('--dataset', choices=[*DATASETS, *OPTIONAL, *RETIRED], required=True)
     parser.add_argument('--mode', choices=['quick', 'full'], default='quick')
     parser.add_argument('--rate', type=float, default=0.3)
     parser.add_argument('--seed', type=int, default=0)

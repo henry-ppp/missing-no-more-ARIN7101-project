@@ -17,7 +17,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from data_preprocessing.dataset_config import DATASETS, MODEL_INPUT, config_path
+from data_preprocessing.dataset_config import DATASETS, MODEL_INPUT, OPTIONAL, config_path
 from data_preprocessing.download import sha256
 from data_preprocessing.prepare_all import load_model_input
 from models.iterative.imputer import IterativeModel
@@ -152,7 +152,7 @@ def run(dataset, mode="full", rate=0.3, seed=0, *, max_iter=50, tol=1e-3, alpha=
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--datasets", "--dataset", nargs="+", choices=DATASETS, default=list(DEFAULT_DATASETS))
+    parser.add_argument("--datasets", "--dataset", nargs="+", choices=[*DATASETS, *OPTIONAL], default=list(DEFAULT_DATASETS))
     parser.add_argument("--mode", choices=["quick", "full"], default="full")
     parser.add_argument("--rate", type=float, default=0.3)
     parser.add_argument("--seed", type=int, default=0)

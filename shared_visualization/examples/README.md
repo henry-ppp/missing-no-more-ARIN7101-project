@@ -22,7 +22,7 @@ The figures read evaluation reports. Scoring every model of a dataset in one cal
 scoreboard can mark which differences are significant. This takes a few minutes.
 
 ```bash
-for ds in credit_card california_housing hmda_ri_2023 superconductivity gas_turbine; do
+for ds in credit_card california_housing superconductivity gas_turbine; do
   out=data/output/$ds/full/rate_0.3_seed_0
   preds=(MissForest=$out/MissForest/initial/predictions.csv MICE-RF=$out/MICE-RF/initial/predictions.csv)
   [ -f $out/dae_v2/initial/predictions.csv ] && preds+=(dae_v2=$out/dae_v2/initial/predictions.csv)
@@ -31,7 +31,7 @@ for ds in credit_card california_housing hmda_ri_2023 superconductivity gas_turb
 done
 ```
 
-HMDA and Superconductivity are both required. HMDA has no DAE v2 run yet, so that dataset is scored with the two random forests only.
+HMDA is optional and has no DAE v2 run yet. Add `hmda_ri_2023` to the loop only when that dataset is needed; it is then scored with the two random forests only.
 
 ## 2. Comparison figures
 
@@ -71,7 +71,7 @@ training_curves({k: pd.read_csv(p)[['round', 'change']] for k, p in rf.items()},
 EOF
 ```
 
-- `v.parts[-5] in DATASETS` keeps curves for the five project datasets, including HMDA and Superconductivity.
+- `v.parts[-5] in DATASETS` keeps curves for the four required datasets. HMDA is optional, so its curves are left out unless that filter is widened.
 - Random-forest training histories are in `local_models/`, which isn't pushed, so the MissForest figure can only be
   made on the machine that ran the random forests. DAE v2 histories are in `results/` and work anywhere.
 - `[['round', 'change']]` drops the timing column, so only the change per round is drawn.

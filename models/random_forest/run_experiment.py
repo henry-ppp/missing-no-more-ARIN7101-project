@@ -43,7 +43,7 @@ import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed, parallel_config
 
-from data_preprocessing.dataset_config import DATASETS, MODEL_INPUT, RETIRED, config_path
+from data_preprocessing.dataset_config import DATASETS, MODEL_INPUT, OPTIONAL, RETIRED, config_path
 from data_preprocessing.download import sha256
 from data_preprocessing.prepare_all import load_model_input
 from .imputers import MAX_ROUNDS, METHODS, N_TREES
@@ -541,8 +541,8 @@ def _rows(value: str) -> int | None:
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--models', nargs='+', choices=list(METHODS), default=list(METHODS))
-    parser.add_argument('--datasets', nargs='+', choices=[*DATASETS, *RETIRED], default=list(DATASETS),
-                        help='Default: every dataset in data/README.md, including HMDA and superconductivity')
+    parser.add_argument('--datasets', nargs='+', choices=[*DATASETS, *OPTIONAL, *RETIRED], default=list(DATASETS),
+                        help='Default: the four required datasets. Add hmda_ri_2023 only when that optional dataset is needed.')
     parser.add_argument('--mode', choices=['quick', 'full'], default='full')
     parser.add_argument('--rates', nargs='+', type=float, help='Default: every rate prepared for the seed')
     parser.add_argument('--seed', type=int, default=SEED, help='The one shared seed (default 0)')

@@ -11,7 +11,7 @@ python -m models.random_forest.run_experiment --plan      # what is done, what i
 caffeinate -is python -m models.random_forest.run_experiment
 ```
 
-The second command runs both models on all five datasets in `full` mode, for every missing rate prepared with seed 0 (currently 0.3), using 8 worker processes with one thread each. `caffeinate` keeps a Mac awake; plug the laptop in and keep the lid open. If full Superconductivity is too slow, the meeting note says to use its Quick configuration.
+The second command runs both models on the four required datasets in `full` mode, for every missing rate prepared with seed 0 (currently 0.3), using 8 worker processes with one thread each. `caffeinate` keeps a Mac awake; plug the laptop in and keep the lid open. If full Superconductivity is too slow, the meeting note says to use its Quick configuration. Add `--datasets hmda_ri_2023` only when that optional dataset is needed.
 
 The command can be stopped and restarted. Each tuning trial, final fit and evaluation is saved as soon as it finishes, and a rerun skips work saved with the same settings. Reusing a `--run-id` with different settings is refused before anything runs, so saved results are never mixed or overwritten. Pick a new run ID instead.
 

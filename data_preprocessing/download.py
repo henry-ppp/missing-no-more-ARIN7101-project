@@ -8,7 +8,7 @@ from urllib.request import urlopen
 from zipfile import ZipFile
 from io import BytesIO
 import pandas as pd
-from .dataset_config import DATASETS
+from .dataset_config import get_dataset
 
 CALIFORNIA_RELEASE = 'https://doi.org/10.17632/hhb6nwfft8.1'
 CALIFORNIA_CSV = 'https://data.mendeley.com/public-files/datasets/hhb6nwfft8/files/891e5207-9af4-48d6-b52d-1786310ef8a5/file_downloaded'
@@ -39,7 +39,7 @@ def hmda_csv(query=HMDA_QUERY):
     return body, url
 
 def load_raw(dataset, raw_dir='data/raw'):
-    config = DATASETS[dataset]
+    config = get_dataset(dataset)
     folder = Path(raw_dir) / dataset
     frames = []
     for filename in config.raw_files:
@@ -55,7 +55,7 @@ def load_raw(dataset, raw_dir='data/raw'):
 
 def download(dataset, raw_dir='data/raw'):
     from .clean import clean
-    config = DATASETS[dataset]
+    config = get_dataset(dataset)
     folder = Path(raw_dir) / dataset
     if all((folder / name).exists() for name in config.raw_files):
         frame, _ = load_raw(dataset, raw_dir)

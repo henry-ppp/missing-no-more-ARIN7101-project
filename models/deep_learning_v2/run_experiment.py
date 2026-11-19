@@ -8,7 +8,7 @@ import time
 import traceback
 import pandas as pd
 import torch
-from data_preprocessing.dataset_config import DATASETS, MODEL_INPUT, config_path
+from data_preprocessing.dataset_config import DATASETS, MODEL_INPUT, OPTIONAL, config_path
 from data_preprocessing.download import sha256
 from data_preprocessing.prepare_all import load_model_input
 from shared_evaluation.result_paths import validate_identifier
@@ -92,7 +92,7 @@ def run(dataset, mode='quick', rate=0.3, seed=0, config=TrainConfig(),
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--datasets', '--dataset', nargs='+', choices=DATASETS, default=list(DATASETS))
+    parser.add_argument('--datasets', '--dataset', nargs='+', choices=[*DATASETS, *OPTIONAL], default=list(DATASETS))
     parser.add_argument('--mode', choices=['quick', 'full'], default='quick')
     parser.add_argument('--rate', type=float, default=0.3)
     parser.add_argument('--seed', type=int, default=0)

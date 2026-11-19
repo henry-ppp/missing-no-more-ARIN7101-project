@@ -8,9 +8,10 @@ Clone or update `dev` to use the **actual shared raw data and prepared Quick/Ful
 | --- | ---: | ---: | ---: | ---: |
 | Credit Card Default | 30,000 | 30,000 | 14 | 3,000 |
 | California Housing | 20,640 | 20,640 | 8 | 3,000 |
-| HMDA Rhode Island 2023 | 20,714 | 17,809 | 7 | 3,000 |
 | Superconductivity | 21,263 | 21,263 | 81 | 3,000 |
 | Gas Turbine CO & NOx | 36,733 | 36,733 | 11 | 3,000 |
+
+HMDA Rhode Island 2023 is optional (20,714 published rows, 17,809 cleaned, 7 features, 3,000 Quick rows). Use it only after the four datasets above, and only if it supports a result.
 
 [Dataset sources, licenses, feature lists and CSV contract](data/README.md) · Sample counts and mask statistics are stored in each configuration's `metadata.json`.
 

@@ -1,6 +1,6 @@
 # LEGACY
 
-This is the 18 November 2026 snapshot, when HMDA Rhode Island 2023 replaced Superconductivity. On 19 November 2026 the group put Superconductivity back and kept HMDA, so the current specification is [README.md](README.md).
+This is the 18 November 2026 snapshot, when HMDA Rhode Island 2023 replaced Superconductivity. On 19 November 2026 the group put Superconductivity back and left HMDA optional, so the current specification is [README.md](README.md).
 
 ---
 

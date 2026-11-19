@@ -10,10 +10,10 @@ from unittest.mock import patch
 import pandas as pd
 
 from data_preprocessing.clean import clean
-from data_preprocessing.dataset_config import DATASETS, RETIRED
+from data_preprocessing.dataset_config import DATASETS, OPTIONAL, RETIRED
 from data_preprocessing.download import HMDA_QUERY, download, hmda_csv, load_raw
 
-FEATURES = DATASETS['hmda_ri_2023'].features
+FEATURES = OPTIONAL['hmda_ri_2023'].features
 FILE_URL = 'https://files.ffiec.cfpb.gov/data-browser/datasets/2023/filtered-queries/one-year/abc.csv'
 
 
@@ -42,8 +42,9 @@ class Response(io.BytesIO):
 
 
 class HMDADataset(unittest.TestCase):
-    def test_schema_includes_hmda_and_superconductivity(self):
-        self.assertEqual(list(DATASETS), ['credit_card', 'california_housing', 'hmda_ri_2023', 'superconductivity', 'gas_turbine'])
+    def test_schema_keeps_hmda_optional(self):
+        self.assertEqual(list(DATASETS), ['credit_card', 'california_housing', 'superconductivity', 'gas_turbine'])
+        self.assertEqual(list(OPTIONAL), ['hmda_ri_2023'])
         self.assertEqual(RETIRED, {})
         self.assertEqual(FEATURES, ('loan_amount', 'loan_to_value_ratio', 'interest_rate', 'rate_spread', 'loan_term',
                                     'property_value', 'income'))

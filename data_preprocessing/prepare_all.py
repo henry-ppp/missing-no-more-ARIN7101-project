@@ -9,7 +9,7 @@ from dataclasses import asdict
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from .dataset_config import DATASETS, EVALUATION_TRUTH, MODEL_INPUT, config_path
+from .dataset_config import DATASETS, EVALUATION_TRUTH, MODEL_INPUT, OPTIONAL, config_path, get_dataset
 from .download import download, load_raw, sha256
 from .clean import clean, select_rows
 from .mask import mcar_mask, apply_mask
@@ -74,7 +74,7 @@ def export_configuration(full, dataset, mode, rate, seed, directory, cleaning, r
         except PackageNotFoundError:
             package_versions[package] = None
     metadata = {'schema_version': 2, 'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed,
-        'dataset_config': asdict(DATASETS[dataset]), 'features': list(selected.columns),
+        'dataset_config': asdict(get_dataset(dataset)), 'features': list(selected.columns),
         'row_ids': selected.index.tolist(), 'selected_rows': len(selected),
         'quick_under_limit': mode == 'quick' and len(full) < 3000,
         'cleaning': cleaning, 'raw_sha256': raw_hashes, 'mask_count': int(mask.to_numpy().sum()),
@@ -110,7 +110,7 @@ def prepare(dataset, mode='quick', rate=0.3, seed=0, raw_dir='data/raw', process
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--mode', choices=['quick', 'full'], default='quick')
-    parser.add_argument('--datasets', '--dataset', nargs='+', choices=DATASETS, default=list(DATASETS))
+    parser.add_argument('--datasets', '--dataset', nargs='+', choices=[*DATASETS, *OPTIONAL], default=list(DATASETS))
     parser.add_argument('--rate', type=float, nargs='+', default=[0.3])
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--raw-dir', default='data/raw')
