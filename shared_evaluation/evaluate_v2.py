@@ -1,5 +1,6 @@
 """Evaluation, version 2: accuracy, distribution, confidence intervals and an optional downstream check.
 
+This is the project's main evaluation protocol; evaluate.py (version 1) stays only for runners that still call it.
 Works for any imputation method; it only reads prediction files and never imports a model. It does not import
 evaluate.py or metrics.py, so it keeps working if version 1 is removed.
 
@@ -22,11 +23,11 @@ What it adds to version 1:
 Command line, from the repository root, once predictions.csv files exist (one or several models):
 
     python -m shared_evaluation.evaluate_v2 --dataset credit_card --mode quick --rate 0.3 --seed 0 \\
-        --predictions data/output/credit_card/quick/rate_0.3_seed_0/dae/predictions.csv \\
-                      data/output/credit_card/quick/rate_0.3_seed_0/missforest/predictions.csv \\
+        --predictions dae_v2=data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv \\
+                      MissForest=data/output/credit_card/quick/rate_0.3_seed_0/MissForest/initial/predictions.csv \\
         --downstream
 
-A model is named after its folder, or give NAME=PATH. Results go to
+Give NAME=PATH; a bare path is named after its folder, which is the run ID (e.g. initial). Results go to
 data/output/<dataset>/<mode>/rate_<r>_seed_<s>/evaluation_v2_<hash>.json for standalone comparisons.
 For a formal report, add --model MODEL --run-id ID to save under results/MODEL/evaluation/.
 
@@ -271,7 +272,7 @@ def evaluate_files(dataset, mode, rate, seed, predictions, processed_dir='data/p
     directory, metadata, truth, mask, baseline = load_benchmark(dataset, mode, rate, seed, processed_dir)
     frames = {name: read_matrix(path) for name, path in predictions.items()}
     report = {'dataset': dataset, 'mode': mode, 'rate': rate, 'seed': seed,
-              'predictions': {n: {'path': str(Path(p).resolve()), 'sha256': sha256(p)} for n, p in predictions.items()},
+              'predictions': {n: {'path': Path(p).as_posix(), 'sha256': sha256(p)} for n, p in predictions.items()},
               'benchmark_metadata_sha256': sha256(directory / 'metadata.json'),
               'accuracy_and_distribution': bootstrap(truth, frames, mask, baseline, n_boot, boot_seed, level)}
     if run_downstream:

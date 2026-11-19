@@ -1,4 +1,7 @@
-"""Independent array and file-based evaluation; never imports a model."""
+"""Independent array and file-based evaluation; never imports a model.
+
+Version 1, kept for runners that still call it. The main evaluation protocol is evaluate_v2.py (version 2).
+"""
 import argparse
 import json
 from pathlib import Path

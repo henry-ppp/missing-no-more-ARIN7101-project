@@ -125,8 +125,10 @@ data/
     metadata.json          # schema, row IDs, hashes, versions, cleaning, sampling
   output/<dataset>/<mode>/rate_0.3_seed_0/<model>/
     predictions.csv
+  output/<dataset>/<mode>/rate_0.3_seed_0/evaluation_v2_<hash>.json   # standalone version 2 comparison
 results/<model>/evaluation/<dataset>/<mode>/rate_0.3_seed_0/<run_id>/
-  evaluation_v1_<prediction_sha256>.json
+  evaluation_v2_<hash>.json                  # version 2 report saved with --model
+  evaluation_v1_<prediction_sha256>.json     # version 1, from runners that still call it
 ```
 
 The preprocessing stages are:
@@ -172,23 +174,42 @@ the shared loader and evaluator for all new comparisons. Existing imputer classe
 are unchanged; any internal scaling must return predictions in input scale.
 DAE V2 uses the shared loader. See the [project README](../README.md) for commands.
 
+The main evaluation protocol is version 2, `shared_evaluation/evaluate_v2.py`.
+Score every model of one configuration in one call:
+
 ```bash
-python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --model dae_v2 --run-id verification --predictions data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv
+python -m shared_evaluation.evaluate_v2 --dataset credit_card --mode quick --rate 0.3 --seed 0 --downstream \
+    --predictions dae_v2=data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv \
+                  my_model=data/output/credit_card/quick/rate_0.3_seed_0/my_model/initial/predictions.csv
 ```
 
-The CLI requires --model, defaults --run-id to standalone, and supports --processed-dir and --output-dir (override the results root), verifies metadata/artifact
-hashes, rejects misalignment without reordering, prints metrics and writes JSON.
-Output names include configuration, model and full prediction hash to distinguish
-runs. Model names accept letters, digits, underscore and hyphen. The programmatic
-API is `shared_evaluation.evaluate.evaluate(X_true, X_pred, mask_eval,
-X_mean_baseline)`; use all DataFrames or all arrays (array callers own alignment).
+The CLI verifies metadata/artifact hashes, rejects misalignment without
+reordering, prints a table and writes one JSON report. Without `--model` the
+report is a standalone comparison under `data/output/`; with `--model MODEL
+--run-id ID` it goes under `results/MODEL/evaluation/`. `--processed-dir`,
+`--raw-dir` and `--output-dir` override the roots. Name each file `NAME=PATH`;
+model names accept letters, digits, underscore and hyphen, but not `mean` or
+`true`. The programmatic API is `shared_evaluation.evaluate_v2.evaluate(X_true,
+X_pred, mask_eval, X_mean_baseline)` for point scores and `bootstrap(...)` for
+intervals; use all DataFrames or all arrays (array callers own alignment).
 
-Exactly four metrics, all over hidden cells in standardized space:
-RMSE, MAE, macro per-feature R2, and 1 - RMSE_model/RMSE_mean_baseline.
-R2 omits features with fewer than two hidden targets or zero target variance;
-returns null/None if none qualify. Relative improvement is null/None for zero
-baseline RMSE. Positive improvement beats mean; negative is worse. NaN/infinite
-hidden predictions, invalid masks, empty masks and mismatched IDs are errors.
+All scores are over hidden cells in standardized space. Headline scores, each
+0 for mean imputation and higher for better: RMSE improvement
+(1 - RMSE_model/RMSE_mean_baseline), Wasserstein improvement, and, with
+`--downstream`, the share of the downstream gap between mean imputation and the
+true table that the model closes. RMSE, MAE, macro per-feature R2 and the
+Wasserstein distance are also saved. Each score has a 95% basic bootstrap
+interval over resampled rows, and every pair of models scored together gets a
+paired difference and p-value. R2 omits features with fewer than two hidden
+targets or zero target variance; returns null/None if none qualify. Improvements
+are null/None for a zero baseline. NaN/infinite hidden predictions, invalid
+masks, empty masks and mismatched IDs are errors. Details are in
+[EVALUATION_V2.md](../shared_evaluation/EVALUATION_V2.md).
+
+Version 1 (`python -m shared_evaluation.evaluate ... --model MODEL`) is kept
+for runners that still call it. It reports exactly four of the same metrics,
+computed identically: RMSE, MAE, macro per-feature R2 and RMSE improvement,
+without intervals.
 
 ## Verification and attribution
 

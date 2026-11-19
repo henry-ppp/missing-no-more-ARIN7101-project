@@ -28,7 +28,7 @@ models/
   iterative/            Implemented iterative imputer and historical results (Henry)
   knn/                  K-nearest neighbours placeholder (Hamad)
   random_forest/        Random Forest / MissForest placeholder (Blith)
-shared_evaluation/      Four-metric evaluator and separate teammate evaluation V2
+shared_evaluation/      Evaluation version 2 (main protocol); version 1 kept for runners that still call it
 results/                Model-owned training and evaluation directories; checkpoints stay local
 tests/                  Automated data, model and evaluation checks
 ```
@@ -66,6 +66,28 @@ These commands verify and reuse the published snapshot. To regenerate into a fre
 
 The flow is raw data → dataset-level `cleaned/X_cleaned.csv` → Quick/Full `X_cleaned.csv` → `X_cleaned_masked.csv` → `X_cleaned_masked_standardized.csv`. Evaluation reads the separate complete `X_cleaned_standardized.csv`, transformed with the same scaler fitted to the masked matrix's visible cells. See the [file layout](data/README.md#files-and-commands).
 
+## Evaluate
+
+Evaluation version 2 (`shared_evaluation/evaluate_v2.py`) is the main protocol for every model. It loads the configuration's truth, evaluation mask and mean baseline from `data/processed/`, checks their hashes, and scores only the hidden cells. The three headline scores are all measured against mean imputation (0 = mean imputation, higher is better):
+
+- accuracy: RMSE improvement (`relative_improvement`);
+- distribution: Wasserstein improvement (`wasserstein_improvement`);
+- usefulness for prediction (`--downstream`): the share of the gap between mean imputation and the true table that an imputation closes (`gap_closed`). Credit card and HMDA use logistic regression scored by AUROC, California and superconductivity use linear regression scored by R², and gas turbine has no target, so it is skipped.
+
+RMSE, MAE and macro per-feature R² are saved too, computed exactly as in version 1. Each score gets a 95% bootstrap interval from 1,000 row resamples. Models scored in the same call share the resamples, so every pair gets a paired difference and p-value. The intervals reflect only which cells were hidden, not retraining or a new mask.
+
+Score all models of one configuration in one call, naming each file `NAME=PATH`:
+
+```bash
+python -m shared_evaluation.evaluate_v2 --dataset credit_card --mode full --rate 0.3 --seed 0 --downstream \
+    --predictions MissForest=data/output/credit_card/full/rate_0.3_seed_0/MissForest/initial/predictions.csv \
+                  dae_v2=data/output/credit_card/full/rate_0.3_seed_0/dae_v2/initial/predictions.csv
+```
+
+It prints a table and writes `data/output/<dataset>/<mode>/<configuration>/evaluation_v2_<hash>.json`. Add `--model MODEL --run-id ID` to save a report under `results/<model>/evaluation/<dataset>/<mode>/<configuration>/<run_id>/` instead. In Python, use `evaluate_files`, `evaluate` or `bootstrap` from `shared_evaluation.evaluate_v2`. The reasons for each score are in [EVALUATION_V2.md](shared_evaluation/EVALUATION_V2.md), and figures are drawn from the reports by [shared_visualization](shared_visualization/README.md).
+
+Version 1 (`shared_evaluation/evaluate.py`: RMSE, MAE, R² and RMSE improvement, without intervals) is kept only because existing runners, including DAE V2's, still call it. Their predictions are saved, so score them with version 2 as above; nothing has to be retrained.
+
 ## Train and evaluate DAE V2
 
 DAE V2 owns its results under `results/dae_v2/`. The `training/` directory holds
@@ -85,13 +107,9 @@ python -m models.deep_learning_v2.run_experiment --mode full --rate 0.3 --seed 0
 
 The MLP encoder-decoder receives zero-filled standardized values and a visibility mask. Each training batch hides more originally observed cells; only those extra hidden cells contribute to masked MSE. Early stopping uses a separate fixed holdout of observed cells excluded from training inputs and targets. At inference only missing cells are replaced. Default settings: Adam, learning rate 0.001, batch size 256, 30% extra training masking, 10% observed validation holdout, ReLU, dropout 0.05, and at most 150 epochs with patience 20. Hidden widths and bottleneck vary with feature count. `--run-id` prevents overwriting earlier runs.
 
-The shared evaluator loads the configuration's truth, evaluation mask and mean baseline directly from `data/processed/`. Given an aligned CSV it computes standardized RMSE and MAE, macro per-feature R², and relative RMSE improvement against mean imputation. Results only use hidden cells and are saved to `results/<model>/evaluation/<dataset>/<mode>/<configuration>/<run_id>/`. Use the `evaluate()` Python API for in-memory matrices, or run:
+The runner writes a version 1 report for each run. Score its predictions with version 2 as described in [Evaluate](#evaluate).
 
-```bash
-python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --model dae_v2 --run-id verification --predictions data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv
-```
-
-See [DAE benchmark results](results/dae_v2/evaluation/summary/benchmark_summary.csv), [training histories and configurations](results/dae_v2/training/), and the separate [evaluation V2 documentation](shared_evaluation/EVALUATION_V2.md). The initial experiment uses one seed and a transductive missing-cell holdout; these scores do not measure generalization to unseen rows or establish significance across seeds. Credits and change notices for the datasets are in [data/README.md](data/README.md). The project uses NumPy, pandas, PyTorch, SciPy, scikit-learn and ucimlrepo.
+See [DAE benchmark results](results/dae_v2/evaluation/summary/benchmark_summary.csv) (version 1 scores) and [training histories and configurations](results/dae_v2/training/). The initial experiment uses one seed and a transductive missing-cell holdout; these scores do not measure generalization to unseen rows or establish significance across seeds. Credits and change notices for the datasets are in [data/README.md](data/README.md). The project uses NumPy, pandas, PyTorch, SciPy, scikit-learn and ucimlrepo.
 
 California Housing Quick has an unusually large RMSE because one hidden `AveOccup` value is about 1,314 observed standard deviations from its observed mean. That cell contributes 99.35% of the mean baseline's squared error for this configuration. The published data retain this observation; inspect MAE and macro R² alongside RMSE.
 

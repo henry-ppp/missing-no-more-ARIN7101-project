@@ -1,6 +1,6 @@
-# Evaluation v2: proposed changes
+# Evaluation v2: the main protocol
 
-**Proposal:** score every model on three core criteria: accuracy, distribution and usefulness for prediction. Each one is measured against mean imputation and comes with a 95% confidence interval. The version 1 files stay untouched until we agree.
+Every model is scored on three core criteria: accuracy, distribution and usefulness for prediction. Each one is measured against mean imputation and comes with a 95% confidence interval. Version 2 is the project's main evaluation protocol; version 1 (`evaluate.py`) is kept only for runners that still call it.
 
 ## Why change
 
@@ -17,7 +17,7 @@
 
 **3. One run per setting gives no error bars,** so we can't tell a real difference from luck. Retraining every model many times is too slow.
 
-## Proposed core criteria
+## Core criteria
 
 All three use the same scale: **0 = mean imputation, higher is better.**
 
@@ -49,15 +49,16 @@ MAE, R² and raw RMSE are still computed and saved, for an appendix.
 
 ## What's in the repo
 
-- New: `metrics_v2.py`, `evaluate_v2.py` and `tests/test_evaluation_v2.py`. `evaluate.py` and `metrics.py` are unchanged.
-- Version 2 doesn't import version 1. If we adopt it, we can delete `evaluate.py` and `metrics.py`. We'd also update the "exactly four metrics" line in `data/README.md` and the metric-name check in `tests/test_benchmark.py`.
+- `metrics_v2.py`, `evaluate_v2.py` and `tests/test_evaluation_v2.py`. RMSE, MAE, R² and RMSE improvement are computed exactly as in version 1, so the two versions agree on those four.
+- Version 2 doesn't import version 1. `evaluate.py` and `metrics.py` stay while runners still call them (DAE V2, `models/deep_learning`, iterative ridge, random forest). Those runners save their predictions, so version 2 can score them without retraining. Once no runner calls version 1, delete both files, the version 1 note in `data/README.md` and the version 1 checks in `tests/test_benchmark.py`.
 - It reads only `predictions.csv` files, so it works for every model.
 
-Run it from the repo root, with one or more models:
+Run it from the repo root with every model of one configuration, so all pairs share the same resamples. Name each file `NAME=PATH`:
 
 ```bash
-python -m shared_evaluation.evaluate_v2 --dataset credit_card --mode quick --rate 0.3 --seed 0 \
-    --predictions data/output/credit_card/quick/rate_0.3_seed_0/<model>/predictions.csv [more files] --downstream
+python -m shared_evaluation.evaluate_v2 --dataset credit_card --mode quick --rate 0.3 --seed 0 --downstream \
+    --predictions dae_v2=data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv \
+                  <model>=data/output/credit_card/quick/rate_0.3_seed_0/<model>/<run_id>/predictions.csv
 ```
 
 It prints a table. Standalone comparisons write to
@@ -65,9 +66,5 @@ It prints a table. Standalone comparisons write to
 For a formal report owned by a model, supply `--model MODEL --run-id ID` to
 write to `results/<model>/evaluation/<dataset>/<mode>/<configuration>/<run_id>/evaluation_v2_<hash>.json`.
 `--output-dir` overrides the corresponding root. Leave out `--downstream`
-to skip the prediction check.
-
-## What we need to decide
-
-1. Do we adopt the three core criteria?
-2. The prediction check needs the raw data files (`data/raw/`), because the targets aren't in the prepared data. Can whoever prepared the data share them?
+to skip the prediction check. The check reads its targets from the raw files in `data/raw/`, because the
+targets aren't in the prepared data.
