@@ -1,0 +1,12 @@
+{
+  "source": "https://ffiec.cfpb.gov/data-browser/",
+  "uci_id": null,
+  "rows": 20714,
+  "sha256": {
+    "source.csv": "41f52114f22fc6535266407ca797245abd1d4d5e267d7e84d8fb00073ba95d98"
+  },
+  "storage": "Byte-identical HMDA Data Browser CSV (Rhode Island, 2023, originated loans)",
+  "query": "https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=RI&years=2023&actions_taken=1",
+  "file_url": "https://files.ffiec.cfpb.gov/data-browser/datasets/2023/filtered-queries/one-year/6aa280c7df701da34e401fee78af1d7d.csv",
+  "license": "No explicit license found; public HMDA data published by the CFPB for the FFIEC"
+}

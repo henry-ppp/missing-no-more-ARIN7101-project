@@ -33,6 +33,7 @@ MAE, R² and raw RMSE are still computed and saved, for an appendix.
 
 **The prediction check:**
 - Credit card default uses logistic regression, scored by AUROC.
+- HMDA uses whether a loan is government-backed (FHA, VA or USDA, from `loan_type`), with logistic regression scored by AUROC.
 - California house value and superconductor critical temperature use linear regression, scored by R².
 - Gas turbine has no target, so it is skipped.
 - It uses 5-fold cross-validation with the same folds for every model.

@@ -145,15 +145,18 @@ def tint(colour: str, amount: float) -> str:
 DATASETS = {
     'credit_card': 'Credit card',
     'california_housing': 'California housing',
-    'superconductivity': 'Superconductivity',
+    'hmda_ri_2023': 'HMDA mortgages (RI)',
     'gas_turbine': 'Gas turbine',
+    'superconductivity': 'Superconductivity',     # retired from the benchmark; kept for old reports
 }
 DATASET_SOURCES = {
     'credit_card': 'UCI Default of Credit Card Clients (Yeh)',
     'california_housing': 'California Housing (Pace & Barry; Deshpande CSV export)',
-    'superconductivity': 'UCI Superconductivity Data (Hamidieh)',
+    'hmda_ri_2023': 'HMDA loan-level data, Rhode Island 2023 (CFPB for the FFIEC)',
     'gas_turbine': 'UCI Gas Turbine CO and NOx Emission',
+    'superconductivity': 'UCI Superconductivity Data (Hamidieh)',
 }
+DATASET_LICENSES = {'hmda_ri_2023': 'public data, no explicit license'}   # every other source: CC BY 4.0
 METRICS = {
     'relative_improvement': 'RMSE improvement over mean',
     'mae_improvement': 'MAE improvement over mean',
@@ -196,9 +199,13 @@ def rate_label(rate: float) -> str:
 
 
 def source_note(datasets=(), extra: str | None = None) -> str:
-    """'Data: ... (CC BY 4.0).' for the datasets shown, plus a sentence on outside methods or statistics."""
-    sources = [DATASET_SOURCES.get(d, dataset_label(d)) for d in ordered_datasets(datasets)]
-    parts = [f"Data: {'; '.join(sources)} (CC BY 4.0)." if sources else '']
+    """'Data: ... (CC BY 4.0).' for the datasets shown, grouped by license, plus a sentence on outside methods or
+    statistics."""
+    groups = {}
+    for d in ordered_datasets(datasets):
+        groups.setdefault(DATASET_LICENSES.get(d, 'CC BY 4.0'), []).append(DATASET_SOURCES.get(d, dataset_label(d)))
+    sources = [f"{'; '.join(names)} ({license})" for license, names in groups.items()]
+    parts = [f"Data: {'; '.join(sources)}." if sources else '']
     if extra:
         parts.append(extra)
     return ' '.join(p for p in parts if p)

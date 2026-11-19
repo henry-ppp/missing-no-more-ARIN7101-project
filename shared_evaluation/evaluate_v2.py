@@ -14,8 +14,9 @@ What it adds to version 1:
   retraining, model seeds or a new mask, so they are narrower than variation between runs.
 - Downstream check (optional): predict each dataset's target from the imputed table with a simple model, using
   cross-validation, and report the share of the gap between mean imputation (0) and the true table (1) that an
-  imputation closes. Logistic regression and AUROC for credit card default; linear regression and R^2 for
-  California house value and superconductor critical temperature. Gas turbine has no target. The targets are
+  imputation closes. Logistic regression and AUROC for credit card default and for whether an HMDA loan is
+  government-backed (FHA, VA or USDA, from loan_type); linear regression and R^2 for California house value
+  and superconductor critical temperature. Gas turbine has no target. The targets are
   not in the prepared data, so they are read from the raw cache data/raw/<dataset>/source.csv.
 
 Command line, from the repository root, once predictions.csv files exist (one or several models):
@@ -61,6 +62,12 @@ TARGETS = {
     'credit_card': ('classification', ('Y', 'default payment next month')),
     'california_housing': ('regression', ('MedHouseVal',)),
     'superconductivity': ('regression', ('critical_temp',)),
+    'hmda_ri_2023': ('classification', ('loan_type',)),
+}
+# Targets made from a coded raw column: dataset -> (target name, allowed codes, codes that count as 1).
+# HMDA loan_type: 1 conventional, 2 FHA, 3 VA, 4 USDA; government-backed (2, 3, 4) is 1.
+CODED_TARGETS = {
+    'hmda_ri_2023': ('government_backed', {1, 2, 3, 4}, {2, 3, 4}),
 }
 NAME_CHARS = set('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-')
 
@@ -186,6 +193,11 @@ def load_target(dataset, row_ids, raw_dir='data/raw', raw_sha256=None):
                   index=pd.Index(list(row_ids), name='row_id'), name=column)
     if not np.isfinite(y.to_numpy()).all():
         raise ValueError('Target has missing or non-finite values')
+    if dataset in CODED_TARGETS:
+        name, codes, positive = CODED_TARGETS[dataset]
+        if not y.isin(codes).all():
+            raise ValueError(f'{column} has codes outside {sorted(codes)}')
+        y = y.isin(positive).astype(float).rename(name)
     return y
 
 

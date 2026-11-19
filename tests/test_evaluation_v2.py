@@ -179,6 +179,21 @@ class EvaluationV2Tests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 load_target('gas_turbine', ['gt_2011.csv:0'], temp)
 
+    def test_load_hmda_government_backed_target(self):
+        with TemporaryDirectory(dir=Path.cwd()) as temp:
+            folder = Path(temp) / 'hmda_ri_2023'
+            folder.mkdir()
+            path = folder / 'source.csv'
+            pd.DataFrame({'loan_type': [1, 2, 3, 4, 1], 'income': [90, 60, 70, 50, 120]}).to_csv(path, index=False)
+            rows = [f'source.csv:{i}' for i in (4, 0, 1, 2, 3)]
+            y = load_target('hmda_ri_2023', rows, temp, {'source.csv': sha256(path)})
+            self.assertEqual(y.tolist(), [0.0, 0.0, 1.0, 1.0, 1.0])   # conventional 0; FHA, VA, USDA 1
+            self.assertEqual((y.name, y.index.tolist()), ('government_backed', rows))
+            for bad in ([1, 5], [1, None]):                            # unknown code, missing code
+                pd.DataFrame({'loan_type': bad}).to_csv(path, index=False)
+                with self.assertRaises(ValueError):
+                    load_target('hmda_ri_2023', ['source.csv:0', 'source.csv:1'], temp)
+
     def test_parse_predictions(self):
         parsed = parse_predictions(['data/output/x/dae/predictions.csv', 'vae=other/predictions.csv'])
         self.assertEqual(parsed, {'dae': 'data/output/x/dae/predictions.csv', 'vae': 'other/predictions.csv'})
