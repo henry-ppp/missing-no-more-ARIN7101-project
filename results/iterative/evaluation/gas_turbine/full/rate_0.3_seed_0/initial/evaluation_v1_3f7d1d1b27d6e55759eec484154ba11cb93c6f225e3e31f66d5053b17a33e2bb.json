@@ -1,0 +1,18 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "iterative",
+  "run_id": "initial",
+  "predictions": "data/output/gas_turbine/full/rate_0.3_seed_0/iterative/initial/predictions.csv",
+  "prediction_sha256": "3f7d1d1b27d6e55759eec484154ba11cb93c6f225e3e31f66d5053b17a33e2bb",
+  "benchmark_metadata_sha256": "0566878878e49617ff1ca8bcf7e81676bb24a15f360763e0d8578b2912e9b095",
+  "mean_baseline_rmse": 0.9990947162837363,
+  "metrics": {
+    "rmse": 0.6224455065992955,
+    "mae": 0.3951455387073686,
+    "r2": 0.6147545681192756,
+    "relative_improvement": 0.37699049303897514
+  }
+}

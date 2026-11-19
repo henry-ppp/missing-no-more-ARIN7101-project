@@ -1,0 +1,49 @@
+{
+  "dataset": "california_housing",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "rows": 20640,
+  "features": 8,
+  "max_iter": 50,
+  "tol": 0.001,
+  "alpha": 1.0,
+  "n_iter": 50,
+  "fit_seconds": 1.000541100045666,
+  "metrics_v1": {
+    "rmse": 1.2463456668043695,
+    "mae": 0.49522093232581893,
+    "r2": -0.8008199961582934,
+    "relative_improvement": -0.3638859521959965
+  },
+  "mean_baseline_rmse": 0.9138195644567092,
+  "headline": {
+    "relative_improvement": {
+      "estimate": -0.3638859521959965,
+      "ci": [
+        -0.909813493076876,
+        0.2400794056347495
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.5563679016892291,
+      "ci": [
+        0.5442303992591254,
+        0.5734821489448484
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.28824922918363227,
+      "ci": [
+        0.2525575647741399,
+        0.3314151238849631
+      ]
+    }
+  },
+  "predictions": "data/output/california_housing/full/rate_0.3_seed_0/iterative/initial/predictions.csv",
+  "prediction_sha256": "312397c756f38d6f56d36cb85ba73ee7bb8e3728fe6f542176eaadedd4edcd9c",
+  "input_sha256": "706fc2d3788631efc800c865f6d638eb5fba94d1c83c8fef070b5a5a6ad5b600",
+  "evaluation_v1": "results/iterative/evaluation/california_housing/full/rate_0.3_seed_0/initial/evaluation_v1_312397c756f38d6f56d36cb85ba73ee7bb8e3728fe6f542176eaadedd4edcd9c.json",
+  "evaluation_v2": "results/iterative/evaluation/california_housing/full/rate_0.3_seed_0/initial/evaluation_v2_bf1bf80d1446831e.json"
+}

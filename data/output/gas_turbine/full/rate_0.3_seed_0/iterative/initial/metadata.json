@@ -1,0 +1,16 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "iterative",
+  "run_id": "initial",
+  "max_iter": 50,
+  "tol": 0.001,
+  "alpha": 1.0,
+  "n_iter": 50,
+  "fit_seconds": 15.811645699897781,
+  "benchmark_metadata_sha256": "0566878878e49617ff1ca8bcf7e81676bb24a15f360763e0d8578b2912e9b095",
+  "input_sha256": "0b94ea4da6fc3ef4cbbada1489940c1982c8ad5b137b804cadf03b69c14343ec",
+  "prediction_sha256": "3f7d1d1b27d6e55759eec484154ba11cb93c6f225e3e31f66d5053b17a33e2bb"
+}
