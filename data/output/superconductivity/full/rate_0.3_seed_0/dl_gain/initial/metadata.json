@@ -1,0 +1,13 @@
+{
+  "dataset": "superconductivity",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_gain",
+  "method": "gain",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "f1383aba578e2aac5908764f04a2a0dcb5397c0345949ebbfca373ced3132627",
+  "input_sha256": "471c05add4d63308f15d894f2ada26f717c7b22837cca6cfcd266d6db680ce37",
+  "prediction_sha256": "3006be1b00dd8c28b3b8ef06f519f07c128e6d4260462d5d8418a73a62cbcf37",
+  "checkpoint": "results/dl_gain/training/checkpoints/superconductivity/full/rate_0.3_seed_0/initial/best.pt"
+}

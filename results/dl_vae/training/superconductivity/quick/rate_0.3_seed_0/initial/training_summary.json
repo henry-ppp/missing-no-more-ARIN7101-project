@@ -1,0 +1,30 @@
+{
+  "config": {
+    "epochs": 150,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "training_mask_rate": 0.3,
+    "validation_fraction": 0.1,
+    "patience": 20,
+    "dropout": 0.05,
+    "seed": 0,
+    "device": "auto",
+    "threads": 2
+  },
+  "method": "vae",
+  "model_id": "dl_vae",
+  "rows": 3000,
+  "features": 81,
+  "device": "cpu",
+  "device_name": "CPU",
+  "torch_version": "2.0.1",
+  "numpy_version": "1.26.4",
+  "runtime_seconds": 2.6538347909999995,
+  "input_sha256": "da34bcae72d0dc193f864a144ce46e7d5a583b110dadd30d9956786e293fb3fe",
+  "benchmark_metadata_sha256": "1582b15fb0cdc17b34dd03aafb04661b7ac92e18ed58f54789b043c8c88b9d8d",
+  "code_commit": "8c8629232bf83e7ce7d96531120f900011db88c2",
+  "objective": "Two-mask denoising: evaluation mask comes from shared benchmark; training loss uses additional masks of observed cells.",
+  "epochs_completed": 150,
+  "best_epoch": 150,
+  "best_validation_loss": 0.18056853115558624
+}

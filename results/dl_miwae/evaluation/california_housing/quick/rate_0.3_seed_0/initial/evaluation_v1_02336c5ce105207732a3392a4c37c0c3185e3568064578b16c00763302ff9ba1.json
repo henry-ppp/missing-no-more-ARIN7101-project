@@ -1,0 +1,18 @@
+{
+  "dataset": "california_housing",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_miwae",
+  "run_id": "initial",
+  "predictions": "data/output/california_housing/quick/rate_0.3_seed_0/dl_miwae/initial/predictions.csv",
+  "prediction_sha256": "02336c5ce105207732a3392a4c37c0c3185e3568064578b16c00763302ff9ba1",
+  "benchmark_metadata_sha256": "2f7437ed35964d209cd0ddc7856486cfb767f3edb49251f360e23a04abdddb86",
+  "mean_baseline_rmse": 15.722942606791388,
+  "metrics": {
+    "rmse": 15.72302114526746,
+    "mae": 0.890941324859707,
+    "r2": -0.0009425496532515371,
+    "relative_improvement": -4.99515122798222e-06
+  }
+}

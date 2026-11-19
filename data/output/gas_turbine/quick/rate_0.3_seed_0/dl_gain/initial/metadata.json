@@ -1,0 +1,13 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_gain",
+  "method": "gain",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "1fb7d6375fcef73cc3c443427599ffc8f3907363c21c67fa47443191acd920f1",
+  "input_sha256": "a105c628becac8cec1c52f675fe2de3f3ad230dbf3699a48c20ebe88e6f01ea4",
+  "prediction_sha256": "cffdb6f06176a5295b5eb993d36c67b7ef63c09ecb33094508c7b0a7403c36a4",
+  "checkpoint": "results/dl_gain/training/checkpoints/gas_turbine/quick/rate_0.3_seed_0/initial/best.pt"
+}

@@ -1,4 +1,6 @@
 """Official benchmark schema; feature order is part of the experiment contract."""
+from __future__ import annotations
+
 from dataclasses import dataclass
 
 MODEL_INPUT = 'X_cleaned_masked_standardized.csv'

@@ -1,0 +1,30 @@
+{
+  "config": {
+    "epochs": 150,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "training_mask_rate": 0.3,
+    "validation_fraction": 0.1,
+    "patience": 20,
+    "dropout": 0.05,
+    "seed": 0,
+    "device": "auto",
+    "threads": 2
+  },
+  "method": "mida",
+  "model_id": "dl_mida",
+  "rows": 3000,
+  "features": 8,
+  "device": "cpu",
+  "device_name": "CPU",
+  "torch_version": "2.0.1",
+  "numpy_version": "1.26.4",
+  "runtime_seconds": 1.0774537089999998,
+  "input_sha256": "115948a55dd49d7b0787a9fcb0f76ab465b8dec9ad121b0c580090b52fb1cf44",
+  "benchmark_metadata_sha256": "2f7437ed35964d209cd0ddc7856486cfb767f3edb49251f360e23a04abdddb86",
+  "code_commit": "8c8629232bf83e7ce7d96531120f900011db88c2",
+  "objective": "Two-mask denoising: evaluation mask comes from shared benchmark; training loss uses additional masks of observed cells.",
+  "epochs_completed": 150,
+  "best_epoch": 134,
+  "best_validation_loss": 0.6366770267486572
+}

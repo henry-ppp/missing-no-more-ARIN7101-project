@@ -1,0 +1,30 @@
+{
+  "config": {
+    "epochs": 150,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "training_mask_rate": 0.3,
+    "validation_fraction": 0.1,
+    "patience": 20,
+    "dropout": 0.05,
+    "seed": 0,
+    "device": "auto",
+    "threads": 2
+  },
+  "method": "miwae",
+  "model_id": "dl_miwae",
+  "rows": 30000,
+  "features": 14,
+  "device": "cpu",
+  "device_name": "CPU",
+  "torch_version": "2.0.1",
+  "numpy_version": "1.26.4",
+  "runtime_seconds": 25.596304709,
+  "input_sha256": "0d45ed4e3739759f68363f43c61d4f2c8211bb01dc05360c937d7ca43643cda2",
+  "benchmark_metadata_sha256": "06e2f65a1e7acc32f30584854954774ebacd84a87f33c85586a90f4ac6679b10",
+  "code_commit": "8c8629232bf83e7ce7d96531120f900011db88c2",
+  "objective": "Two-mask denoising: evaluation mask comes from shared benchmark; training loss uses additional masks of observed cells.",
+  "epochs_completed": 140,
+  "best_epoch": 110,
+  "best_validation_loss": 1.0038630962371826
+}

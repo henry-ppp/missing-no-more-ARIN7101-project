@@ -1,0 +1,18 @@
+{
+  "dataset": "superconductivity",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_mida",
+  "run_id": "initial",
+  "predictions": "data/output/superconductivity/quick/rate_0.3_seed_0/dl_mida/initial/predictions.csv",
+  "prediction_sha256": "1e37ad0b50cc67ab7ac7adc76a46157f70bc1e8f20a788847d95066a1710b152",
+  "benchmark_metadata_sha256": "1582b15fb0cdc17b34dd03aafb04661b7ac92e18ed58f54789b043c8c88b9d8d",
+  "mean_baseline_rmse": 1.0069015735421845,
+  "metrics": {
+    "rmse": 0.3591483830708973,
+    "mae": 0.24514646471755008,
+    "r2": 0.8724942302364045,
+    "relative_improvement": 0.6433133163081202
+  }
+}

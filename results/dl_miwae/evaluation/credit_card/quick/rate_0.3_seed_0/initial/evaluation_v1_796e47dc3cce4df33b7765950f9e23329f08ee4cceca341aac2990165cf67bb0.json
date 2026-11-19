@@ -1,0 +1,18 @@
+{
+  "dataset": "credit_card",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_miwae",
+  "run_id": "initial",
+  "predictions": "data/output/credit_card/quick/rate_0.3_seed_0/dl_miwae/initial/predictions.csv",
+  "prediction_sha256": "796e47dc3cce4df33b7765950f9e23329f08ee4cceca341aac2990165cf67bb0",
+  "benchmark_metadata_sha256": "a506c5964f5f3a64862c500c6bd7f64e6f30f7c8e43b5ddfdd097dfaa0dec5ae",
+  "mean_baseline_rmse": 1.4671739939017683,
+  "metrics": {
+    "rmse": 1.3399150760419978,
+    "mae": 0.4896640409299455,
+    "r2": 0.2584072221474117,
+    "relative_improvement": 0.08673744108654835
+  }
+}

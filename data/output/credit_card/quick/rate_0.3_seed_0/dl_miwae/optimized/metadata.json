@@ -1,0 +1,13 @@
+{
+  "dataset": "credit_card",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_miwae",
+  "method": "miwae",
+  "run_id": "optimized",
+  "benchmark_metadata_sha256": "a506c5964f5f3a64862c500c6bd7f64e6f30f7c8e43b5ddfdd097dfaa0dec5ae",
+  "input_sha256": "386bcdd483170952cdd272553508a53865ec8e8f2040095b464a964eb500da23",
+  "prediction_sha256": "572aa3c156f037695aae1f5e6ae8fb3aa656bbd29fa92641d5dcc641327b6aeb",
+  "checkpoint": "results/dl_miwae/training/checkpoints/credit_card/quick/rate_0.3_seed_0/optimized/best.pt"
+}

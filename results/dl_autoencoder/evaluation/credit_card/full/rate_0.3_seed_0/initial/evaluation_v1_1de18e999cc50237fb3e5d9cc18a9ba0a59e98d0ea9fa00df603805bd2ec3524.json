@@ -1,0 +1,18 @@
+{
+  "dataset": "credit_card",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_autoencoder",
+  "run_id": "initial",
+  "predictions": "data/output/credit_card/full/rate_0.3_seed_0/dl_autoencoder/initial/predictions.csv",
+  "prediction_sha256": "1de18e999cc50237fb3e5d9cc18a9ba0a59e98d0ea9fa00df603805bd2ec3524",
+  "benchmark_metadata_sha256": "06e2f65a1e7acc32f30584854954774ebacd84a87f33c85586a90f4ac6679b10",
+  "mean_baseline_rmse": 1.00676501182553,
+  "metrics": {
+    "rmse": 0.7262449279572694,
+    "mae": 0.2993342436174088,
+    "r2": 0.4920347228765511,
+    "relative_improvement": 0.27863511402686103
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "dataset": "credit_card",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_vae",
+  "method": "vae",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "a506c5964f5f3a64862c500c6bd7f64e6f30f7c8e43b5ddfdd097dfaa0dec5ae",
+  "input_sha256": "386bcdd483170952cdd272553508a53865ec8e8f2040095b464a964eb500da23",
+  "prediction_sha256": "54722dc5052d89c24d4c2d098faaa95fe9c77ae7dfe038c074d3d7b83baf9ec0",
+  "checkpoint": "results/dl_vae/training/checkpoints/credit_card/quick/rate_0.3_seed_0/initial/best.pt"
+}

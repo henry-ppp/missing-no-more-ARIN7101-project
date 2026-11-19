@@ -1,0 +1,18 @@
+{
+  "dataset": "superconductivity",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_gain",
+  "run_id": "optimized",
+  "predictions": "data/output/superconductivity/full/rate_0.3_seed_0/dl_gain/optimized/predictions.csv",
+  "prediction_sha256": "afd94162ba0a0385d110ddc73d26654c311fe4e8c7fe1aa651ec0a1e5b8ece3e",
+  "benchmark_metadata_sha256": "f1383aba578e2aac5908764f04a2a0dcb5397c0345949ebbfca373ced3132627",
+  "mean_baseline_rmse": 1.001909228258145,
+  "metrics": {
+    "rmse": 0.8525892463796229,
+    "mae": 0.612697352770721,
+    "r2": 0.2754505108033451,
+    "relative_improvement": 0.14903543920652396
+  }
+}

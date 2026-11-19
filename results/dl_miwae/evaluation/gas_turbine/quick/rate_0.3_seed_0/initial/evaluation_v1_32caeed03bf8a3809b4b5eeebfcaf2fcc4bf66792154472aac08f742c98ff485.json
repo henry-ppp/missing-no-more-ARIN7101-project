@@ -1,0 +1,18 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_miwae",
+  "run_id": "initial",
+  "predictions": "data/output/gas_turbine/quick/rate_0.3_seed_0/dl_miwae/initial/predictions.csv",
+  "prediction_sha256": "32caeed03bf8a3809b4b5eeebfcaf2fcc4bf66792154472aac08f742c98ff485",
+  "benchmark_metadata_sha256": "1fb7d6375fcef73cc3c443427599ffc8f3907363c21c67fa47443191acd920f1",
+  "mean_baseline_rmse": 0.9872789483117294,
+  "metrics": {
+    "rmse": 0.9059228572032175,
+    "mae": 0.7061510099747076,
+    "r2": 0.16158539829573756,
+    "relative_improvement": 0.08240436124727735
+  }
+}

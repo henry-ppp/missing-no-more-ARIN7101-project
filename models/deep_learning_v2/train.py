@@ -1,4 +1,6 @@
 """Training sees only shared incomplete inputs, never evaluation truth."""
+from __future__ import annotations
+
 from dataclasses import dataclass, asdict
 from copy import deepcopy
 import hashlib

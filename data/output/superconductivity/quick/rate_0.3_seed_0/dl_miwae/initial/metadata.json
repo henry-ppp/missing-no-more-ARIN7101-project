@@ -1,0 +1,13 @@
+{
+  "dataset": "superconductivity",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_miwae",
+  "method": "miwae",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "1582b15fb0cdc17b34dd03aafb04661b7ac92e18ed58f54789b043c8c88b9d8d",
+  "input_sha256": "da34bcae72d0dc193f864a144ce46e7d5a583b110dadd30d9956786e293fb3fe",
+  "prediction_sha256": "574c2a478e6af81e4c00c147f4cd7af7245b0e8ff0cd16a6233d7cd8109c1cd0",
+  "checkpoint": "results/dl_miwae/training/checkpoints/superconductivity/quick/rate_0.3_seed_0/initial/best.pt"
+}

@@ -1,0 +1,13 @@
+{
+  "dataset": "credit_card",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_mida",
+  "method": "mida",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "a506c5964f5f3a64862c500c6bd7f64e6f30f7c8e43b5ddfdd097dfaa0dec5ae",
+  "input_sha256": "386bcdd483170952cdd272553508a53865ec8e8f2040095b464a964eb500da23",
+  "prediction_sha256": "092be72f3997e9f3afc68f3ec3982de3fcde9f11b4eb0215ba07b6a50fc78f9b",
+  "checkpoint": "results/dl_mida/training/checkpoints/credit_card/quick/rate_0.3_seed_0/initial/best.pt"
+}

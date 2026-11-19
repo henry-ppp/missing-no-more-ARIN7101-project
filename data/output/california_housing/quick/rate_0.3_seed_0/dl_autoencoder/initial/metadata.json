@@ -1,0 +1,13 @@
+{
+  "dataset": "california_housing",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_autoencoder",
+  "method": "autoencoder",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "2f7437ed35964d209cd0ddc7856486cfb767f3edb49251f360e23a04abdddb86",
+  "input_sha256": "115948a55dd49d7b0787a9fcb0f76ab465b8dec9ad121b0c580090b52fb1cf44",
+  "prediction_sha256": "8023e9ea42685438f45d5fd33e3a8e8d8d52d6b320307e953f76681d458e799c",
+  "checkpoint": "results/dl_autoencoder/training/checkpoints/california_housing/quick/rate_0.3_seed_0/initial/best.pt"
+}

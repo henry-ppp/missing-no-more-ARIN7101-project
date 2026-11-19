@@ -151,6 +151,86 @@ for method in ["autoencoder", "vae", "gain"]:
     print(method, rmse(X, imputed, mask), mae(X, imputed, mask), nrmse(X, imputed, mask), nmae(X, imputed, mask))
 ```
 
+## V2 shared-benchmark experiment results
+
+These results use the same shared processed data, mask, output layout, checkpoint layout, and `shared_evaluation.evaluate` scoring style as `models/deep_learning_v2`. They are **not** compared against `dae_v2` here; this section records only the models in `models/deep_learning`.
+
+Run configuration:
+
+- Models: `dl_autoencoder`, `dl_vae`, `dl_gain`, `dl_mida`, `dl_miwae`
+- Datasets: `california_housing`, `credit_card`, `gas_turbine`, `superconductivity`
+- Modes: `quick`, `full`
+- Evaluation missing rate: `0.3`
+- Seed: `0`
+- Run ID: `initial`
+- Epochs: `150`
+- Batch size: `256`
+- Training mask rate: `0.3`
+- Device used here: `cpu`
+
+Main summary file:
+
+```text
+results/deep_learning/evaluation/summary/benchmark_summary.csv
+```
+
+Per-model summary files:
+
+```text
+results/dl_autoencoder/evaluation/summary/benchmark_summary.csv
+results/dl_vae/evaluation/summary/benchmark_summary.csv
+results/dl_gain/evaluation/summary/benchmark_summary.csv
+```
+
+Predictions are saved under:
+
+```text
+data/output/<dataset>/<mode>/rate_0.3_seed_0/<model>/initial/predictions.csv
+```
+
+Checkpoints are saved under:
+
+```text
+results/<model>/training/checkpoints/<dataset>/<mode>/rate_0.3_seed_0/initial/best.pt
+```
+
+### V2 benchmark results for `models/deep_learning`
+
+| Model | Dataset | Mode | RMSE | MAE | R2 | Relative improvement |
+| --- | --- | --- | --- | --- | --- | --- |
+| dl_autoencoder | california_housing | full | 0.683928 | 0.417247 | 0.411225 | 0.251572 |
+| dl_gain | california_housing | full | 0.914932 | 0.576012 | -0.041648 | -0.001217 |
+| dl_vae | california_housing | full | 0.707714 | 0.432550 | 0.376245 | 0.225543 |
+| dl_autoencoder | credit_card | full | 0.726245 | 0.299334 | 0.492035 | 0.278635 |
+| dl_gain | credit_card | full | 0.874864 | 0.415654 | 0.255660 | 0.131015 |
+| dl_vae | credit_card | full | 0.765253 | 0.303266 | 0.437440 | 0.239889 |
+| dl_autoencoder | gas_turbine | full | 0.553843 | 0.350332 | 0.695200 | 0.445655 |
+| dl_gain | gas_turbine | full | 0.621652 | 0.420779 | 0.615461 | 0.377785 |
+| dl_vae | gas_turbine | full | 0.561126 | 0.356549 | 0.687057 | 0.438366 |
+| dl_autoencoder | superconductivity | full | 0.239609 | 0.155955 | 0.942757 | 0.760848 |
+| dl_gain | superconductivity | full | 0.512762 | 0.337384 | 0.738289 | 0.488216 |
+| dl_vae | superconductivity | full | 0.265984 | 0.172301 | 0.929420 | 0.734523 |
+| dl_autoencoder | california_housing | quick | 15.7109 | 0.720732 | 0.308907 | 0.000766 |
+| dl_gain | california_housing | quick | 15.7552 | 1.3935 | -2.432474 | -0.002053 |
+| dl_vae | california_housing | quick | 15.7184 | 0.771640 | 0.149675 | 0.000287 |
+| dl_autoencoder | credit_card | quick | 1.3127 | 0.415341 | 0.349564 | 0.105280 |
+| dl_gain | credit_card | quick | 1.6986 | 1.1018 | -0.495721 | -0.157759 |
+| dl_vae | credit_card | quick | 1.2977 | 0.378026 | 0.390047 | 0.115496 |
+| dl_autoencoder | gas_turbine | quick | 0.593332 | 0.388591 | 0.649412 | 0.399023 |
+| dl_gain | gas_turbine | quick | 0.909565 | 0.696187 | 0.165329 | 0.078715 |
+| dl_vae | gas_turbine | quick | 0.607485 | 0.398730 | 0.632542 | 0.384687 |
+| dl_autoencoder | superconductivity | quick | 0.354503 | 0.241427 | 0.875784 | 0.647927 |
+| dl_gain | superconductivity | quick | 0.930167 | 0.685099 | 0.142722 | 0.076209 |
+| dl_vae | superconductivity | quick | 0.382462 | 0.258060 | 0.855439 | 0.620160 |
+
+Notes:
+
+- `dl_autoencoder` remains the strongest overall baseline.
+- `dl_mida` improves some settings, especially `california_housing` and quick `credit_card`, by averaging MC-dropout imputations.
+- `dl_vae` is usually close to `dl_autoencoder`.
+- `dl_gain` and the current `dl_miwae` are weaker in this configuration and likely need further hyperparameter tuning before final use.
+
+
 ## Current limitations / next steps
 
 - The shared RMSE/MAE metrics are numeric, so current experiments keep numeric

@@ -1,0 +1,18 @@
+{
+  "dataset": "superconductivity",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_autoencoder",
+  "run_id": "initial",
+  "predictions": "data/output/superconductivity/quick/rate_0.3_seed_0/dl_autoencoder/initial/predictions.csv",
+  "prediction_sha256": "0634d44ff8678ce95f38f81b542b7c69a59b01efa2bf32e15dd04f1af3b359bc",
+  "benchmark_metadata_sha256": "1582b15fb0cdc17b34dd03aafb04661b7ac92e18ed58f54789b043c8c88b9d8d",
+  "mean_baseline_rmse": 1.0069015735421845,
+  "metrics": {
+    "rmse": 0.35450299513076594,
+    "mae": 0.2414267451610873,
+    "r2": 0.8757842731162232,
+    "relative_improvement": 0.6479268635129272
+  }
+}

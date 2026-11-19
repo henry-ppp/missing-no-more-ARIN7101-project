@@ -1,0 +1,13 @@
+{
+  "dataset": "california_housing",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_mida",
+  "method": "mida",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "2f7437ed35964d209cd0ddc7856486cfb767f3edb49251f360e23a04abdddb86",
+  "input_sha256": "115948a55dd49d7b0787a9fcb0f76ab465b8dec9ad121b0c580090b52fb1cf44",
+  "prediction_sha256": "097f7c16f1e271efdf9539d056c549d4f39aa34cbb5601f25c7fa2baa844098e",
+  "checkpoint": "results/dl_mida/training/checkpoints/california_housing/quick/rate_0.3_seed_0/initial/best.pt"
+}

@@ -1,0 +1,13 @@
+{
+  "dataset": "california_housing",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_vae",
+  "method": "vae",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "d1c115c7951daf7e81f29ead4708ef0626f49b388931e03b3aad782564eac755",
+  "input_sha256": "706fc2d3788631efc800c865f6d638eb5fba94d1c83c8fef070b5a5a6ad5b600",
+  "prediction_sha256": "cb11dcf346a560a21941d743093dc648d889a14aea4268080cee1314a7c2d6d9",
+  "checkpoint": "results/dl_vae/training/checkpoints/california_housing/full/rate_0.3_seed_0/initial/best.pt"
+}

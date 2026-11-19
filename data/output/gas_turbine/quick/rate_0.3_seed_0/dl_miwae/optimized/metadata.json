@@ -1,0 +1,13 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_miwae",
+  "method": "miwae",
+  "run_id": "optimized",
+  "benchmark_metadata_sha256": "1fb7d6375fcef73cc3c443427599ffc8f3907363c21c67fa47443191acd920f1",
+  "input_sha256": "a105c628becac8cec1c52f675fe2de3f3ad230dbf3699a48c20ebe88e6f01ea4",
+  "prediction_sha256": "511e2e8628054a4aaa7aad6edcd995a5d42f9208f547f3b46c7217ef122f5d46",
+  "checkpoint": "results/dl_miwae/training/checkpoints/gas_turbine/quick/rate_0.3_seed_0/optimized/best.pt"
+}

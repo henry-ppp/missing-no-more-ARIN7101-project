@@ -1,0 +1,30 @@
+{
+  "config": {
+    "epochs": 150,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "training_mask_rate": 0.3,
+    "validation_fraction": 0.1,
+    "patience": 20,
+    "dropout": 0.05,
+    "seed": 0,
+    "device": "auto",
+    "threads": 2
+  },
+  "method": "autoencoder",
+  "model_id": "dl_autoencoder",
+  "rows": 36733,
+  "features": 11,
+  "device": "cpu",
+  "device_name": "CPU",
+  "torch_version": "2.0.1",
+  "numpy_version": "1.26.4",
+  "runtime_seconds": 13.263921665999998,
+  "input_sha256": "0b94ea4da6fc3ef4cbbada1489940c1982c8ad5b137b804cadf03b69c14343ec",
+  "benchmark_metadata_sha256": "0566878878e49617ff1ca8bcf7e81676bb24a15f360763e0d8578b2912e9b095",
+  "code_commit": "8c8629232bf83e7ce7d96531120f900011db88c2",
+  "objective": "Two-mask denoising: evaluation mask comes from shared benchmark; training loss uses additional masks of observed cells.",
+  "epochs_completed": 150,
+  "best_epoch": 146,
+  "best_validation_loss": 0.35759085416793823
+}

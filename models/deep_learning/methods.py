@@ -8,6 +8,8 @@ import pandas as pd
 
 from models.deep_learning.autoencoder_imputer import DeepAutoencoderImputer
 from models.deep_learning.gain_imputer import GAINImputer
+from models.deep_learning.mida_imputer import MIDAImputer
+from models.deep_learning.miwae_imputer import MIWAEImputer
 from models.deep_learning.vae_imputer import VariationalAutoencoderImputer
 
 
@@ -19,6 +21,8 @@ METHODS = {
     "autoencoder": DeepAutoencoderImputer,
     "vae": VariationalAutoencoderImputer,
     "gain": GAINImputer,
+    "mida": MIDAImputer,
+    "miwae": MIWAEImputer,
 }
 
 
@@ -29,6 +33,7 @@ def create_imputer(
     epochs: int,
     batch_size: int,
     verbose: bool,
+    training_mask_rate: float = 0.2,
 ) -> Imputer:
     """Create one imputer by method name using shared runner settings."""
 
@@ -40,4 +45,5 @@ def create_imputer(
         epochs=epochs,
         batch_size=batch_size,
         verbose=verbose,
+        training_mask_rate=training_mask_rate,
     )

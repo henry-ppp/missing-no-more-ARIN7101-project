@@ -1,9 +1,9 @@
 """Denoising autoencoder imputer for numeric tabular data.
 
-The model is intentionally small and CPU-friendly so it can be used for the
-course comparison across several datasets and missing rates. It follows the
-project protocol: train on the masked table, reconstruct all cells, and evaluate
-only the held-out cells with the shared metrics.
+Two-mask protocol:
+1. The shared benchmark hides evaluation cells before fitting.
+2. This imputer samples an additional training mask from still-observed cells and
+   computes the loss only on those training-hidden cells.
 """
 
 from __future__ import annotations
@@ -21,10 +21,7 @@ from torch.utils.data import DataLoader, TensorDataset
 class _Autoencoder(nn.Module):
     def __init__(self, n_features: int, hidden_dims: Iterable[int], dropout: float) -> None:
         super().__init__()
-        hidden_dims = list(hidden_dims)
-        if not hidden_dims:
-            hidden_dims = [max(4, min(128, n_features * 2))]
-
+        hidden_dims = list(hidden_dims) or [max(4, min(128, n_features * 2))]
         encoder_layers: list[nn.Module] = []
         previous = n_features * 2
         for width in hidden_dims:
@@ -32,7 +29,6 @@ class _Autoencoder(nn.Module):
             if dropout > 0:
                 encoder_layers.append(nn.Dropout(dropout))
             previous = width
-
         decoder_layers: list[nn.Module] = []
         for width in reversed(hidden_dims[:-1]):
             decoder_layers.extend([nn.Linear(previous, width), nn.ReLU()])
@@ -40,23 +36,15 @@ class _Autoencoder(nn.Module):
                 decoder_layers.append(nn.Dropout(dropout))
             previous = width
         decoder_layers.append(nn.Linear(previous, n_features))
-
         self.network = nn.Sequential(*encoder_layers, *decoder_layers)
 
     def forward(self, values: torch.Tensor, observed: torch.Tensor) -> torch.Tensor:
-        # Concatenating the observation mask lets the network distinguish an
-        # actual zero from a value that was filled with zero before training.
-        return self.network(torch.cat([values, observed], dim=1))
+        return self.network(torch.cat([values, observed.to(values.dtype)], dim=1))
 
 
 @dataclass
 class DeepAutoencoderImputer:
-    """Impute numeric DataFrames with a denoising autoencoder.
-
-    Parameters are conservative defaults for small tabular datasets. The class
-    keeps the same DataFrame index/columns as the input and can be used from a
-    script or notebook.
-    """
+    """Impute numeric DataFrames with a two-mask denoising autoencoder."""
 
     hidden_dims: tuple[int, ...] | None = None
     epochs: int = 300
@@ -64,6 +52,7 @@ class DeepAutoencoderImputer:
     learning_rate: float = 1e-3
     weight_decay: float = 1e-5
     dropout: float = 0.05
+    training_mask_rate: float = 0.2
     validation_fraction: float = 0.1
     patience: int = 30
     seed: int = 0
@@ -80,38 +69,38 @@ class DeepAutoencoderImputer:
 
     def fit(self, X: pd.DataFrame) -> "DeepAutoencoderImputer":
         X = self._validate_input(X)
+        if not 0 < self.training_mask_rate < 1:
+            raise ValueError("training_mask_rate must be strictly between 0 and 1")
         self.columns_ = X.columns
         self.mean_ = X.mean(axis=0)
-        std = X.std(axis=0).replace(0, 1.0)
-        self.std_ = std.fillna(1.0)
+        self.std_ = X.std(axis=0).replace(0, 1.0).fillna(1.0)
         self.fill_values_ = self.mean_.fillna(0.0)
 
-        observed = X.notna().astype(np.float32)
+        available = X.notna().astype(np.float32)
         filled = X.fillna(self.fill_values_)
         scaled = ((filled - self.mean_) / self.std_).fillna(0.0).astype(np.float32)
-
         values_tensor = torch.as_tensor(scaled.to_numpy(), dtype=torch.float32)
-        observed_tensor = torch.as_tensor(observed.to_numpy(), dtype=torch.float32)
+        available_tensor = torch.as_tensor(available.to_numpy(), dtype=torch.bool)
 
         torch.manual_seed(self.seed)
         np.random.seed(self.seed)
         device = torch.device(self.device or ("cuda" if torch.cuda.is_available() else "cpu"))
-
         n_features = X.shape[1]
         hidden_dims = self.hidden_dims or self._default_hidden_dims(n_features)
         model = _Autoencoder(n_features, hidden_dims, self.dropout).to(device)
-        optimiser = torch.optim.AdamW(
-            model.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay
-        )
+        optimiser = torch.optim.AdamW(model.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay)
 
         train_idx, val_idx = self._train_validation_split(len(X))
         train_loader = DataLoader(
-            TensorDataset(values_tensor[train_idx], observed_tensor[train_idx]),
+            TensorDataset(values_tensor[train_idx], available_tensor[train_idx]),
             batch_size=min(self.batch_size, max(1, len(train_idx))),
             shuffle=True,
             generator=torch.Generator().manual_seed(self.seed),
         )
-
+        val_target_mask = self._sample_training_mask(
+            available_tensor[val_idx], torch.Generator().manual_seed(self.seed + 10_000), self.training_mask_rate
+        )
+        mask_generator = torch.Generator(device=device).manual_seed(self.seed + 1)
         best_state = None
         best_val = float("inf")
         best_epoch = 0
@@ -120,35 +109,32 @@ class DeepAutoencoderImputer:
         for epoch in range(1, self.epochs + 1):
             model.train()
             train_loss_total = 0.0
-            train_weight_total = 0.0
-            for batch_values, batch_observed in train_loader:
+            train_weight_total = 0
+            for batch_values, batch_available in train_loader:
                 batch_values = batch_values.to(device)
-                batch_observed = batch_observed.to(device)
-                prediction = model(batch_values, batch_observed)
-                loss = self._masked_mse(prediction, batch_values, batch_observed)
-
+                batch_available = batch_available.to(device)
+                target_mask = self._sample_training_mask(batch_available, mask_generator, self.training_mask_rate)
+                input_observed = batch_available & ~target_mask
+                input_values = batch_values.masked_fill(~input_observed, 0.0)
+                prediction = model(input_values, input_observed)
+                loss = self._masked_mse(prediction, batch_values, target_mask)
                 optimiser.zero_grad()
                 loss.backward()
                 optimiser.step()
+                weight = int(target_mask.sum().item())
+                train_loss_total += float(loss.item()) * max(weight, 1)
+                train_weight_total += max(weight, 1)
 
-                weight = float(batch_observed.sum().item())
-                train_loss_total += float(loss.item()) * max(weight, 1.0)
-                train_weight_total += max(weight, 1.0)
-
-            train_loss = train_loss_total / max(train_weight_total, 1.0)
-            val_loss = self._evaluate_loss(model, values_tensor, observed_tensor, val_idx, device)
+            train_loss = train_loss_total / max(train_weight_total, 1)
+            val_loss = self._evaluate_loss(model, values_tensor, available_tensor, val_idx, val_target_mask, device)
             self.history_.append({"epoch": float(epoch), "train_loss": train_loss, "val_loss": val_loss})
-
             if self.verbose and (epoch == 1 or epoch % 25 == 0):
-                print(f"epoch={epoch:04d} train_loss={train_loss:.6f} val_loss={val_loss:.6f}")
-
+                print(f"epoch={epoch:04d} train_loss={train_loss:.6f} val_loss={val_loss:.6f}", flush=True)
             if val_loss < best_val - 1e-7:
                 best_val = val_loss
                 best_epoch = epoch
                 best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
             elif epoch - best_epoch >= self.patience:
-                if self.verbose:
-                    print(f"early stopping at epoch={epoch}; best_epoch={best_epoch}")
                 break
 
         if best_state is not None:
@@ -162,21 +148,16 @@ class DeepAutoencoderImputer:
         X = self._validate_input(X)
         if not X.columns.equals(self.columns_):
             raise ValueError("X columns differ from the columns used during fit")
-
-        assert self.mean_ is not None
-        assert self.std_ is not None
-        assert self.fill_values_ is not None
-
+        assert self.mean_ is not None and self.std_ is not None and self.fill_values_ is not None
         observed = X.notna().astype(np.float32)
         filled = X.fillna(self.fill_values_)
         scaled = ((filled - self.mean_) / self.std_).fillna(0.0).astype(np.float32)
-
         self.model_.eval()
         with torch.no_grad():
             values_tensor = torch.as_tensor(scaled.to_numpy(), dtype=torch.float32)
-            observed_tensor = torch.as_tensor(observed.to_numpy(), dtype=torch.float32)
-            reconstructed = self.model_(values_tensor, observed_tensor).cpu().numpy()
-
+            observed_tensor = torch.as_tensor(observed.to_numpy(), dtype=torch.bool)
+            input_values = values_tensor.masked_fill(~observed_tensor, 0.0)
+            reconstructed = self.model_(input_values, observed_tensor).cpu().numpy()
         reconstructed = pd.DataFrame(reconstructed, index=X.index, columns=X.columns)
         unscaled = reconstructed * self.std_ + self.mean_
         imputed = X.copy()
@@ -188,13 +169,9 @@ class DeepAutoencoderImputer:
         return self.fit(X).transform(X)
 
     def checkpoint(self) -> dict[str, object]:
-        """Return a serializable checkpoint for the fitted imputer."""
-
         if self.model_ is None or self.columns_ is None:
             raise RuntimeError("fit must be called before checkpoint")
-        assert self.mean_ is not None
-        assert self.std_ is not None
-        assert self.fill_values_ is not None
+        assert self.mean_ is not None and self.std_ is not None and self.fill_values_ is not None
         return {
             "method": "autoencoder",
             "state_dict": self.model_.state_dict(),
@@ -208,6 +185,7 @@ class DeepAutoencoderImputer:
             "learning_rate": self.learning_rate,
             "weight_decay": self.weight_decay,
             "dropout": self.dropout,
+            "training_mask_rate": self.training_mask_rate,
             "seed": self.seed,
             "history": self.history_,
         }
@@ -241,23 +219,36 @@ class DeepAutoencoderImputer:
         return indices[n_val:], indices[:n_val]
 
     @staticmethod
-    def _masked_mse(prediction: torch.Tensor, target: torch.Tensor, observed: torch.Tensor) -> torch.Tensor:
-        squared_error = (prediction - target).pow(2) * observed
-        denominator = observed.sum().clamp_min(1.0)
-        return squared_error.sum() / denominator
+    def _sample_training_mask(available: torch.Tensor, generator: torch.Generator, rate: float) -> torch.Tensor:
+        target_mask = (torch.rand(available.shape, generator=generator, device=available.device) < rate) & available
+        if not target_mask.any() and available.any():
+            observed_positions = torch.nonzero(available.reshape(-1), as_tuple=False).reshape(-1)
+            chosen = observed_positions[torch.randint(len(observed_positions), (1,), generator=generator, device=available.device)]
+            target_mask.reshape(-1)[chosen] = True
+        return target_mask
+
+    @staticmethod
+    def _masked_mse(prediction: torch.Tensor, target: torch.Tensor, target_mask: torch.Tensor) -> torch.Tensor:
+        if not target_mask.any():
+            raise ValueError("No supervised denoising targets")
+        return (prediction[target_mask] - target[target_mask]).square().mean()
 
     def _evaluate_loss(
         self,
         model: _Autoencoder,
         values: torch.Tensor,
-        observed: torch.Tensor,
+        available: torch.Tensor,
         indices: np.ndarray,
+        target_mask: torch.Tensor,
         device: torch.device,
     ) -> float:
         model.eval()
         with torch.no_grad():
             batch_values = values[indices].to(device)
-            batch_observed = observed[indices].to(device)
-            prediction = model(batch_values, batch_observed)
-            loss = self._masked_mse(prediction, batch_values, batch_observed)
+            batch_available = available[indices].to(device)
+            batch_target_mask = target_mask.to(device)
+            input_observed = batch_available & ~batch_target_mask
+            input_values = batch_values.masked_fill(~input_observed, 0.0)
+            prediction = model(input_values, input_observed)
+            loss = self._masked_mse(prediction, batch_values, batch_target_mask)
         return float(loss.item())

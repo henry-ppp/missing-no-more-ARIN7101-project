@@ -1,0 +1,13 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_vae",
+  "method": "vae",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "1fb7d6375fcef73cc3c443427599ffc8f3907363c21c67fa47443191acd920f1",
+  "input_sha256": "a105c628becac8cec1c52f675fe2de3f3ad230dbf3699a48c20ebe88e6f01ea4",
+  "prediction_sha256": "5b5871ad064b745b3e2c530ce929161bbfcc6c1d26eeba7678cb5fcce1522d79",
+  "checkpoint": "results/dl_vae/training/checkpoints/gas_turbine/quick/rate_0.3_seed_0/initial/best.pt"
+}

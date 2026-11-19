@@ -1,0 +1,13 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_autoencoder",
+  "method": "autoencoder",
+  "run_id": "initial",
+  "benchmark_metadata_sha256": "0566878878e49617ff1ca8bcf7e81676bb24a15f360763e0d8578b2912e9b095",
+  "input_sha256": "0b94ea4da6fc3ef4cbbada1489940c1982c8ad5b137b804cadf03b69c14343ec",
+  "prediction_sha256": "e6cf4dfe4ce626f006a28505fb12348c0d1b6c5dca1df5822d99da937ab61dcf",
+  "checkpoint": "results/dl_autoencoder/training/checkpoints/gas_turbine/full/rate_0.3_seed_0/initial/best.pt"
+}

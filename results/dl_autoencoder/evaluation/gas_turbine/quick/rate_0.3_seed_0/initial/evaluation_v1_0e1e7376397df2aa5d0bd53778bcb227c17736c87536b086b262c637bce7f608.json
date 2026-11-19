@@ -1,0 +1,18 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_autoencoder",
+  "run_id": "initial",
+  "predictions": "data/output/gas_turbine/quick/rate_0.3_seed_0/dl_autoencoder/initial/predictions.csv",
+  "prediction_sha256": "0e1e7376397df2aa5d0bd53778bcb227c17736c87536b086b262c637bce7f608",
+  "benchmark_metadata_sha256": "1fb7d6375fcef73cc3c443427599ffc8f3907363c21c67fa47443191acd920f1",
+  "mean_baseline_rmse": 0.9872789483117294,
+  "metrics": {
+    "rmse": 0.5933316961351959,
+    "mae": 0.38859084129645716,
+    "r2": 0.6494116901312702,
+    "relative_improvement": 0.39902324753322527
+  }
+}

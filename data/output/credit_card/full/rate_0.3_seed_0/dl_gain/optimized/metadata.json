@@ -1,0 +1,13 @@
+{
+  "dataset": "credit_card",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_gain",
+  "method": "gain",
+  "run_id": "optimized",
+  "benchmark_metadata_sha256": "06e2f65a1e7acc32f30584854954774ebacd84a87f33c85586a90f4ac6679b10",
+  "input_sha256": "0d45ed4e3739759f68363f43c61d4f2c8211bb01dc05360c937d7ca43643cda2",
+  "prediction_sha256": "f29e239728b78c7a906fc7a48e69d30c00f980807884aadb459056e2b9189b44",
+  "checkpoint": "results/dl_gain/training/checkpoints/credit_card/full/rate_0.3_seed_0/optimized/best.pt"
+}

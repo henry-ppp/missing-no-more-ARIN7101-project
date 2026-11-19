@@ -1,0 +1,18 @@
+{
+  "dataset": "credit_card",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "dl_mida",
+  "run_id": "initial",
+  "predictions": "data/output/credit_card/quick/rate_0.3_seed_0/dl_mida/initial/predictions.csv",
+  "prediction_sha256": "092be72f3997e9f3afc68f3ec3982de3fcde9f11b4eb0215ba07b6a50fc78f9b",
+  "benchmark_metadata_sha256": "a506c5964f5f3a64862c500c6bd7f64e6f30f7c8e43b5ddfdd097dfaa0dec5ae",
+  "mean_baseline_rmse": 1.4671739939017683,
+  "metrics": {
+    "rmse": 1.2591835791034962,
+    "mae": 0.3542065965289016,
+    "r2": 0.42347901265852805,
+    "relative_improvement": 0.14176261006722668
+  }
+}
