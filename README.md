@@ -21,7 +21,7 @@ data/
   processed/            Full cleaned source plus Quick/Full inputs, masks, scalers, baseline and ground truth
   output/               Model predictions and run metadata
 data_preprocessing/     Shared dataset preparation
-meeting_notes/          Second/third meeting notes and archived dataset research
+meeting_notes/          Meeting notes and archived dataset research
 models/
   deep_learning/        Existing AE, VAE and GAIN implementations (Yicheng and Eric)
   deep_learning_v2/     Mask-trained Denoising Autoencoder (DAE V2)
