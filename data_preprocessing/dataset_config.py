@@ -41,8 +41,9 @@ DATASETS = {
         tuple(f'gt_{y}.csv' for y in range(2011, 2016))),
 }
 
-# Replaced by hmda_ri_2023 on 18 November 2026 (see data/LEGACY_README.md). Kept only to document the committed
-# superconductivity files; it is not prepared, evaluated or run by default any more.
+# Replaced by hmda_ri_2023 on 18 November 2026 (see data/LEGACY_README.md). It is not prepared, evaluated or run by
+# default any more, but its committed files can still be used by naming it explicitly (the team wanted it back on
+# 19 November 2026 for its collinear features; see meeting_notes/4th_meeting.md).
 RETIRED = {
     'superconductivity': DatasetConfig('Superconductivty Data', 21263,
         ('number_of_elements',) + tuple(f'{s}_{p}' for p in _properties for s in _summaries),
@@ -52,7 +53,7 @@ RETIRED = {
 
 def config_path(root, dataset, mode, rate, seed):
     from pathlib import Path
-    if dataset not in DATASETS or mode not in ('quick', 'full'):
+    if (dataset not in DATASETS and dataset not in RETIRED) or mode not in ('quick', 'full'):
         raise ValueError('Unknown dataset or mode')
     if not 0 < rate < 1:
         raise ValueError('Benchmark rate must be strictly between 0 and 1')

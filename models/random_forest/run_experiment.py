@@ -13,13 +13,13 @@ Stages, each saved as soon as it finishes so the command can be stopped and rest
    missing rate, reuses the saved file instead of tuning again. Delete the file to tune again.
 2. Final fit: the hyperparameters fill the full model input. Predictions go to the shared location
    data/output/<dataset>/<mode>/<configuration>/<Model>/<run_id>/predictions.csv.
-3. Evaluation: shared_evaluation version 1 and version 2 (bootstrap intervals, downstream check) score them.
+3. Evaluation: shared_evaluation version 2 (bootstrap intervals, Wasserstein, downstream check) scores them.
 4. Paired comparison: version 2 scores both models of each setting together, so their difference gets a p-value.
 
 Where things go (<run> = <dataset>/<mode>/<configuration>/<run_id>):
     results/random_forest/<Model>/hyperparameters/<dataset>_<mode>.json      tuned hyperparameters, reused
     results/random_forest/<Model>/experiment/<run>/experiment.json           results of the run
-    results/random_forest/<Model>/evaluation/<run>/evaluation_v1_*.json, _v2_*.json  shared evaluation reports
+    results/random_forest/<Model>/evaluation/<run>/evaluation_v2_*.json     shared evaluation report
     results/random_forest/<Model>/evaluation/summary/benchmark_summary.csv  one row per run
     results/random_forest/comparison/evaluation/<run>/evaluation_v2_*.json  both models, paired
     local_models/random_forest/<Model>/training/<run>/   not pushed: training_history.csv, importances.csv, run.json
@@ -43,7 +43,7 @@ import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed, parallel_config
 
-from data_preprocessing.dataset_config import DATASETS, MODEL_INPUT, config_path
+from data_preprocessing.dataset_config import DATASETS, MODEL_INPUT, RETIRED, config_path
 from data_preprocessing.download import sha256
 from data_preprocessing.prepare_all import load_model_input
 from .imputers import MAX_ROUNDS, METHODS, N_TREES
@@ -52,6 +52,7 @@ from .tuning import CHECK_SHARE, TUNE_ROWS, candidates, hide_and_check, score_ca
 SEED = 0
 TUNE_RATE = 0.3
 HEADLINE = ('relative_improvement', 'wasserstein_improvement')
+RAW_SCORES = ('rmse', 'mae', 'r2', 'wasserstein')    # plain estimates from the version 2 report, for the summary
 COMPARISON = 'comparison'
 # Rough single-core seconds per forest fit, per visible row and per feature tried at each split (M2, 100 trees),
 # measured on the full tables. Only used to start the longest runs first and for the --plan estimate.
@@ -313,11 +314,8 @@ def _fit_and_save(job: Job, X: pd.DataFrame, params: dict, key: dict, settings: 
 
 def _evaluate(job: Job, run: dict, params: dict, source: dict, settings: Settings, paths: Paths) -> dict:
     # Imported only now, after the predictions exist, so the model code never touches evaluation files.
-    from shared_evaluation.evaluate import evaluate_files as evaluate_v1
     from shared_evaluation.evaluate_v2 import evaluate_files as evaluate_v2
     prediction = Path(run['prediction'])
-    v1, v1_path = evaluate_v1(job.dataset, job.mode, job.rate, job.seed, prediction, paths.processed, paths.results,
-                              model=job.model, run_id=job.run_id)
     v2, v2_path = evaluate_v2(job.dataset, job.mode, job.rate, job.seed, {job.model: prediction}, paths.processed,
                               paths.results, n_boot=settings.n_boot, boot_seed=job.seed, run_downstream=True,
                               raw_dir=paths.raw, model=job.model, run_id=job.run_id)
@@ -332,9 +330,9 @@ def _evaluate(job: Job, run: dict, params: dict, source: dict, settings: Setting
         'run_id': job.run_id, 'params': params, 'default_params': METHODS[job.model].default,
         'hyperparameters': source, 'settings': asdict(settings),
         'kept_round': run['kept_round'], 'rounds_run': run['rounds_run'], 'stopped_early': run['stopped_early'],
-        'fit_seconds': run['fit_seconds'], 'metrics_v1': v1, 'headline': headline,
+        'fit_seconds': run['fit_seconds'], 'headline': headline,
         'predictions': prediction.as_posix(), 'prediction_sha256': run['prediction_sha256'],
-        'evaluation_v1': v1_path.as_posix(), 'evaluation_v2': v2_path.as_posix(),
+        'evaluation_v2': v2_path.as_posix(),
         'local_artifacts': job.local_dir(paths).as_posix(), 'environment': run['environment']}
     _write_json(job.experiment_dir(paths) / 'experiment.json', experiment)
     return experiment
@@ -380,11 +378,12 @@ def write_summaries(paths: Paths, models) -> list[Path]:
         rows = []
         for file in sorted((paths.results / model / 'experiment').glob('*/*/*/*/experiment.json')):
             e = json.loads(file.read_text())
+            scores = json.loads(Path(e['evaluation_v2']).read_text())['accuracy_and_distribution']['methods'][model]
             row = {k: e[k] for k in ('dataset', 'mode', 'rate', 'seed', 'run_id', 'kept_round', 'rounds_run',
                                      'stopped_early', 'fit_seconds')}
             row.update(params=json.dumps(e['params']), hyperparameters=e['hyperparameters']['source'],
                        tuning_gain_percent=e['hyperparameters'].get('gain_percent'),
-                       **{f'v1_{k}': v for k, v in e['metrics_v1'].items()})
+                       **{name: scores[name]['estimate'] for name in RAW_SCORES})
             for name, value in e['headline'].items():
                 row.update({name: value['estimate'], f'{name}_ci_low': value['ci'][0],
                             f'{name}_ci_high': value['ci'][1]})
@@ -540,7 +539,8 @@ def _rows(value: str) -> int | None:
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--models', nargs='+', choices=list(METHODS), default=list(METHODS))
-    parser.add_argument('--datasets', nargs='+', choices=list(DATASETS), default=list(DATASETS))
+    parser.add_argument('--datasets', nargs='+', choices=[*DATASETS, *RETIRED], default=list(DATASETS),
+                        help='Default: every current dataset; a retired one (superconductivity) runs only when named')
     parser.add_argument('--mode', choices=['quick', 'full'], default='full')
     parser.add_argument('--rates', nargs='+', type=float, help='Default: every rate prepared for the seed')
     parser.add_argument('--seed', type=int, default=SEED, help='The one shared seed (default 0)')

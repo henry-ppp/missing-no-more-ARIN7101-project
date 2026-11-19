@@ -1,9 +1,11 @@
 """Offline tests for models.random_forest: synthetic tables, tiny forests, temporary folders only."""
 import json
+import sys
 import unittest
 import warnings
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
@@ -164,7 +166,9 @@ class Experiment(unittest.TestCase):
             paths = self.prepare(Path(temp))
             jobs = plan(['MissForest', 'MICE-RF'], ['california_housing'], 'full', None, 0, 'test', paths)
             self.assertEqual([(j.model, j.rate) for j in jobs], [('MissForest', 0.3), ('MICE-RF', 0.3)])
-            experiments = run(jobs, SMALL, TUNE, paths, **QUIET)
+            # Evaluation version 1 is blocked: the pipeline must only need version 2 (one worker runs in this process).
+            with patch.dict(sys.modules, {'shared_evaluation.evaluate': None, 'shared_evaluation.metrics': None}):
+                experiments = run(jobs, SMALL, TUNE, paths, **QUIET)
             for job, experiment in zip(jobs, experiments):
                 with self.subTest(job.model):
                     self.assertEqual(experiment['seed'], 0)
@@ -177,10 +181,12 @@ class Experiment(unittest.TestCase):
                     self.assertEqual(experiment['hyperparameters']['source'], 'tuned')
                     self.assertEqual(len(saved['candidates']), len(candidates(job.model, 8)))
                     reports = list((paths.results / job.model / 'evaluation').rglob('evaluation_v*.json'))
-                    self.assertEqual(sorted(p.name[:13] for p in reports), ['evaluation_v1', 'evaluation_v2'])
+                    self.assertEqual([p.name[:13] for p in reports], ['evaluation_v2'])
                     self.assertIn('gap_closed', experiment['headline'])
-                    self.assertTrue((paths.results / job.model / 'evaluation' / 'summary' /
-                                     'benchmark_summary.csv').is_file())
+                    summary = pd.read_csv(paths.results / job.model / 'evaluation' / 'summary' /
+                                          'benchmark_summary.csv')
+                    self.assertTrue({'rmse', 'mae', 'r2', 'wasserstein', 'relative_improvement'} <= set(summary))
+                    self.assertFalse([c for c in summary if c.startswith('v1_')])
                     predictions = pd.read_csv(job.prediction_path(paths), index_col='row_id')
                     self.assertTrue(np.isfinite(predictions.to_numpy()).all())
             self.assertEqual(len(self.trial_files(paths)), 2 + 4)      # MissForest 2 settings, MICE-RF 4

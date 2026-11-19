@@ -68,9 +68,7 @@ The file holds the chosen hyperparameters, the rate and rows they were tuned on,
 ## What else it does
 
 1. **Final fit.** The hyperparameters fill the full model input. Visible cells are kept unchanged, and the run checks that the input matches the hash in its `metadata.json`.
-2. **Evaluation.** The shared evaluators score the predictions only after they are saved:
-   - version 1: RMSE, MAE, R², RMSE improvement over mean;
-   - version 2: adds the Wasserstein distance, 95% bootstrap intervals and the downstream check.
+2. **Evaluation.** Shared evaluation version 2 scores the predictions only after they are saved: RMSE, MAE, R², the Wasserstein distance and their improvements over mean imputation, with 95% bootstrap intervals, plus the downstream check. The code doesn't use version 1.
 3. **Paired comparison.** Version 2 scores both models of each setting together, so the MissForest-vs-MICE-RF difference gets a p-value.
 
 **Models.**
@@ -93,9 +91,8 @@ data/output/<dataset>/<mode>/rate_<r>_seed_<s>/<Model>/<run_id>/
 results/random_forest/<Model>/                  Model = MissForest or MICE-RF
     hyperparameters/<dataset>_<mode>.json       tuned once, reused for every missing rate
     experiment/<run>/experiment.json            hyperparameters used, rounds, time, headline scores with intervals
-    evaluation/<run>/evaluation_v1_*.json       shared evaluation, version 1
-    evaluation/<run>/evaluation_v2_*.json       version 2: intervals, Wasserstein, downstream
-    evaluation/summary/benchmark_summary.csv    one row per run
+    evaluation/<run>/evaluation_v2_*.json       shared evaluation: intervals, Wasserstein, downstream
+    evaluation/summary/benchmark_summary.csv    one row per run (runs before 19 Nov 2026 also have a v1 report)
 results/random_forest/comparison/evaluation/<run>/evaluation_v2_*.json   both models, paired
 local_models/random_forest/<Model>/             not pushed (.gitignore)
     training/<run>/training_history.csv         change between rounds (the training curve)

@@ -50,7 +50,7 @@ MAE, R² and raw RMSE are still computed and saved, for an appendix.
 ## What's in the repo
 
 - `metrics_v2.py`, `evaluate_v2.py` and `tests/test_evaluation_v2.py`. RMSE, MAE, R² and RMSE improvement are computed exactly as in version 1, so the two versions agree on those four.
-- Version 2 doesn't import version 1. `evaluate.py` and `metrics.py` stay while runners still call them (DAE V2, `models/deep_learning`, iterative ridge, random forest). Those runners save their predictions, so version 2 can score them without retraining. Once no runner calls version 1, delete both files, the version 1 note in `data/README.md` and the version 1 checks in `tests/test_benchmark.py`.
+- Version 2 doesn't import version 1. `evaluate.py` and `metrics.py` stay while runners still call them (DAE V2, `models/deep_learning`, iterative ridge). The random forest runner and `shared_visualization` don't need them. Those runners save their predictions, so version 2 can score them without retraining. Once no runner calls version 1, delete both files, the version 1 note in `data/README.md` and the version 1 checks in `tests/test_benchmark.py`.
 - It reads only `predictions.csv` files, so it works for every model.
 
 Run it from the repo root with every model of one configuration, so all pairs share the same resamples. Name each file `NAME=PATH`:
