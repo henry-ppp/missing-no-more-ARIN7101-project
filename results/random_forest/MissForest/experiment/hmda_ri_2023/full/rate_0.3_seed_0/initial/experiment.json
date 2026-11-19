@@ -1,0 +1,79 @@
+{
+  "model": "MissForest",
+  "dataset": "hmda_ri_2023",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 5
+  },
+  "default_params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/random_forest/MissForest/hyperparameters/hmda_ri_2023_full.json",
+    "tuned_on": {
+      "rate": 0.3,
+      "seed": 0,
+      "configuration": "rate_0.3_seed_0"
+    },
+    "tuning_rows": 17809,
+    "gain_percent": 1.692895205386169
+  },
+  "settings": {
+    "n_trees": 100,
+    "max_rounds": 10,
+    "n_boot": 1000
+  },
+  "kept_round": 8,
+  "rounds_run": 9,
+  "stopped_early": true,
+  "fit_seconds": 66.69799512499958,
+  "metrics_v1": {
+    "rmse": 0.7022165779931743,
+    "mae": 0.4014278074797347,
+    "r2": 0.46192288026626294,
+    "relative_improvement": 0.27692426694380756
+  },
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.27692426694380756,
+      "ci": [
+        0.2524848997877853,
+        0.30322821363201236
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.7729402589538722,
+      "ci": [
+        0.7658474077374694,
+        0.7813133960895612
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.6503635037580955,
+      "ci": [
+        0.6115078757138026,
+        0.6951778158867274
+      ]
+    }
+  },
+  "predictions": "data/output/hmda_ri_2023/full/rate_0.3_seed_0/MissForest/initial/predictions.csv",
+  "prediction_sha256": "690fdf6b6edb61de37f437d5042bfb96fcd2507b64dd350ad5c7cbb28766add9",
+  "evaluation_v1": "results/random_forest/MissForest/evaluation/hmda_ri_2023/full/rate_0.3_seed_0/initial/evaluation_v1_690fdf6b6edb61de37f437d5042bfb96fcd2507b64dd350ad5c7cbb28766add9.json",
+  "evaluation_v2": "results/random_forest/MissForest/evaluation/hmda_ri_2023/full/rate_0.3_seed_0/initial/evaluation_v2_69fb70a101ca687e.json",
+  "local_artifacts": "local_models/random_forest/MissForest/training/hmda_ri_2023/full/rate_0.3_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "8c8629232bf83e7ce7d96531120f900011db88c2"
+  }
+}

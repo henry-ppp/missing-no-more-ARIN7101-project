@@ -1,0 +1,18 @@
+{
+  "dataset": "hmda_ri_2023",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "MissForest",
+  "run_id": "initial",
+  "predictions": "data/output/hmda_ri_2023/full/rate_0.3_seed_0/MissForest/initial/predictions.csv",
+  "prediction_sha256": "690fdf6b6edb61de37f437d5042bfb96fcd2507b64dd350ad5c7cbb28766add9",
+  "benchmark_metadata_sha256": "117adc6b928c8580c7ffce478aff0150d998246658413046da6d32d4866440d0",
+  "mean_baseline_rmse": 0.9711521848826904,
+  "metrics": {
+    "rmse": 0.7022165779931743,
+    "mae": 0.4014278074797347,
+    "r2": 0.46192288026626294,
+    "relative_improvement": 0.27692426694380756
+  }
+}

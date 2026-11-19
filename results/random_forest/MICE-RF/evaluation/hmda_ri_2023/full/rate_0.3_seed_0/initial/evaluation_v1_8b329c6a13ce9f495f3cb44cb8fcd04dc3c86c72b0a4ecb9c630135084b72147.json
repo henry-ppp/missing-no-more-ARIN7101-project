@@ -1,0 +1,18 @@
+{
+  "dataset": "hmda_ri_2023",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "MICE-RF",
+  "run_id": "initial",
+  "predictions": "data/output/hmda_ri_2023/full/rate_0.3_seed_0/MICE-RF/initial/predictions.csv",
+  "prediction_sha256": "8b329c6a13ce9f495f3cb44cb8fcd04dc3c86c72b0a4ecb9c630135084b72147",
+  "benchmark_metadata_sha256": "117adc6b928c8580c7ffce478aff0150d998246658413046da6d32d4866440d0",
+  "mean_baseline_rmse": 0.9711521848826904,
+  "metrics": {
+    "rmse": 0.6901594273324296,
+    "mae": 0.39497374813005254,
+    "r2": 0.4766762148623037,
+    "relative_improvement": 0.2893395720303127
+  }
+}

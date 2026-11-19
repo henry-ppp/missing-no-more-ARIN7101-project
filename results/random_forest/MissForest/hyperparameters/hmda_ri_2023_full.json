@@ -1,0 +1,61 @@
+{
+  "model": "MissForest",
+  "dataset": "hmda_ri_2023",
+  "mode": "full",
+  "params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 5
+  },
+  "default_params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "grid": {
+    "max_features": [
+      "sqrt",
+      0.3333333333333333
+    ],
+    "min_samples_leaf": [
+      1,
+      5
+    ]
+  },
+  "tuned_on": {
+    "rate": 0.3,
+    "seed": 0,
+    "configuration": "rate_0.3_seed_0"
+  },
+  "tuning": {
+    "rows": 17809,
+    "check_share": 0.1,
+    "check_cells": 8577,
+    "n_trees": 100,
+    "max_rounds": 10,
+    "trials": "local_models/random_forest/MissForest/tuning/hmda_ri_2023/full/rate_0.3_seed_0"
+  },
+  "candidates": [
+    {
+      "params": {
+        "max_features": "sqrt",
+        "min_samples_leaf": 1
+      },
+      "rmse": 0.9356264707446584,
+      "mae": 0.4507809819894107,
+      "rounds": 5,
+      "seconds": 62.912540624998655
+    },
+    {
+      "params": {
+        "max_features": "sqrt",
+        "min_samples_leaf": 5
+      },
+      "rmse": 0.9197872950810982,
+      "mae": 0.4566620481919497,
+      "rounds": 9,
+      "seconds": 78.2329951669999
+    }
+  ],
+  "default_rmse": 0.9356264707446584,
+  "chosen_rmse": 0.9197872950810982,
+  "gain_percent": 1.692895205386169
+}

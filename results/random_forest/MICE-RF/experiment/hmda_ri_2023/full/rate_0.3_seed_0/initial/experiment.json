@@ -1,0 +1,79 @@
+{
+  "model": "MICE-RF",
+  "dataset": "hmda_ri_2023",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 2
+  },
+  "default_params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 2
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/random_forest/MICE-RF/hyperparameters/hmda_ri_2023_full.json",
+    "tuned_on": {
+      "rate": 0.3,
+      "seed": 0,
+      "configuration": "rate_0.3_seed_0"
+    },
+    "tuning_rows": 17809,
+    "gain_percent": 0.0
+  },
+  "settings": {
+    "n_trees": 100,
+    "max_rounds": 10,
+    "n_boot": 1000
+  },
+  "kept_round": 10,
+  "rounds_run": 10,
+  "stopped_early": false,
+  "fit_seconds": 48.43493154099997,
+  "metrics_v1": {
+    "rmse": 0.6901594273324296,
+    "mae": 0.39497374813005254,
+    "r2": 0.4766762148623037,
+    "relative_improvement": 0.2893395720303127
+  },
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.2893395720303127,
+      "ci": [
+        0.26568157089453215,
+        0.314887238292836
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.7435842263304727,
+      "ci": [
+        0.7367206381023337,
+        0.7521462868846468
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.6419958812698384,
+      "ci": [
+        0.6060742716578109,
+        0.6830299013689527
+      ]
+    }
+  },
+  "predictions": "data/output/hmda_ri_2023/full/rate_0.3_seed_0/MICE-RF/initial/predictions.csv",
+  "prediction_sha256": "8b329c6a13ce9f495f3cb44cb8fcd04dc3c86c72b0a4ecb9c630135084b72147",
+  "evaluation_v1": "results/random_forest/MICE-RF/evaluation/hmda_ri_2023/full/rate_0.3_seed_0/initial/evaluation_v1_8b329c6a13ce9f495f3cb44cb8fcd04dc3c86c72b0a4ecb9c630135084b72147.json",
+  "evaluation_v2": "results/random_forest/MICE-RF/evaluation/hmda_ri_2023/full/rate_0.3_seed_0/initial/evaluation_v2_acb497300d8693ed.json",
+  "local_artifacts": "local_models/random_forest/MICE-RF/training/hmda_ri_2023/full/rate_0.3_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "8c8629232bf83e7ce7d96531120f900011db88c2"
+  }
+}

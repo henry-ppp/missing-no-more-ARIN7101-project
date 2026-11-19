@@ -1,0 +1,15 @@
+{
+  "dataset": "hmda_ri_2023",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "MissForest",
+  "run_id": "initial",
+  "params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 5
+  },
+  "input_sha256": "bb9984673d370c722d91d73a73081da95d2106be6346345a1ae9824b4624db3f",
+  "prediction_sha256": "690fdf6b6edb61de37f437d5042bfb96fcd2507b64dd350ad5c7cbb28766add9",
+  "local_artifacts": "local_models/random_forest/MissForest/training/hmda_ri_2023/full/rate_0.3_seed_0/initial"
+}
