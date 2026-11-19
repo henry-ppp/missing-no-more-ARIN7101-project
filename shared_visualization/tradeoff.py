@@ -56,7 +56,7 @@ def accuracy_vs_distribution(results: Results, x: str = 'mae_improvement', y: st
     pad = 0.06 * (high - low or 1)
     limits = (low - pad, high + pad)
     figure, axes = new_figure(1, len(datasets), size=(13.33, 5.6))
-    table = []
+    table, labels = [], []
     for dataset, ax in zip(datasets, axes[0]):
         panel = wide[wide['dataset'] == dataset]
         ax.plot(limits, limits, color=AXIS, linewidth=1, zorder=1)
@@ -66,7 +66,7 @@ def accuracy_vs_distribution(results: Results, x: str = 'mae_improvement', y: st
         ax.plot([0], [0], marker='o', linestyle='none', markersize=8, color=MUTED, markeredgecolor=SURFACE,
                 markeredgewidth=1.5, zorder=3)
         placed = [(0.0, 0.0)]
-        _label(ax, 0.0, 0.0, 'Mean', placed, limits)
+        labels.append(_label(ax, 0.0, 0.0, 'Mean', placed, limits))
         taus = []
         for rate, at_rate in panel.groupby('rate'):
             tau, p_value = kendall(at_rate[x], at_rate[y])
@@ -87,7 +87,7 @@ def accuracy_vs_distribution(results: Results, x: str = 'mae_improvement', y: st
                     color=style.colour, markeredgecolor=SURFACE, markeredgewidth=1.5, zorder=4)
             if panel['method'].nunique() <= MAX_DIRECT_LABELS:
                 last = points.iloc[-1]
-                _label(ax, last[x], last[y], style.label, placed, limits)
+                labels.append(_label(ax, last[x], last[y], style.label, placed, limits))
         ax.text(0.97, 0.04, _tau_text(taus), transform=ax.transAxes, ha='right', va='bottom', color=INK_2,
                 fontsize=12, linespacing=1.3, in_layout=False)
         ax.set_xlim(limits)
@@ -110,6 +110,7 @@ def accuracy_vs_distribution(results: Results, x: str = 'mae_improvement', y: st
                          '(Villani, 2009), so y ≥ x up to the small pooled-vs-column-averaged MAE difference. '
                          f'Kendall (1938) τ across methods.{joined}'),
            legend=legend, legend_columns=min(len(methods), 7))
+    _keep_labels_inside(figure, labels)
     return Plot(figure, pd.DataFrame(table))
 
 
@@ -132,6 +133,16 @@ def _label(ax, x, y, text, placed, limits):
         spot = (x + dx, y + dy)
         return min(np.hypot(spot[0] - px, spot[1] - py) for px, py in placed) if placed else np.inf
     dx, dy, ha, va = max(candidates, key=clearance)
-    ax.annotate(text, (x, y), xytext=(dx, dy), textcoords='offset points', ha=ha, va=va, fontsize=12,
-                color=INK_2, zorder=5, in_layout=False)
     placed.append((x + np.sign(dx) * 0.06 * span, y + np.sign(dy) * 0.04 * span))
+    return ax.annotate(text, (x, y), xytext=(dx, dy), textcoords='offset points', ha=ha, va=va, fontsize=12,
+                       color=INK_2, zorder=5, in_layout=False)
+
+
+def _keep_labels_inside(figure, labels):
+    """Move any label that runs past the figure's right edge to the left of its point (needs the final layout)."""
+    figure.canvas.draw()
+    for label in labels:
+        if label.get_window_extent().x1 > figure.bbox.x1:
+            dx, dy = label.xyann
+            label.xyann = (-abs(dx), dy)
+            label.set_horizontalalignment('right')
