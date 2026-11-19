@@ -156,7 +156,7 @@ DATASET_SOURCES = {
     'gas_turbine': 'UCI Gas Turbine CO and NOx Emission',
     'superconductivity': 'UCI Superconductivity Data (Hamidieh)',
 }
-DATASET_LICENSES = {'hmda_ri_2023': 'public data, no explicit license'}   # every other source: CC BY 4.0
+DATASET_LICENSES = {'hmda_ri_2023': 'public domain'}   # CFPB legal notice; every other source: CC BY 4.0
 METRICS = {
     'relative_improvement': 'RMSE improvement over mean',
     'mae_improvement': 'MAE improvement over mean',

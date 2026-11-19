@@ -204,15 +204,20 @@ experiments; do not treat a single run as evidence of significance.
 ## Dataset redistribution and attribution
 
 The credit card, California and gas turbine source releases are labeled [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The license applies to the datasets under their respective terms; the corresponding derived artifacts are marked as modified below.
-The HMDA data carry no explicit license: they are public loan-level data that the CFPB publishes for the FFIEC under the
-Home Mortgage Disclosure Act, with privacy modifications applied before release. No license statement was found, so
-confirm the terms before committing the HMDA raw file.
+The HMDA data have no dataset license, and they don't need one: they are in the public domain. The CFPB's
+[legal notice](https://www.consumerfinance.gov/privacy/website-privacy-policy/) (revised December 2023) says "Information
+created by the CFPB is in the public domain and you may reproduce, publish, or otherwise use it without the Bureau's
+permission" and asks users to cite the Bureau as the source. The data are published under the Home Mortgage Disclosure
+Act for public use, with privacy modifications applied before release, and no terms restrict them by use or by country.
+Committing, changing and sharing the raw and derived HMDA files is therefore allowed; credit the CFPB/FFIEC as the
+source, as in the table below. (A missing license alone would not grant these rights, because unlicensed works are
+normally all rights reserved. Here they come from the public-domain notice.)
 
 | Dataset | Attribution and release | Changes in this repository |
 | --- | --- | --- |
 | Credit Card Default | I-Cheng Yeh, [UCI Default of Credit Card Clients](https://doi.org/10.24432/C55S3H) ([source and license](https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients)) | Raw API table exported to CSV. |
 | California Housing | R. Kelley Pace and Ronald Barry (1997), StatLib / 1990 U.S. Census; Vrushali Deshpande, [Scikit-learn CSV Export, v1](https://data.mendeley.com/datasets/hhb6nwfft8/1) | Raw CSV retained byte-for-byte from the licensed release. |
-| HMDA Rhode Island 2023 | Consumer Financial Protection Bureau for the Federal Financial Institutions Examination Council, [HMDA Data Browser](https://ffiec.cfpb.gov/data-browser/), 2023 loan-level data, Rhode Island, originated loans | Data Browser CSV retained byte-for-byte. |
+| HMDA Rhode Island 2023 | Consumer Financial Protection Bureau for the Federal Financial Institutions Examination Council, [HMDA Data Browser](https://ffiec.cfpb.gov/data-browser/), 2023 loan-level data, Rhode Island, originated loans ([public domain](https://www.consumerfinance.gov/privacy/website-privacy-policy/)) | Data Browser CSV retained byte-for-byte. |
 | Gas Turbine | [UCI Gas Turbine CO and NOx Emission Data Set](https://doi.org/10.24432/C5WC95) ([source and license](https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set)) | Five original yearly CSVs retained byte-for-byte. |
 
 For all four sources, the derived files select the documented features, clean and select rows, then mask and scale values. Baseline and DAE prediction matrices additionally fill missing cells. Raw-file checksums and source metadata are next to the CSVs. The complete matrices are publicly visible in Git, so the separation is an experiment protocol: model code may read only the incomplete input and never use truth values for fitting or tuning.

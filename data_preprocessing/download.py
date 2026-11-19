@@ -92,7 +92,8 @@ def download(dataset, raw_dir='data/raw'):
             content, file_url = hmda_csv()
             (folder / 'source.csv').write_bytes(content)
             release = {'query': HMDA_QUERY, 'file_url': file_url,
-                       'license': 'No explicit license found; public HMDA data published by the CFPB for the FFIEC',
+                       'license': 'Public domain (CFPB legal notice, consumerfinance.gov/privacy/website-privacy-policy/); '
+                                  'cite the CFPB/FFIEC as the source',
                        'storage': 'Byte-identical HMDA Data Browser CSV (Rhode Island, 2023, originated loans)'}
         else:
             try:
