@@ -26,6 +26,8 @@ From the repository root, after `pip install -r requirements.txt`:
 
    Folders are searched for `evaluation*.json`. Each figure is saved as PDF and SVG (sharp on slides) and as a 300-dpi PNG, with a CSV of exactly what it shows. A figure the reports can't support is skipped, with the reason printed. Add `--mode quick`, `--seed 0` or `--rename old=new` as needed.
 
+Commands for the six representative figures on the current results: [examples/README.md](examples/README.md).
+
 ## In Python
 
 ```python
