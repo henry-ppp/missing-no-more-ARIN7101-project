@@ -1,0 +1,72 @@
+{
+  "model": "MissForest",
+  "dataset": "superconductivity",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "default_params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/random_forest/MissForest/hyperparameters/superconductivity_full.json",
+    "tuned_on": {
+      "rate": 0.3,
+      "seed": 0,
+      "configuration": "rate_0.3_seed_0"
+    },
+    "tuning_rows": 21263,
+    "gain_percent": 0.0
+  },
+  "settings": {
+    "n_trees": 100,
+    "max_rounds": 10,
+    "n_boot": 1000
+  },
+  "kept_round": 7,
+  "rounds_run": 8,
+  "stopped_early": true,
+  "fit_seconds": 3397.936917040999,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.9139352235453156,
+      "ci": [
+        0.9109919972975857,
+        0.9167761625983433
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.9817725188516324,
+      "ci": [
+        0.9816278805945438,
+        0.9826906458658139
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.958580407915621,
+      "ci": [
+        0.945138692655515,
+        0.971264444492748
+      ]
+    }
+  },
+  "predictions": "data/output/superconductivity/full/rate_0.3_seed_0/MissForest/initial/predictions.csv",
+  "prediction_sha256": "8614028fc48111ddfd79947d71819f6f8f7f3c5057ef6287d4144c68b68f78ef",
+  "evaluation_v2": "results/random_forest/MissForest/evaluation/superconductivity/full/rate_0.3_seed_0/initial/evaluation_v2_f966563f46adc888.json",
+  "local_artifacts": "local_models/random_forest/MissForest/training/superconductivity/full/rate_0.3_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "3be5f42bb040ddcac1fa6435e2044853c6d8e95d"
+  }
+}

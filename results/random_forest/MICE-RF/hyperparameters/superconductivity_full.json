@@ -1,0 +1,81 @@
+{
+  "model": "MICE-RF",
+  "dataset": "superconductivity",
+  "mode": "full",
+  "params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 1
+  },
+  "default_params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 2
+  },
+  "grid": {
+    "max_features": [
+      0.5,
+      1.0
+    ],
+    "min_samples_leaf": [
+      2,
+      1
+    ]
+  },
+  "tuned_on": {
+    "rate": 0.3,
+    "seed": 0,
+    "configuration": "rate_0.3_seed_0"
+  },
+  "tuning": {
+    "rows": 21263,
+    "check_share": 0.1,
+    "check_cells": 120287,
+    "n_trees": 100,
+    "max_rounds": 10,
+    "trials": "local_models/random_forest/MICE-RF/tuning/superconductivity/full/rate_0.3_seed_0"
+  },
+  "candidates": [
+    {
+      "params": {
+        "max_features": 0.5,
+        "min_samples_leaf": 2
+      },
+      "rmse": 0.09731594350886326,
+      "mae": 0.02547413658923419,
+      "rounds": 10,
+      "seconds": 3238.419120749997
+    },
+    {
+      "params": {
+        "max_features": 0.5,
+        "min_samples_leaf": 1
+      },
+      "rmse": 0.09179272306902181,
+      "mae": 0.02171692021787376,
+      "rounds": 10,
+      "seconds": 3786.0957991250034
+    },
+    {
+      "params": {
+        "max_features": 1.0,
+        "min_samples_leaf": 2
+      },
+      "rmse": 0.11127967492802296,
+      "mae": 0.02635569071188695,
+      "rounds": 10,
+      "seconds": 5454.463648708996
+    },
+    {
+      "params": {
+        "max_features": 1.0,
+        "min_samples_leaf": 1
+      },
+      "rmse": 0.1058764936976975,
+      "mae": 0.023406219197457372,
+      "rounds": 10,
+      "seconds": 6255.210948915999
+    }
+  ],
+  "default_rmse": 0.09731594350886326,
+  "chosen_rmse": 0.09179272306902181,
+  "gain_percent": 5.675555557182066
+}

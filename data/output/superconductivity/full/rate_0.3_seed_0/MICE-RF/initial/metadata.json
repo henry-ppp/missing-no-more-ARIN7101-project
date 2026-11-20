@@ -1,0 +1,15 @@
+{
+  "dataset": "superconductivity",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "MICE-RF",
+  "run_id": "initial",
+  "params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 1
+  },
+  "input_sha256": "471c05add4d63308f15d894f2ada26f717c7b22837cca6cfcd266d6db680ce37",
+  "prediction_sha256": "5c103d838b2f645362101cf68f07044c76f6f565b06d176b58c4b46f4feff68f",
+  "local_artifacts": "local_models/random_forest/MICE-RF/training/superconductivity/full/rate_0.3_seed_0/initial"
+}
