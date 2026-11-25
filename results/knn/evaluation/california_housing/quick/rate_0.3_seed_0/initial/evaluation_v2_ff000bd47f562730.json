@@ -1,0 +1,341 @@
+{
+  "dataset": "california_housing",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "predictions": {
+    "knn": {
+      "path": "data/output/california_housing/quick/rate_0.3_seed_0/knn/initial/predictions.csv",
+      "sha256": "85933078300408c6b800e9c7a24927abdd664d85c954d8d2b1d65a09b1f79dc3"
+    }
+  },
+  "benchmark_metadata_sha256": "2f7437ed35964d209cd0ddc7856486cfb767f3edb49251f360e23a04abdddb86",
+  "accuracy_and_distribution": {
+    "n_boot": 1000,
+    "seed": 0,
+    "level": 0.95,
+    "interval": "basic bootstrap",
+    "rows_resampled": 2807,
+    "methods": {
+      "knn": {
+        "rmse": {
+          "estimate": 15.726029777527037,
+          "bias": -3.3128600303257354,
+          "bias_corrected": 19.038889807852772,
+          "ci": [
+            4.082215330238185,
+            30.49206304300915
+          ]
+        },
+        "mae": {
+          "estimate": 0.8620885115710925,
+          "bias": -0.0012053761903276783,
+          "bias_corrected": 0.8632938877614201,
+          "ci": [
+            0.4671524646856531,
+            1.0669982044532555
+          ]
+        },
+        "r2": {
+          "estimate": -0.032599678498775805,
+          "bias": -0.009305979550259406,
+          "bias_corrected": -0.0232936989485164,
+          "ci": [
+            -0.07642699770490274,
+            0.04313593675062374
+          ]
+        },
+        "relative_improvement": {
+          "estimate": -0.00019634815268698702,
+          "bias": -0.002552699233771543,
+          "bias_corrected": 0.002356351081084556,
+          "ci": [
+            -0.0035920830989908496,
+            0.01775676975718136
+          ]
+        },
+        "wasserstein": {
+          "estimate": 0.5764250150640076,
+          "bias": 0.0001646744526796473,
+          "bias_corrected": 0.5762603406113279,
+          "ci": [
+            0.1643489567099342,
+            0.7851050419134106
+          ]
+        },
+        "wasserstein_improvement": {
+          "estimate": 0.35432732276321954,
+          "bias": 0.013902152794995515,
+          "bias_corrected": 0.34042516996822403,
+          "ci": [
+            0.2449774379374034,
+            0.4709684168054125
+          ]
+        }
+      },
+      "mean": {
+        "rmse": {
+          "estimate": 15.722942606791388,
+          "bias": -3.3150662510053017,
+          "bias_corrected": 19.03800885779669,
+          "ci": [
+            4.081181190497876,
+            30.496801436657346
+          ]
+        },
+        "mae": {
+          "estimate": 0.891425664086669,
+          "bias": -0.001541855649501045,
+          "bias_corrected": 0.8929675197361701,
+          "ci": [
+            0.4998429116024399,
+            1.0960250213365628
+          ]
+        },
+        "r2": {
+          "estimate": -0.0012320270851737813,
+          "bias": -0.00129974908105404,
+          "bias_corrected": 6.772199588025865e-05,
+          "ci": [
+            -0.0015352100150053407,
+            0.0032861181431350526
+          ]
+        },
+        "relative_improvement": {
+          "estimate": 0.0,
+          "bias": 0.0,
+          "bias_corrected": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ]
+        },
+        "wasserstein": {
+          "estimate": 0.8927511344151574,
+          "bias": -0.001722043003910878,
+          "bias_corrected": 0.8944731774190683,
+          "ci": [
+            0.48097118592831256,
+            1.101908383247531
+          ]
+        },
+        "wasserstein_improvement": {
+          "estimate": 0.0,
+          "bias": 0.0,
+          "bias_corrected": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "differences": {
+      "knn - mean": {
+        "rmse": {
+          "estimate": 0.00308717073564857,
+          "bias": 0.002206220679564731,
+          "bias_corrected": 0.0008809500560838391,
+          "ci": [
+            -0.013154202418160146,
+            0.010029717278011469
+          ],
+          "p_value": 0.4595404595404595
+        },
+        "mae": {
+          "estimate": -0.02933715251557656,
+          "bias": 0.0003364794591733562,
+          "bias_corrected": -0.029673631974749915,
+          "ci": [
+            -0.04094521329400214,
+            -0.018376065075716284
+          ],
+          "p_value": 0.001998001998001998
+        },
+        "r2": {
+          "estimate": -0.031367651413602024,
+          "bias": -0.008006230469205365,
+          "bias_corrected": -0.02336142094439666,
+          "ci": [
+            -0.07565298285761404,
+            0.04172275218316564
+          ],
+          "p_value": 0.4255744255744256
+        },
+        "relative_improvement": {
+          "estimate": -0.00019634815268698702,
+          "bias": -0.002552699233771543,
+          "bias_corrected": 0.002356351081084556,
+          "ci": [
+            -0.0035920830989908496,
+            0.01775676975718136
+          ],
+          "p_value": 0.6393606393606394
+        },
+        "wasserstein": {
+          "estimate": -0.31632611935114985,
+          "bias": 0.0018867174565905254,
+          "bias_corrected": -0.3182128368077404,
+          "ci": [
+            -0.329333195906599,
+            -0.30805516360462426
+          ],
+          "p_value": 0.001998001998001998
+        },
+        "wasserstein_improvement": {
+          "estimate": 0.35432732276321954,
+          "bias": 0.013902152794995515,
+          "bias_corrected": 0.34042516996822403,
+          "ci": [
+            0.2449774379374034,
+            0.4709684168054125
+          ],
+          "p_value": 0.001998001998001998
+        }
+      }
+    }
+  },
+  "downstream": {
+    "task": "regression",
+    "model": "LinearRegression",
+    "score_name": "r2",
+    "n_splits": 5,
+    "n_boot": 1000,
+    "seed": 0,
+    "level": 0.95,
+    "interval": "basic bootstrap",
+    "rows_resampled": 3000,
+    "methods": {
+      "knn": {
+        "score": {
+          "estimate": 0.4022703960409111,
+          "bias": -6.597793996920842e-05,
+          "bias_corrected": 0.4023363739808803,
+          "ci": [
+            0.3720196464250453,
+            0.4372175703406029
+          ]
+        },
+        "gap_closed": {
+          "estimate": null,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        }
+      },
+      "mean": {
+        "score": {
+          "estimate": 0.3878351031345455,
+          "bias": -6.871225033400208e-08,
+          "bias_corrected": 0.38783517184679583,
+          "ci": [
+            0.35826986225247937,
+            0.41956566605132195
+          ]
+        },
+        "gap_closed": {
+          "estimate": null,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        }
+      },
+      "true": {
+        "score": {
+          "estimate": -1.2753713086292993,
+          "bias": 0.023930899229108515,
+          "bias_corrected": -1.2993022078584078,
+          "ci": [
+            -3.1728698058720446,
+            2.5853212648551533
+          ]
+        },
+        "gap_closed": {
+          "estimate": null,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        }
+      }
+    },
+    "differences": {
+      "knn - mean": {
+        "score": {
+          "estimate": 0.014435292906365582,
+          "bias": -6.59092277188935e-05,
+          "bias_corrected": 0.014501202134084476,
+          "ci": [
+            0.0021544367233867698,
+            0.028122536024809575
+          ],
+          "p_value": 0.027972027972027972
+        },
+        "gap_closed": {
+          "estimate": null,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        }
+      },
+      "knn - true": {
+        "score": {
+          "estimate": 1.6776417046702103,
+          "bias": -0.023996877169077724,
+          "bias_corrected": 1.701638581839288,
+          "ci": [
+            -2.174913956257099,
+            3.57438584724923
+          ],
+          "p_value": 0.5394605394605395
+        },
+        "gap_closed": {
+          "estimate": null,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        }
+      },
+      "mean - true": {
+        "score": {
+          "estimate": 1.6632064117638448,
+          "bias": -0.023930967941358627,
+          "bias_corrected": 1.6871373797052034,
+          "ci": [
+            -2.2042556712929176,
+            3.5588589636176002
+          ],
+          "p_value": 0.5394605394605395
+        },
+        "gap_closed": {
+          "estimate": null,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        }
+      }
+    }
+  },
+  "model": "knn",
+  "run_id": "initial"
+}
