@@ -5,7 +5,7 @@
 
 ## Notes
 
-1. Each person commits one markdown file at `meeting_notes/slides/<name>.md` covering their own part. Henry and Hamad will build the slide deck from these files. Include anything a slide needs: the line to say, the number to show, and the path to a figure. Due Saturday 28 November.
+1. Each person commits one markdown file at `docs/slides/<name>.md` covering their own part. Henry and Hamad will build the slide deck from these files. Include anything a slide needs: the line to say, the number to show, and the path to a figure. Due Saturday 28 November.
 2. Henry and Hamad make the slide deck. Due Thursday 3 December.
 3. The presentation will be rehearsed and recorded on campus on Saturday 5 December, in the afternoon.
 4. The presentation is split as follows.
