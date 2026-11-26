@@ -1,0 +1,48 @@
+{
+  "dataset": "credit_card",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "rows": 30000,
+  "features": 14,
+  "n_neighbors": 5,
+  "weights": "uniform",
+  "fit_seconds": 67.82167420000769,
+  "metrics": {
+    "rmse": 0.866125147481879,
+    "mae": 0.338353034520392,
+    "r2": 0.2723591269049691,
+    "relative_improvement": 0.13969482718577408,
+    "wasserstein": 0.165078086673036,
+    "wasserstein_improvement": 0.7003585219775608
+  },
+  "mean_baseline_rmse": 1.0067650118255302,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.13969482718577408,
+      "ci": [
+        0.12542147392308192,
+        0.15300070887515926
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.7003585219775608,
+      "ci": [
+        0.6934283321658922,
+        0.7074970789514261
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.1655920290151591,
+      "ci": [
+        0.032938008543172304,
+        0.3095259564989717
+      ]
+    }
+  },
+  "predictions": "data/output/credit_card/full/rate_0.3_seed_0/knn/initial/predictions.csv",
+  "prediction_sha256": "8a4d854dc5c4dc6edc398f2acc2f8b1b1b10b216c28877920d0d9fcd63f3852a",
+  "input_sha256": "0d45ed4e3739759f68363f43c61d4f2c8211bb01dc05360c937d7ca43643cda2",
+  "evaluation": "results/knn/evaluation/credit_card/full/rate_0.3_seed_0/initial/evaluation_v2_6f66e5bd2a587c52.json"
+}

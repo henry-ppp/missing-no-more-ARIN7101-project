@@ -1,0 +1,41 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "rows": 36733,
+  "features": 11,
+  "n_neighbors": 5,
+  "weights": "uniform",
+  "fit_seconds": 90.65054990000499,
+  "metrics": {
+    "rmse": 0.7586157728169705,
+    "mae": 0.5321271687624267,
+    "r2": 0.4254418493397232,
+    "relative_improvement": 0.24069684239874556,
+    "wasserstein": 0.2834790869220895,
+    "wasserstein_improvement": 0.6324793788829833
+  },
+  "mean_baseline_rmse": 0.9990947162837364,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.24069684239874556,
+      "ci": [
+        0.23571942462566634,
+        0.24571681289276423
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.6324793788829833,
+      "ci": [
+        0.6288661987701892,
+        0.6362006567813835
+      ]
+    }
+  },
+  "predictions": "data/output/gas_turbine/full/rate_0.3_seed_0/knn/initial/predictions.csv",
+  "prediction_sha256": "0650f0a35296a7b5c9481584eaa0375a46af9f75f1edd15b641a0a9df3b536c6",
+  "input_sha256": "0b94ea4da6fc3ef4cbbada1489940c1982c8ad5b137b804cadf03b69c14343ec",
+  "evaluation": "results/knn/evaluation/gas_turbine/full/rate_0.3_seed_0/initial/evaluation_v2_5547ba581529958b.json"
+}
