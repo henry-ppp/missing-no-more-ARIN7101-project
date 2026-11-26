@@ -1,0 +1,72 @@
+{
+  "model": "MICE-RF",
+  "dataset": "credit_card",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 1
+  },
+  "default_params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 2
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/random_forest/MICE-RF/hyperparameters/credit_card_full.json",
+    "tuned_on": {
+      "rate": 0.3,
+      "seed": 0,
+      "configuration": "rate_0.3_seed_0"
+    },
+    "tuning_rows": 30000,
+    "gain_percent": 2.023006924682036
+  },
+  "settings": {
+    "n_trees": 100,
+    "max_rounds": 10,
+    "n_boot": 1000
+  },
+  "kept_round": 10,
+  "rounds_run": 10,
+  "stopped_early": false,
+  "fit_seconds": 662.7461927910044,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.38514941546088377,
+      "ci": [
+        0.34587300047083963,
+        0.42425506142886965
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.7940355206351449,
+      "ci": [
+        0.7891589112323841,
+        0.8041193614195793
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.7774751925909165,
+      "ci": [
+        0.6365183547558585,
+        0.8990448688410225
+      ]
+    }
+  },
+  "predictions": "data/output/credit_card/full/rate_0.1_seed_0/MICE-RF/initial/predictions.csv",
+  "prediction_sha256": "b87ce4ba3153ade99d0581d745e8b200407452ab8ba3323c2ec883c3d8bd67d0",
+  "evaluation_v2": "results/random_forest/MICE-RF/evaluation/credit_card/full/rate_0.1_seed_0/initial/evaluation_v2_4bbd5927fae098c8.json",
+  "local_artifacts": "local_models/random_forest/MICE-RF/training/credit_card/full/rate_0.1_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "9e0c294c77b262d21449be3e4150fc8c73a55478"
+  }
+}

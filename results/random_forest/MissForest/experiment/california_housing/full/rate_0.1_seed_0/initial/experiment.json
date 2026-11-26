@@ -1,0 +1,72 @@
+{
+  "model": "MissForest",
+  "dataset": "california_housing",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 5
+  },
+  "default_params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/random_forest/MissForest/hyperparameters/california_housing_full.json",
+    "tuned_on": {
+      "rate": 0.3,
+      "seed": 0,
+      "configuration": "rate_0.3_seed_0"
+    },
+    "tuning_rows": 20640,
+    "gain_percent": 0.813987716450193
+  },
+  "settings": {
+    "n_trees": 100,
+    "max_rounds": 10,
+    "n_boot": 1000
+  },
+  "kept_round": 8,
+  "rounds_run": 9,
+  "stopped_early": true,
+  "fit_seconds": 213.36532941600308,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.386588999778817,
+      "ci": [
+        0.34747439567192384,
+        0.43710122758493075
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.7803863268477769,
+      "ci": [
+        0.772968191293129,
+        0.7915467008283923
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.8665179435784627,
+      "ci": [
+        0.8345940008412871,
+        0.899595668999278
+      ]
+    }
+  },
+  "predictions": "data/output/california_housing/full/rate_0.1_seed_0/MissForest/initial/predictions.csv",
+  "prediction_sha256": "d0c22de02ae1504d6de9f80f6dbe2413c4fa29f786d9d686ba633f36ed3ade7b",
+  "evaluation_v2": "results/random_forest/MissForest/evaluation/california_housing/full/rate_0.1_seed_0/initial/evaluation_v2_54ab4252f16f9ddf.json",
+  "local_artifacts": "local_models/random_forest/MissForest/training/california_housing/full/rate_0.1_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "9e0c294c77b262d21449be3e4150fc8c73a55478"
+  }
+}

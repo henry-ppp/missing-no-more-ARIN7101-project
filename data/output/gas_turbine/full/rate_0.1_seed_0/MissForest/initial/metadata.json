@@ -1,0 +1,15 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "model": "MissForest",
+  "run_id": "initial",
+  "params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "input_sha256": "c25b854677fa02829941ba7feecfcf22ce89bb139a471e60647682a372788bde",
+  "prediction_sha256": "79bcdeb55aebebf838e12db942a8ec015e44d12ef9bfbbed7b6ee9db0fb7c130",
+  "local_artifacts": "local_models/random_forest/MissForest/training/gas_turbine/full/rate_0.1_seed_0/initial"
+}

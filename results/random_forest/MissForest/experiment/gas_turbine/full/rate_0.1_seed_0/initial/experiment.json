@@ -1,0 +1,65 @@
+{
+  "model": "MissForest",
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "default_params": {
+    "max_features": "sqrt",
+    "min_samples_leaf": 1
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/random_forest/MissForest/hyperparameters/gas_turbine_full.json",
+    "tuned_on": {
+      "rate": 0.3,
+      "seed": 0,
+      "configuration": "rate_0.3_seed_0"
+    },
+    "tuning_rows": 36733,
+    "gain_percent": 0.0
+  },
+  "settings": {
+    "n_trees": 100,
+    "max_rounds": 10,
+    "n_boot": 1000
+  },
+  "kept_round": 8,
+  "rounds_run": 9,
+  "stopped_early": true,
+  "fit_seconds": 902.5243972080061,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.656390617057292,
+      "ci": [
+        0.6460764025204732,
+        0.6685244419091407
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.9008469876757179,
+      "ci": [
+        0.8990991490725214,
+        0.9058241150378292
+      ]
+    }
+  },
+  "predictions": "data/output/gas_turbine/full/rate_0.1_seed_0/MissForest/initial/predictions.csv",
+  "prediction_sha256": "79bcdeb55aebebf838e12db942a8ec015e44d12ef9bfbbed7b6ee9db0fb7c130",
+  "evaluation_v2": "results/random_forest/MissForest/evaluation/gas_turbine/full/rate_0.1_seed_0/initial/evaluation_v2_80132d7e4489381a.json",
+  "local_artifacts": "local_models/random_forest/MissForest/training/gas_turbine/full/rate_0.1_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "9e0c294c77b262d21449be3e4150fc8c73a55478"
+  }
+}
