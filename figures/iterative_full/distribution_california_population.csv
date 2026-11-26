@@ -1,0 +1,6 @@
+dataset,column,method,hidden_cells,shaded_area
+california_housing,Population,mean,6135,0.6231672455933908
+california_housing,Population,iterative,6135,0.3605058511643906
+california_housing,Population,MissForest,6135,0.20190453696853838
+california_housing,Population,MICE-RF,6135,0.23103821025535584
+california_housing,Population,dae_v2,6135,0.5994090720691996

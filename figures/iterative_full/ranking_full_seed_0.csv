@@ -1,0 +1,9 @@
+metric,method,average_rank,settings,friedman_p,tied_groups,significance_testable
+relative_improvement,MICE-RF,1.0,4,0.01119724671514405,,False
+relative_improvement,MissForest,2.0,4,0.01119724671514405,,False
+relative_improvement,dae_v2,3.25,4,0.01119724671514405,,False
+relative_improvement,iterative,3.75,4,0.01119724671514405,,False
+wasserstein_improvement,MICE-RF,1.3333333333333333,3,0.06018432387173455,,False
+wasserstein_improvement,MissForest,1.6666666666666667,3,0.06018432387173455,,False
+wasserstein_improvement,iterative,3.3333333333333335,3,0.06018432387173455,,False
+wasserstein_improvement,dae_v2,3.6666666666666665,3,0.06018432387173455,,False

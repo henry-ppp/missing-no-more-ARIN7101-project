@@ -1,0 +1,6 @@
+dataset,column,method,hidden_cells,shaded_area
+superconductivity,mean_atomic_mass,mean,6354,0.7204876427287289
+superconductivity,mean_atomic_mass,iterative,6354,0.0553035190429714
+superconductivity,mean_atomic_mass,MissForest,6354,0.014256986782048852
+superconductivity,mean_atomic_mass,MICE-RF,6354,0.005299504690504227
+superconductivity,mean_atomic_mass,dae_v2,6354,0.060785819315524244
