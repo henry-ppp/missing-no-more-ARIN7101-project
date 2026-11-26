@@ -1,0 +1,14 @@
+{
+  "dataset": "credit_card",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "knn",
+  "run_id": "smoke",
+  "n_neighbors": 5,
+  "weights": "uniform",
+  "fit_seconds": 0.6192443000036292,
+  "benchmark_metadata_sha256": "a506c5964f5f3a64862c500c6bd7f64e6f30f7c8e43b5ddfdd097dfaa0dec5ae",
+  "input_sha256": "386bcdd483170952cdd272553508a53865ec8e8f2040095b464a964eb500da23",
+  "prediction_sha256": "1670a61104564e23e8e91a683abc482a5566ed8d29b9358d9051d3da35c48fb1"
+}
