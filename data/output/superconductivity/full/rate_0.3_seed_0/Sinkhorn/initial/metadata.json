@@ -1,0 +1,12 @@
+{
+  "dataset": "superconductivity",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "Sinkhorn",
+  "run_id": "initial",
+  "params": {},
+  "input_sha256": "471c05add4d63308f15d894f2ada26f717c7b22837cca6cfcd266d6db680ce37",
+  "prediction_sha256": "5c526a337de33be1cb2ce21635ad750a736468975f4be9948a8d285f0220e5fb",
+  "local_artifacts": "local_models/softimpute_sinkhorn/Sinkhorn/training/superconductivity/full/rate_0.3_seed_0/initial"
+}

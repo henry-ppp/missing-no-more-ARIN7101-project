@@ -1,0 +1,65 @@
+{
+  "model": "Sinkhorn",
+  "dataset": "superconductivity",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {},
+  "hyperparameters": {
+    "source": "paper",
+    "reference": "Muzellec et al. (ICML 2020), Section 4"
+  },
+  "settings": {
+    "n_boot": 1000,
+    "sinkhorn_visits": 500,
+    "sinkhorn_batch": 128,
+    "sinkhorn_lr": 0.01,
+    "sinkhorn_noise": 0.1,
+    "sinkhorn_eps_share": 0.05
+  },
+  "details": {
+    "epsilon": 2.508650423683166,
+    "iterations": 41530,
+    "batch": 128,
+    "visits_per_row": 500
+  },
+  "fit_seconds": 1792.6173519999998,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.5122668806234425,
+      "ci": [
+        0.5095452990236441,
+        0.5149063254192147
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.7141981202355876,
+      "ci": [
+        0.7124637163876717,
+        0.7161178848540728
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.4651751755130585,
+      "ci": [
+        0.4454266516164284,
+        0.48189432026290435
+      ]
+    }
+  },
+  "predictions": "data/output/superconductivity/full/rate_0.3_seed_0/Sinkhorn/initial/predictions.csv",
+  "prediction_sha256": "5c526a337de33be1cb2ce21635ad750a736468975f4be9948a8d285f0220e5fb",
+  "input_sha256": "471c05add4d63308f15d894f2ada26f717c7b22837cca6cfcd266d6db680ce37",
+  "evaluation_v2": "results/softimpute_sinkhorn/Sinkhorn/evaluation/superconductivity/full/rate_0.3_seed_0/initial/evaluation_v2_002f50d1aff28043.json",
+  "local_artifacts": "local_models/softimpute_sinkhorn/Sinkhorn/training/superconductivity/full/rate_0.3_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "torch": "2.10.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "9e0c294c77b262d21449be3e4150fc8c73a55478"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "model": "SoftImpute",
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "fraction": 0.05
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/softimpute_sinkhorn/SoftImpute/hyperparameters/gas_turbine_full_rate_0.3_seed_0.json"
+  },
+  "settings": {
+    "n_boot": 1000,
+    "soft_grid": [
+      0.001,
+      0.002,
+      0.005,
+      0.01,
+      0.02,
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.5
+    ],
+    "soft_tol": 1e-05,
+    "soft_max_iter": 500,
+    "tune": true,
+    "tie_tolerance": 0.001
+  },
+  "details": {
+    "lambda": 16.054468112580675,
+    "rank": 10,
+    "iterations": 8,
+    "converged": true,
+    "fraction": 0.05,
+    "path": [
+      {
+        "fraction": 0.5,
+        "rank": 2,
+        "iterations": 7
+      },
+      {
+        "fraction": 0.3,
+        "rank": 6,
+        "iterations": 7
+      },
+      {
+        "fraction": 0.2,
+        "rank": 8,
+        "iterations": 8
+      },
+      {
+        "fraction": 0.1,
+        "rank": 9,
+        "iterations": 9
+      },
+      {
+        "fraction": 0.05,
+        "rank": 10,
+        "iterations": 8
+      }
+    ]
+  },
+  "fit_seconds": 0.9203732080000009,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.3571194168764832,
+      "ci": [
+        0.35255243294905064,
+        0.3623293963212461
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.5572728723915201,
+      "ci": [
+        0.5546294669926279,
+        0.5601042794301606
+      ]
+    }
+  },
+  "predictions": "data/output/gas_turbine/full/rate_0.3_seed_0/SoftImpute/initial/predictions.csv",
+  "prediction_sha256": "98f2f35660751291f8809ec5a613dc0fac327efd32ba5729f475d49e7546299d",
+  "input_sha256": "0b94ea4da6fc3ef4cbbada1489940c1982c8ad5b137b804cadf03b69c14343ec",
+  "evaluation_v2": "results/softimpute_sinkhorn/SoftImpute/evaluation/gas_turbine/full/rate_0.3_seed_0/initial/evaluation_v2_83a6c655e28e05e2.json",
+  "local_artifacts": "local_models/softimpute_sinkhorn/SoftImpute/training/gas_turbine/full/rate_0.3_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "torch": "2.10.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "9e0c294c77b262d21449be3e4150fc8c73a55478"
+  }
+}

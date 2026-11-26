@@ -1,0 +1,14 @@
+{
+  "dataset": "credit_card",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "SoftImpute",
+  "run_id": "initial",
+  "params": {
+    "fraction": 0.05
+  },
+  "input_sha256": "0d45ed4e3739759f68363f43c61d4f2c8211bb01dc05360c937d7ca43643cda2",
+  "prediction_sha256": "35f98e6a599cbedb7dc1fe10d8f88ae3bcd1dc64e48d1e0c70a75e77c793e152",
+  "local_artifacts": "local_models/softimpute_sinkhorn/SoftImpute/training/credit_card/full/rate_0.3_seed_0/initial"
+}
