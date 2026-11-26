@@ -1,0 +1,15 @@
+{
+  "dataset": "california_housing",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "model": "MICE-RF",
+  "run_id": "initial",
+  "params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 2
+  },
+  "input_sha256": "fecac395e45c334af6b5f5ff359a7dc41b77a5b20a5db06971629909d3a4992f",
+  "prediction_sha256": "b1429920d79ff961436127a1baa6aed07d75cb786e9d7bb152670089f29c040a",
+  "local_artifacts": "local_models/random_forest/MICE-RF/training/california_housing/full/rate_0.1_seed_0/initial"
+}

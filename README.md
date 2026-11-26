@@ -111,8 +111,33 @@ The MLP encoder-decoder receives zero-filled standardized values and a visibilit
 
 The runner scores each run with `shared_evaluation.evaluate` and writes `evaluation_v2_<hash>.json`. The same command is in [Evaluate](#evaluate).
 
-See [DAE benchmark results](results/dae_v2/evaluation/summary/benchmark_summary.csv) (version 1 scores) and [training histories and configurations](results/dae_v2/training/). The initial experiment uses one seed and a transductive missing-cell holdout; these scores do not measure generalization to unseen rows or establish significance across seeds. Credits and change notices for the datasets are in [data/README.md](data/README.md). The project uses NumPy, pandas, PyTorch, SciPy, scikit-learn and ucimlrepo.
+See [DAE benchmark results](results/dae_v2/evaluation/summary/benchmark_summary.csv) (preserved training and version 1 scores), the [unified V2 summary](results/dae_v2/evaluation/summary/benchmark_summary_v2.csv), the [V2 report manifest and reproduction commands](results/dae_v2/evaluation/summary/evaluation_v2_manifest.json), and [training histories and configurations](results/dae_v2/training/). The initial experiment uses one seed and a transductive missing-cell holdout; these scores do not measure generalization to unseen rows or establish significance across seeds. Credits and change notices for the datasets are in [data/README.md](data/README.md). The project uses NumPy, pandas, PyTorch, SciPy, scikit-learn and ucimlrepo.
 
 California Housing Quick has an unusually large RMSE because one hidden `AveOccup` value is about 1,314 observed standard deviations from its observed mean. That cell contributes 99.35% of the mean baseline's squared error for this configuration. The published data retain this observation; inspect MAE and macro R² alongside RMSE.
 
 All eight initial DAE runs completed on the RTX 4090 Laptop GPU. DAE improved RMSE in all eight runs for this seed. Full-mode improvement ranged from 23.63% (California Housing) to 71.99% (Superconductivity).
+
+## DAE V2 unified evaluation of the initial predictions
+
+The unified V2 reports evaluate the eight original DAE V2 prediction matrices
+(four datasets, Quick and Full, 30% MCAR, seed 0) without retraining or changing
+predictions. They are saved next to the retained V1 reports at
+`results/dae_v2/evaluation/<dataset>/<mode>/rate_0.3_seed_0/initial/evaluation_v2_<hash>.json`.
+
+To reproduce one report with the current unified evaluator:
+
+```bash
+python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --predictions dae_v2=data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv --model dae_v2 --run-id initial --n-boot 1000 --boot-seed 0 --level 0.95 --downstream --n-splits 5
+```
+
+The companion `benchmark_summary_v2.csv` preserves all original training columns
+and adds six reconstruction/distribution scores, their basic-bootstrap intervals
+and bias corrections, mean-baseline scores, paired differences, and downstream
+scores for the model, mean-imputed table and complete table. It is separate from
+the original summary because the training runner maintains the original schema.
+Distribution headline values use the evaluator's bias-corrected estimates;
+plug-in estimates are also preserved. Gas Turbine has no downstream task.
+California Housing Quick's gap-closed value is undefined because the complete
+table's cross-validated linear-regression R² is below the mean-imputed table's
+R²; it remains blank in the summary and null in the report. Intervals reflect
+row resampling of fixed predictions, not repeated imputer training or new masks.

@@ -1,0 +1,96 @@
+{
+  "model": "SoftImpute",
+  "dataset": "california_housing",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "fraction": 0.2
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/softimpute_sinkhorn/SoftImpute/hyperparameters/california_housing_full_rate_0.3_seed_0.json"
+  },
+  "settings": {
+    "n_boot": 1000,
+    "soft_grid": [
+      0.001,
+      0.002,
+      0.005,
+      0.01,
+      0.02,
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.5
+    ],
+    "soft_tol": 1e-05,
+    "soft_max_iter": 500,
+    "tune": true,
+    "tie_tolerance": 0.001
+  },
+  "details": {
+    "lambda": 31.61419471153281,
+    "rank": 7,
+    "iterations": 9,
+    "converged": true,
+    "fraction": 0.2,
+    "path": [
+      {
+        "fraction": 0.5,
+        "rank": 6,
+        "iterations": 8
+      },
+      {
+        "fraction": 0.3,
+        "rank": 6,
+        "iterations": 7
+      },
+      {
+        "fraction": 0.2,
+        "rank": 7,
+        "iterations": 9
+      }
+    ]
+  },
+  "fit_seconds": 0.20920029099988824,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.20254045051601388,
+      "ci": [
+        0.15710380800550905,
+        0.24150559441886543
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.3284782748218086,
+      "ci": [
+        0.3241130968982842,
+        0.333109926294063
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.20741413649835055,
+      "ci": [
+        0.1943837600195119,
+        0.22096403521312472
+      ]
+    }
+  },
+  "predictions": "data/output/california_housing/full/rate_0.3_seed_0/SoftImpute/initial/predictions.csv",
+  "prediction_sha256": "f6cd3ebce1da56cbb6ccb6d7b875589259463c7ab763c059532a6bab02277cfd",
+  "input_sha256": "706fc2d3788631efc800c865f6d638eb5fba94d1c83c8fef070b5a5a6ad5b600",
+  "evaluation_v2": "results/softimpute_sinkhorn/SoftImpute/evaluation/california_housing/full/rate_0.3_seed_0/initial/evaluation_v2_21a7e299a2c7ab35.json",
+  "local_artifacts": "local_models/softimpute_sinkhorn/SoftImpute/training/california_housing/full/rate_0.3_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "torch": "2.10.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "9e0c294c77b262d21449be3e4150fc8c73a55478"
+  }
+}

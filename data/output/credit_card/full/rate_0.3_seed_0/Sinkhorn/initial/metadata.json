@@ -1,0 +1,12 @@
+{
+  "dataset": "credit_card",
+  "mode": "full",
+  "rate": 0.3,
+  "seed": 0,
+  "model": "Sinkhorn",
+  "run_id": "initial",
+  "params": {},
+  "input_sha256": "0d45ed4e3739759f68363f43c61d4f2c8211bb01dc05360c937d7ca43643cda2",
+  "prediction_sha256": "9fca4d42a9509aff4c8cbf70d4e48f8fbaae88a389e6ebed8ce6923bb7690350",
+  "local_artifacts": "local_models/softimpute_sinkhorn/Sinkhorn/training/credit_card/full/rate_0.3_seed_0/initial"
+}

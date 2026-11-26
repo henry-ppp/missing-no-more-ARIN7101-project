@@ -1,0 +1,65 @@
+{
+  "model": "MICE-RF",
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 1
+  },
+  "default_params": {
+    "max_features": 0.5,
+    "min_samples_leaf": 2
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/random_forest/MICE-RF/hyperparameters/gas_turbine_full.json",
+    "tuned_on": {
+      "rate": 0.3,
+      "seed": 0,
+      "configuration": "rate_0.3_seed_0"
+    },
+    "tuning_rows": 36733,
+    "gain_percent": 1.8318630270444447
+  },
+  "settings": {
+    "n_trees": 100,
+    "max_rounds": 10,
+    "n_boot": 1000
+  },
+  "kept_round": 10,
+  "rounds_run": 10,
+  "stopped_early": false,
+  "fit_seconds": 588.9943225419847,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.6734769912210996,
+      "ci": [
+        0.664145460901572,
+        0.6849362557935004
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.9056926232158908,
+      "ci": [
+        0.9038704369679217,
+        0.910427801013606
+      ]
+    }
+  },
+  "predictions": "data/output/gas_turbine/full/rate_0.1_seed_0/MICE-RF/initial/predictions.csv",
+  "prediction_sha256": "7f9322aa0f8e64135a7f99fc40d751428bc7db119a9bbe61ebeda35bc60538ce",
+  "evaluation_v2": "results/random_forest/MICE-RF/evaluation/gas_turbine/full/rate_0.1_seed_0/initial/evaluation_v2_89dc9d3152f2c441.json",
+  "local_artifacts": "local_models/random_forest/MICE-RF/training/gas_turbine/full/rate_0.1_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "9e0c294c77b262d21449be3e4150fc8c73a55478"
+  }
+}
