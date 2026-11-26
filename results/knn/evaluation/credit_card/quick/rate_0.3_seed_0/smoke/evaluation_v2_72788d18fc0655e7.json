@@ -1,0 +1,341 @@
+{
+  "dataset": "credit_card",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "predictions": {
+    "knn": {
+      "path": "data/output/credit_card/quick/rate_0.3_seed_0/knn/smoke/predictions.csv",
+      "sha256": "1670a61104564e23e8e91a683abc482a5566ed8d29b9358d9051d3da35c48fb1"
+    }
+  },
+  "benchmark_metadata_sha256": "a506c5964f5f3a64862c500c6bd7f64e6f30f7c8e43b5ddfdd097dfaa0dec5ae",
+  "accuracy_and_distribution": {
+    "n_boot": 0,
+    "seed": 0,
+    "level": 0.95,
+    "interval": "basic bootstrap",
+    "rows_resampled": 2979,
+    "methods": {
+      "knn": {
+        "rmse": {
+          "estimate": 1.3484352254800174,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "mae": {
+          "estimate": 0.34061673167046197,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "r2": {
+          "estimate": 0.30161069244717226,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "relative_improvement": {
+          "estimate": 0.08093025702151369,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "wasserstein": {
+          "estimate": 0.19388281396416124,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "wasserstein_improvement": {
+          "estimate": 0.6678204159979051,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        }
+      },
+      "mean": {
+        "rmse": {
+          "estimate": 1.4671739939017683,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "mae": {
+          "estimate": 0.5862181342195162,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "r2": {
+          "estimate": -0.0011277722101657212,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "relative_improvement": {
+          "estimate": 0.0,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "wasserstein": {
+          "estimate": 0.5836686638843479,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "wasserstein_improvement": {
+          "estimate": 0.0,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        }
+      }
+    },
+    "differences": {
+      "knn - mean": {
+        "rmse": {
+          "estimate": -0.1187387684217509,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        },
+        "mae": {
+          "estimate": -0.24560140254905422,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        },
+        "r2": {
+          "estimate": 0.302738464657338,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        },
+        "relative_improvement": {
+          "estimate": 0.08093025702151369,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        },
+        "wasserstein": {
+          "estimate": -0.38978584992018667,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        },
+        "wasserstein_improvement": {
+          "estimate": 0.6678204159979051,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        }
+      }
+    }
+  },
+  "downstream": {
+    "task": "classification",
+    "model": "LogisticRegression",
+    "score_name": "auroc",
+    "n_splits": 5,
+    "n_boot": 0,
+    "seed": 0,
+    "level": 0.95,
+    "interval": "basic bootstrap",
+    "rows_resampled": 3000,
+    "methods": {
+      "knn": {
+        "score": {
+          "estimate": 0.6316991920115523,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "gap_closed": {
+          "estimate": 0.33915010700091647,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        }
+      },
+      "mean": {
+        "score": {
+          "estimate": 0.6140642257662283,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "gap_closed": {
+          "estimate": 0.0,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        }
+      },
+      "true": {
+        "score": {
+          "estimate": 0.6660617509955993,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        },
+        "gap_closed": {
+          "estimate": 1.0,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ]
+        }
+      }
+    },
+    "differences": {
+      "knn - mean": {
+        "score": {
+          "estimate": 0.017634966245324013,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        },
+        "gap_closed": {
+          "estimate": 0.33915010700091647,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        }
+      },
+      "knn - true": {
+        "score": {
+          "estimate": -0.03436255898404694,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        },
+        "gap_closed": {
+          "estimate": -0.6608498929990836,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        }
+      },
+      "mean - true": {
+        "score": {
+          "estimate": -0.051997525229370956,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        },
+        "gap_closed": {
+          "estimate": -1.0,
+          "bias": null,
+          "bias_corrected": null,
+          "ci": [
+            null,
+            null
+          ],
+          "p_value": null
+        }
+      }
+    }
+  },
+  "model": "knn",
+  "run_id": "smoke"
+}

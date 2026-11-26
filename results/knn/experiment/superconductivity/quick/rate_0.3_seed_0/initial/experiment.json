@@ -1,0 +1,48 @@
+{
+  "dataset": "superconductivity",
+  "mode": "quick",
+  "rate": 0.3,
+  "seed": 0,
+  "run_id": "initial",
+  "rows": 3000,
+  "features": 81,
+  "n_neighbors": 5,
+  "weights": "uniform",
+  "fit_seconds": 2.1396702000056393,
+  "metrics": {
+    "rmse": 0.3090935874426201,
+    "mae": 0.1535697797207655,
+    "r2": 0.9061164848695279,
+    "relative_improvement": 0.6930250229371893,
+    "wasserstein": 0.06169355104572309,
+    "wasserstein_improvement": 0.9213443308787763
+  },
+  "mean_baseline_rmse": 1.0069015735421845,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.6930250229371893,
+      "ci": [
+        0.6833071578190694,
+        0.7028197175767099
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.9213443308787763,
+      "ci": [
+        0.9209477757721726,
+        0.9286975859209275
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.710428299750291,
+      "ci": [
+        0.6508775138928063,
+        0.7713010253638365
+      ]
+    }
+  },
+  "predictions": "data/output/superconductivity/quick/rate_0.3_seed_0/knn/initial/predictions.csv",
+  "prediction_sha256": "f9ea823d45fbdf6ff8cc7e072bf193153f594e42f241d2800111a85ae35baded",
+  "input_sha256": "da34bcae72d0dc193f864a144ce46e7d5a583b110dadd30d9956786e293fb3fe",
+  "evaluation": "results/knn/evaluation/superconductivity/quick/rate_0.3_seed_0/initial/evaluation_v2_e99819476efd62b7.json"
+}
