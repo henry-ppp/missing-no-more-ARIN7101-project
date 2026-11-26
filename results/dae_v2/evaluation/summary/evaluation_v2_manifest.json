@@ -1,0 +1,96 @@
+{
+  "evaluator": "shared_evaluation.evaluate",
+  "evaluation_code_commit": "d86c7cbd13e6d8936c215c7bf0f524282d1c86e2",
+  "settings": {
+    "n_boot": 1000,
+    "boot_seed": 0,
+    "level": 0.95,
+    "downstream": true,
+    "n_splits": 5,
+    "model": "dae_v2",
+    "run_id": "initial",
+    "rate": 0.3,
+    "seed": 0
+  },
+  "environment": {
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1"
+  },
+  "automated_tests": {
+    "command": "python -m unittest discover -s tests -v",
+    "passed": 77,
+    "failed": 0,
+    "skipped": 0
+  },
+  "protected_file_count": 114,
+  "protected_snapshot_sha256": "0291da67736e503a0bec911e1141bc27ae6cb00bd3c4ba3987f93c56897c3121",
+  "verification": "Every protected input, mask, scaler, prediction, training record, V1 report and original summary hash is unchanged. Accuracy and mean RMSE match V1 at rtol=atol=1e-13.",
+  "reports": [
+    {
+      "dataset": "california_housing",
+      "mode": "full",
+      "path": "results/dae_v2/evaluation/california_housing/full/rate_0.3_seed_0/initial/evaluation_v2_36bb2ff774bc7000.json",
+      "sha256": "fec7986072c438cfbe5d0d4a4c052c7654bccc5bf3a45eb7b6f7150d9942ffd1",
+      "prediction_sha256": "159ff64a44f44787a17ead4740f8bed9e901e99b742231f36992266792eeea37",
+      "command": "python -m shared_evaluation.evaluate --dataset california_housing --mode full --rate 0.3 --seed 0 --predictions dae_v2=data/output/california_housing/full/rate_0.3_seed_0/dae_v2/initial/predictions.csv --model dae_v2 --run-id initial --n-boot 1000 --boot-seed 0 --level 0.95 --downstream --n-splits 5"
+    },
+    {
+      "dataset": "credit_card",
+      "mode": "full",
+      "path": "results/dae_v2/evaluation/credit_card/full/rate_0.3_seed_0/initial/evaluation_v2_880ba1a93fd7379b.json",
+      "sha256": "665574674ea48476fa68d36186c8b31d555938bfb1cc9423fffd9ce387011cc9",
+      "prediction_sha256": "bf715280c18bd8e73fb76ad57584d09b0827bbf9ea750b40161c3ed68c58705b",
+      "command": "python -m shared_evaluation.evaluate --dataset credit_card --mode full --rate 0.3 --seed 0 --predictions dae_v2=data/output/credit_card/full/rate_0.3_seed_0/dae_v2/initial/predictions.csv --model dae_v2 --run-id initial --n-boot 1000 --boot-seed 0 --level 0.95 --downstream --n-splits 5"
+    },
+    {
+      "dataset": "gas_turbine",
+      "mode": "full",
+      "path": "results/dae_v2/evaluation/gas_turbine/full/rate_0.3_seed_0/initial/evaluation_v2_1f2a596899e19745.json",
+      "sha256": "0ed326db9ccf8eedd683d128d6eea81af6008e744203909eeb822da71a8fef23",
+      "prediction_sha256": "e2573f5527e84ea4813d6099a1ab85c8051eeb377b1e6157dc77f7e3090e2569",
+      "command": "python -m shared_evaluation.evaluate --dataset gas_turbine --mode full --rate 0.3 --seed 0 --predictions dae_v2=data/output/gas_turbine/full/rate_0.3_seed_0/dae_v2/initial/predictions.csv --model dae_v2 --run-id initial --n-boot 1000 --boot-seed 0 --level 0.95 --downstream --n-splits 5"
+    },
+    {
+      "dataset": "superconductivity",
+      "mode": "full",
+      "path": "results/dae_v2/evaluation/superconductivity/full/rate_0.3_seed_0/initial/evaluation_v2_1abc6acc1636fccc.json",
+      "sha256": "fae8c1bbda15ac854e3ac26bf26e98a56e25259ef16411170445c816a3235480",
+      "prediction_sha256": "4fd24f1400058633f09b3db8ee7e0172859e95e5e02f3855b438356f69a36a28",
+      "command": "python -m shared_evaluation.evaluate --dataset superconductivity --mode full --rate 0.3 --seed 0 --predictions dae_v2=data/output/superconductivity/full/rate_0.3_seed_0/dae_v2/initial/predictions.csv --model dae_v2 --run-id initial --n-boot 1000 --boot-seed 0 --level 0.95 --downstream --n-splits 5"
+    },
+    {
+      "dataset": "california_housing",
+      "mode": "quick",
+      "path": "results/dae_v2/evaluation/california_housing/quick/rate_0.3_seed_0/initial/evaluation_v2_7c1fe6b9ded372a5.json",
+      "sha256": "f1980b9abf6b3351b34c971359d0961bb600da6ff0f07939c4c06c59eb8a7d94",
+      "prediction_sha256": "a27e1c2a9010dddf1654590a0f17cfe68fa400b896a77c2a6bd4ce035c69c917",
+      "command": "python -m shared_evaluation.evaluate --dataset california_housing --mode quick --rate 0.3 --seed 0 --predictions dae_v2=data/output/california_housing/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv --model dae_v2 --run-id initial --n-boot 1000 --boot-seed 0 --level 0.95 --downstream --n-splits 5"
+    },
+    {
+      "dataset": "credit_card",
+      "mode": "quick",
+      "path": "results/dae_v2/evaluation/credit_card/quick/rate_0.3_seed_0/initial/evaluation_v2_31acd07b2dbffcb7.json",
+      "sha256": "a39c69434710219f2eec59f5ddf390470f60ae711890df2a84425d917eddc878",
+      "prediction_sha256": "27ffe03f94c82b49f08711f9826f51b70f19d23b538a1be2305aced322a29a1e",
+      "command": "python -m shared_evaluation.evaluate --dataset credit_card --mode quick --rate 0.3 --seed 0 --predictions dae_v2=data/output/credit_card/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv --model dae_v2 --run-id initial --n-boot 1000 --boot-seed 0 --level 0.95 --downstream --n-splits 5"
+    },
+    {
+      "dataset": "gas_turbine",
+      "mode": "quick",
+      "path": "results/dae_v2/evaluation/gas_turbine/quick/rate_0.3_seed_0/initial/evaluation_v2_ef88382ee56eab61.json",
+      "sha256": "391592770f57b351bde932381566e2cb6c8b3b4bdce399564a10fa3a303ef203",
+      "prediction_sha256": "831a683dd8b00762eabd49f548981e1cf6942998f1613823c6bf047415cbdec5",
+      "command": "python -m shared_evaluation.evaluate --dataset gas_turbine --mode quick --rate 0.3 --seed 0 --predictions dae_v2=data/output/gas_turbine/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv --model dae_v2 --run-id initial --n-boot 1000 --boot-seed 0 --level 0.95 --downstream --n-splits 5"
+    },
+    {
+      "dataset": "superconductivity",
+      "mode": "quick",
+      "path": "results/dae_v2/evaluation/superconductivity/quick/rate_0.3_seed_0/initial/evaluation_v2_47cda7e6572a3d9e.json",
+      "sha256": "a4b8fa3e6692424c301cce563c851e9910a7389f0d0aaf5af656a04e22a86f3c",
+      "prediction_sha256": "afb888142c60946eff49a24858141097da7a73f436b5c19234afe6e451592074",
+      "command": "python -m shared_evaluation.evaluate --dataset superconductivity --mode quick --rate 0.3 --seed 0 --predictions dae_v2=data/output/superconductivity/quick/rate_0.3_seed_0/dae_v2/initial/predictions.csv --model dae_v2 --run-id initial --n-boot 1000 --boot-seed 0 --level 0.95 --downstream --n-splits 5"
+    }
+  ]
+}
