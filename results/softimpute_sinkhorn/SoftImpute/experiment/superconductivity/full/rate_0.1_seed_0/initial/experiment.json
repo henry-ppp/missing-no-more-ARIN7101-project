@@ -1,0 +1,126 @@
+{
+  "model": "SoftImpute",
+  "dataset": "superconductivity",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "fraction": 0.002
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/softimpute_sinkhorn/SoftImpute/hyperparameters/superconductivity_full_rate_0.1_seed_0.json"
+  },
+  "settings": {
+    "n_boot": 1000,
+    "soft_grid": [
+      0.001,
+      0.002,
+      0.005,
+      0.01,
+      0.02,
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.5
+    ],
+    "soft_tol": 1e-05,
+    "soft_max_iter": 500,
+    "tune": true,
+    "tie_tolerance": 0.001
+  },
+  "details": {
+    "lambda": 1.476413760837213,
+    "rank": 81,
+    "iterations": 1,
+    "converged": true,
+    "fraction": 0.002,
+    "path": [
+      {
+        "fraction": 0.5,
+        "rank": 2,
+        "iterations": 4
+      },
+      {
+        "fraction": 0.3,
+        "rank": 7,
+        "iterations": 4
+      },
+      {
+        "fraction": 0.2,
+        "rank": 11,
+        "iterations": 4
+      },
+      {
+        "fraction": 0.1,
+        "rank": 20,
+        "iterations": 5
+      },
+      {
+        "fraction": 0.05,
+        "rank": 33,
+        "iterations": 5
+      },
+      {
+        "fraction": 0.02,
+        "rank": 52,
+        "iterations": 7
+      },
+      {
+        "fraction": 0.01,
+        "rank": 68,
+        "iterations": 5
+      },
+      {
+        "fraction": 0.005,
+        "rank": 76,
+        "iterations": 3
+      },
+      {
+        "fraction": 0.002,
+        "rank": 81,
+        "iterations": 1
+      }
+    ]
+  },
+  "fit_seconds": 6.628816041004029,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.8145415305211824,
+      "ci": [
+        0.8124330103523971,
+        0.816715789286242
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.909983629337372,
+      "ci": [
+        0.9099162881847201,
+        0.9116951939794793
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.8204833662546567,
+      "ci": [
+        0.8048020892134783,
+        0.8368343623174977
+      ]
+    }
+  },
+  "predictions": "data/output/superconductivity/full/rate_0.1_seed_0/SoftImpute/initial/predictions.csv",
+  "prediction_sha256": "167d089025ec6e07521f2cd3a025e666958bbd555938849dcdd80364558fc84b",
+  "input_sha256": "073f9e96ef7a56102a54f3f10ad5b1cf86e48218f480809f313d28d64c4a34fc",
+  "evaluation_v2": "results/softimpute_sinkhorn/SoftImpute/evaluation/superconductivity/full/rate_0.1_seed_0/initial/evaluation_v2_c6956a032d630a27.json",
+  "local_artifacts": "local_models/softimpute_sinkhorn/SoftImpute/training/superconductivity/full/rate_0.1_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "torch": "2.10.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "de05d01d6e160a42d535cace4399dc3b3638a839"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "dataset": "california_housing",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "model": "Sinkhorn",
+  "run_id": "initial",
+  "params": {},
+  "input_sha256": "fecac395e45c334af6b5f5ff359a7dc41b77a5b20a5db06971629909d3a4992f",
+  "prediction_sha256": "e73246bca899357678aea3310e98bf9da94f77ac8a01f29887adebf031d367ad",
+  "local_artifacts": "local_models/softimpute_sinkhorn/Sinkhorn/training/california_housing/full/rate_0.1_seed_0/initial"
+}

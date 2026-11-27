@@ -1,0 +1,65 @@
+{
+  "model": "Sinkhorn",
+  "dataset": "california_housing",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {},
+  "hyperparameters": {
+    "source": "paper",
+    "reference": "Muzellec et al. (ICML 2020), Section 4"
+  },
+  "settings": {
+    "n_boot": 1000,
+    "sinkhorn_visits": 500,
+    "sinkhorn_batch": 128,
+    "sinkhorn_lr": 0.01,
+    "sinkhorn_noise": 0.1,
+    "sinkhorn_eps_share": 0.05
+  },
+  "details": {
+    "epsilon": 0.19332774114230397,
+    "iterations": 40313,
+    "batch": 128,
+    "visits_per_row": 500
+  },
+  "fit_seconds": 1664.9371917079989,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.20017419249487511,
+      "ci": [
+        0.184728079860629,
+        0.21513618285025327
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.6507232444447738,
+      "ci": [
+        0.6412982226908004,
+        0.661740631845174
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.497951038710047,
+      "ci": [
+        0.46365682718838197,
+        0.5328224695553363
+      ]
+    }
+  },
+  "predictions": "data/output/california_housing/full/rate_0.1_seed_0/Sinkhorn/initial/predictions.csv",
+  "prediction_sha256": "e73246bca899357678aea3310e98bf9da94f77ac8a01f29887adebf031d367ad",
+  "input_sha256": "fecac395e45c334af6b5f5ff359a7dc41b77a5b20a5db06971629909d3a4992f",
+  "evaluation_v2": "results/softimpute_sinkhorn/Sinkhorn/evaluation/california_housing/full/rate_0.1_seed_0/initial/evaluation_v2_08ab03252da1e978.json",
+  "local_artifacts": "local_models/softimpute_sinkhorn/Sinkhorn/training/california_housing/full/rate_0.1_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "torch": "2.10.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "de05d01d6e160a42d535cace4399dc3b3638a839"
+  }
+}

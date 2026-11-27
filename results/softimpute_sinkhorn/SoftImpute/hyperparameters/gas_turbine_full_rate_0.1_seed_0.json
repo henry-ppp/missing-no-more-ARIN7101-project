@@ -1,0 +1,115 @@
+{
+  "model": "SoftImpute",
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "key": {
+    "input_sha256": "c25b854677fa02829941ba7feecfcf22ce89bb139a471e60647682a372788bde",
+    "soft_grid": [
+      0.001,
+      0.002,
+      0.005,
+      0.01,
+      0.02,
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.5
+    ],
+    "soft_tol": 1e-05,
+    "soft_max_iter": 500,
+    "tune": true,
+    "tie_tolerance": 0.001
+  },
+  "params": {
+    "fraction": 0.02
+  },
+  "check_share": 0.1,
+  "check_cells": 36214,
+  "candidates": [
+    {
+      "fraction": 0.001,
+      "rmse": 0.6082979475813123,
+      "mae": 0.4078488341972967,
+      "rank": 11,
+      "iterations": 1,
+      "converged": true
+    },
+    {
+      "fraction": 0.002,
+      "rmse": 0.608314560972028,
+      "mae": 0.40787163382257996,
+      "rank": 11,
+      "iterations": 1,
+      "converged": true
+    },
+    {
+      "fraction": 0.005,
+      "rmse": 0.608348043319577,
+      "mae": 0.40791792561836415,
+      "rank": 11,
+      "iterations": 1,
+      "converged": true
+    },
+    {
+      "fraction": 0.01,
+      "rmse": 0.6084333925045898,
+      "mae": 0.4080381831886639,
+      "rank": 11,
+      "iterations": 1,
+      "converged": true
+    },
+    {
+      "fraction": 0.02,
+      "rmse": 0.608611206401627,
+      "mae": 0.40829972235228285,
+      "rank": 11,
+      "iterations": 4,
+      "converged": true
+    },
+    {
+      "fraction": 0.05,
+      "rmse": 0.6104864410018702,
+      "mae": 0.41195644954651817,
+      "rank": 10,
+      "iterations": 8,
+      "converged": true
+    },
+    {
+      "fraction": 0.1,
+      "rmse": 0.622823056576327,
+      "mae": 0.4318003888904551,
+      "rank": 8,
+      "iterations": 7,
+      "converged": true
+    },
+    {
+      "fraction": 0.2,
+      "rmse": 0.6523919068076963,
+      "mae": 0.47344984538893664,
+      "rank": 8,
+      "iterations": 7,
+      "converged": true
+    },
+    {
+      "fraction": 0.3,
+      "rmse": 0.6985230634272801,
+      "mae": 0.5210532768945821,
+      "rank": 6,
+      "iterations": 6,
+      "converged": true
+    },
+    {
+      "fraction": 0.5,
+      "rmse": 0.7961772325884335,
+      "mae": 0.6077534600046686,
+      "rank": 2,
+      "iterations": 6,
+      "converged": true
+    }
+  ],
+  "on_grid_edge": false,
+  "seconds": 0.8321073339975555
+}

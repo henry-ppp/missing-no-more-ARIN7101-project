@@ -1,0 +1,12 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "model": "Sinkhorn",
+  "run_id": "initial",
+  "params": {},
+  "input_sha256": "c25b854677fa02829941ba7feecfcf22ce89bb139a471e60647682a372788bde",
+  "prediction_sha256": "956a93add697ea1840adbc59eeed8e0af9cb69fe689a722c12894bfb0c147cf8",
+  "local_artifacts": "local_models/softimpute_sinkhorn/Sinkhorn/training/gas_turbine/full/rate_0.1_seed_0/initial"
+}

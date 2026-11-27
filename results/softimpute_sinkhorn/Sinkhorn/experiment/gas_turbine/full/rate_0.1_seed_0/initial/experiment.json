@@ -1,0 +1,58 @@
+{
+  "model": "Sinkhorn",
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {},
+  "hyperparameters": {
+    "source": "paper",
+    "reference": "Muzellec et al. (ICML 2020), Section 4"
+  },
+  "settings": {
+    "n_boot": 1000,
+    "sinkhorn_visits": 500,
+    "sinkhorn_batch": 128,
+    "sinkhorn_lr": 0.01,
+    "sinkhorn_noise": 0.1,
+    "sinkhorn_eps_share": 0.05
+  },
+  "details": {
+    "epsilon": 0.3829151253566503,
+    "iterations": 71745,
+    "batch": 128,
+    "visits_per_row": 500
+  },
+  "fit_seconds": 2862.2491127500034,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.4317294334742994,
+      "ci": [
+        0.4215777880667243,
+        0.442633412187083
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.7762728856211223,
+      "ci": [
+        0.7723173983004016,
+        0.7813622888651277
+      ]
+    }
+  },
+  "predictions": "data/output/gas_turbine/full/rate_0.1_seed_0/Sinkhorn/initial/predictions.csv",
+  "prediction_sha256": "956a93add697ea1840adbc59eeed8e0af9cb69fe689a722c12894bfb0c147cf8",
+  "input_sha256": "c25b854677fa02829941ba7feecfcf22ce89bb139a471e60647682a372788bde",
+  "evaluation_v2": "results/softimpute_sinkhorn/Sinkhorn/evaluation/gas_turbine/full/rate_0.1_seed_0/initial/evaluation_v2_5d1ef2b865963e24.json",
+  "local_artifacts": "local_models/softimpute_sinkhorn/Sinkhorn/training/gas_turbine/full/rate_0.1_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "torch": "2.10.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "de05d01d6e160a42d535cace4399dc3b3638a839"
+  }
+}

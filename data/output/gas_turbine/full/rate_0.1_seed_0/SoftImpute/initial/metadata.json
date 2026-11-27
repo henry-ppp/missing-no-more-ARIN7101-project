@@ -1,0 +1,14 @@
+{
+  "dataset": "gas_turbine",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "model": "SoftImpute",
+  "run_id": "initial",
+  "params": {
+    "fraction": 0.02
+  },
+  "input_sha256": "c25b854677fa02829941ba7feecfcf22ce89bb139a471e60647682a372788bde",
+  "prediction_sha256": "a4116cec56dbd88d49cb1c091c22b186018117c18cfa4e53accbc20b2ffcc06d",
+  "local_artifacts": "local_models/softimpute_sinkhorn/SoftImpute/training/gas_turbine/full/rate_0.1_seed_0/initial"
+}

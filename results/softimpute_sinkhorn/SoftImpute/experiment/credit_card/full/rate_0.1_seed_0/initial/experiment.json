@@ -1,0 +1,106 @@
+{
+  "model": "SoftImpute",
+  "dataset": "credit_card",
+  "mode": "full",
+  "rate": 0.1,
+  "seed": 0,
+  "run_id": "initial",
+  "params": {
+    "fraction": 0.05
+  },
+  "hyperparameters": {
+    "source": "tuned",
+    "file": "results/softimpute_sinkhorn/SoftImpute/hyperparameters/credit_card_full_rate_0.1_seed_0.json"
+  },
+  "settings": {
+    "n_boot": 1000,
+    "soft_grid": [
+      0.001,
+      0.002,
+      0.005,
+      0.01,
+      0.02,
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.5
+    ],
+    "soft_tol": 1e-05,
+    "soft_max_iter": 500,
+    "tune": true,
+    "tie_tolerance": 0.001
+  },
+  "details": {
+    "lambda": 19.097192769603986,
+    "rank": 14,
+    "iterations": 6,
+    "converged": true,
+    "fraction": 0.05,
+    "path": [
+      {
+        "fraction": 0.5,
+        "rank": 2,
+        "iterations": 5
+      },
+      {
+        "fraction": 0.3,
+        "rank": 9,
+        "iterations": 5
+      },
+      {
+        "fraction": 0.2,
+        "rank": 10,
+        "iterations": 5
+      },
+      {
+        "fraction": 0.1,
+        "rank": 11,
+        "iterations": 7
+      },
+      {
+        "fraction": 0.05,
+        "rank": 14,
+        "iterations": 6
+      }
+    ]
+  },
+  "fit_seconds": 0.5695843329958734,
+  "headline": {
+    "relative_improvement": {
+      "estimate": 0.2603655039471877,
+      "ci": [
+        0.22950213671173075,
+        0.2880363960992446
+      ]
+    },
+    "wasserstein_improvement": {
+      "estimate": 0.5707122443184665,
+      "ci": [
+        0.5636433058520698,
+        0.5783359948721569
+      ]
+    },
+    "gap_closed": {
+      "estimate": 0.4388921622071106,
+      "ci": [
+        0.31575852424666373,
+        0.5396102700881408
+      ]
+    }
+  },
+  "predictions": "data/output/credit_card/full/rate_0.1_seed_0/SoftImpute/initial/predictions.csv",
+  "prediction_sha256": "e5d4074d32aba3ae07e5d79bab523a69135bb71ea4861381cf3f3b3ccb23ff4b",
+  "input_sha256": "7c47a6af52500d08b76b217ef2e11aef2db1e755e2fc1f50dd1851e3d056e35a",
+  "evaluation_v2": "results/softimpute_sinkhorn/SoftImpute/evaluation/credit_card/full/rate_0.1_seed_0/initial/evaluation_v2_53c7808978bac08b.json",
+  "local_artifacts": "local_models/softimpute_sinkhorn/SoftImpute/training/credit_card/full/rate_0.1_seed_0/initial",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.1",
+    "pandas": "2.3.3",
+    "torch": "2.10.0",
+    "machine": "arm64",
+    "system": "Darwin",
+    "code_commit": "de05d01d6e160a42d535cace4399dc3b3638a839"
+  }
+}
