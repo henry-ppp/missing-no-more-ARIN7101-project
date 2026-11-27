@@ -2,7 +2,7 @@
 
 Every model's results go into the same five figures, drawn from saved evaluation reports, with one fixed colour and shape per model. The figures are built in this folder; [README.md](README.md) says how to use them. This note records why each figure looks the way it does, so the team can check the choices before results go on slides.
 
-**Where we are (18 Nov, `dev` at `cab39e3`):** on the shared benchmark only DAE v2 and the mean baseline have predictions, and only at 30% missing. Figures 4 and 5 need more methods and rates before they say anything.
+**Where we are (27 Nov):** twelve methods have full-data predictions at 30% missing; MissForest, MICE-RF, SoftImpute and Sinkhorn also have them at 10%. With twelve methods, figure 2 is drawn once per score (twelve rows don't fit three rows of panels on a slide), and five models share a colour with a model of the other family, always with a different shape (table below). Figure 5 still has only four settings, so it shows average ranks only. [examples/README.md](examples/README.md) has the commands.
 
 ## Rules every figure follows
 
@@ -15,9 +15,16 @@ Every model's results go into the same five figures, drawn from saved evaluation
 | kNN | Hamad | traditional | aqua `#1baf7a` | diamond |
 | Iterative ridge | Henry | traditional | yellow `#eda100` | pentagon |
 | DAE v2 | Eric | deep learning | pink `#e87ba4` | triangle up |
-| VAE (if run) | Yicheng, Eric | deep learning | green `#008300` | triangle down |
-| GAIN (if run) | Yicheng, Eric | deep learning | violet `#6250d6` | triangle left |
+| VAE | Yicheng, Eric | deep learning | green `#008300` | triangle down |
+| GAIN | Yicheng, Eric | deep learning | violet `#6250d6` | triangle left |
+| SoftImpute | Blith | traditional | red `#e34948` | hexagon |
+| Sinkhorn OT | Blith | traditional | violet `#6250d6` (as GAIN) | octagon |
+| Autoencoder | Yicheng, Eric | deep learning | blue `#2a78d6` (as MissForest) | triangle right |
+| MIDA | Yicheng, Eric | deep learning | orange `#eb6834` (as MICE-RF) | plus |
+| MIWAE | Yicheng, Eric | deep learning | red `#e34948` (as SoftImpute) | cross |
 | Mean imputation | shared baseline | | grey `#898781`, the 0 line | |
+
+The last five are registered in `examples/make_figures.py`, not `style.py`, which keeps red spare for a new model. A shared colour always pairs a traditional with a deep-learning model and comes with a different shape.
 
 - **Names, not just colours.** Method names sit on the axis or beside the mark. Aqua, yellow and pink are pale on white (contrast below 3:1), so colour alone can't identify a method.
 - **Colour-blind check.** I ran the colours through a colour-blind simulation check, which measures how far apart two colours look (OKLab ΔE; 8 or more is the target):

@@ -1,0 +1,17 @@
+Hidden cells, 95% basic bootstrap CI from 1000 row resamples (this mask only).
+Wasserstein columns are bias-corrected; the plug-in values are in the JSON.
+                            RMSE        vs mean (RMSE)           Wasserstein vs mean (Wasserstein)
+MissForest  0.519 [0.472, 0.555]  0.387 [0.347, 0.437]  0.129 [0.122, 0.135]  0.782 [0.773, 0.792]
+MICE-RF     0.504 [0.479, 0.526]  0.405 [0.382, 0.427]  0.142 [0.136, 0.149]  0.759 [0.750, 0.768]
+SoftImpute  0.632 [0.608, 0.654]  0.253 [0.234, 0.271]  0.344 [0.338, 0.352]  0.417 [0.410, 0.424]
+Sinkhorn    0.677 [0.650, 0.704]  0.200 [0.185, 0.215]  0.206 [0.198, 0.214]  0.652 [0.641, 0.662]
+mean        0.847 [0.820, 0.873]  0.000 [0.000, 0.000]  0.591 [0.583, 0.599]  0.000 [0.000, 0.000]
+Downstream LinearRegression, 5-fold CV, r2:
+                              r2            gap closed
+MissForest  0.589 [0.578, 0.602]  0.867 [0.835, 0.900]
+MICE-RF     0.590 [0.579, 0.602]  0.871 [0.837, 0.904]
+SoftImpute  0.545 [0.535, 0.557]  0.455 [0.433, 0.477]
+Sinkhorn    0.550 [0.540, 0.562]  0.498 [0.464, 0.533]
+mean        0.496 [0.485, 0.509]  0.000 [0.000, 0.000]
+true        0.604 [0.592, 0.616]  1.000 [1.000, 1.000]
+Saved figures/comparative_plots/reports/california_housing/full/rate_0.1_seed_0/evaluation_v2_b4f995fc00b2da65.json

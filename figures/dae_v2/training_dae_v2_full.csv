@@ -1,0 +1,5 @@
+panel,model,step_column,best_step,best_column,best_value,steps
+Credit card,dae_v2,epoch,65.0,validation_masked_mse,0.5417270262806378,85
+California housing,dae_v2,epoch,109.0,validation_masked_mse,1.4596648471121598,123
+Gas turbine,dae_v2,epoch,141.0,validation_masked_mse,0.3121202275372933,150
+Superconductivity,dae_v2,epoch,150.0,validation_masked_mse,0.0755072824118069,150

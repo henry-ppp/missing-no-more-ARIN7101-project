@@ -22,8 +22,12 @@ from .style import (AXIS, FAMILIES, INK, INK_2, MUTED, SLIDE, SURFACE, Plot, dat
 @in_style
 def missing_rate_curves(results: Results, metrics=('relative_improvement', 'wasserstein_improvement'), mode=None,
                         seed=None, datasets=None, methods=None, highlight=None, point: str = 'auto',
-                        title: str | None = None, note: str | None = None) -> Plot:
-    """Lines over missing rates for one mode and seed. Needs reports for at least two rates."""
+                        title: str | None = None, note: str | None = None, direct_labels: bool = True) -> Plot:
+    """Lines over missing rates for one mode and seed. Needs reports for at least two rates.
+
+    direct_labels=False leaves out the labels at the end of the highlighted lines (the legend still names them), for
+    when lines end so close together that their labels would overlap.
+    """
     results, setting = one_setting(results, mode, None, seed, single_rate=False)
     scores = results.scores.assign(value=point_values(results.scores, point))
     rates = sorted(float(r) for r in scores['rate'].unique())
@@ -57,7 +61,7 @@ def missing_rate_curves(results: Results, metrics=('relative_improvement', 'wass
                         marker=model_style(method).marker if emphasised else None, markersize=7,
                         markeredgecolor=SURFACE,
                         zorder=4 if emphasised else 3)
-                if emphasised and c == len(datasets) - 1:
+                if emphasised and direct_labels and c == len(datasets) - 1:
                     ax.annotate(model_style(method).label, (line['rate'].iloc[-1], line['value'].iloc[-1]),
                                 xytext=(6, 0), textcoords='offset points', va='center', fontsize=12, color=INK_2)
                 table += [{**{k: v for k, v in setting.items() if k != 'rate'}, 'dataset': dataset,

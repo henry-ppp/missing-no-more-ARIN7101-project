@@ -1,0 +1,5 @@
+panel,model,step_column,best_step,best_column,best_value,steps
+Credit card,MICE-RF,round,10.0,change,0.0179322297558242,10
+California housing,MICE-RF,round,9.0,change,0.013170277879758,10
+Gas turbine,MICE-RF,round,8.0,change,0.0048835288631035,10
+Superconductivity,MICE-RF,round,7.0,change,0.0007554778374456,10

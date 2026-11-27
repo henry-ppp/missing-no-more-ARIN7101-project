@@ -1,0 +1,5 @@
+dataset,column,method,hidden_cells,shaded_area
+credit_card,BILL_AMT1,mean,9049,0.6917515739588145
+credit_card,BILL_AMT1,MissForest,9049,0.04252536284064769
+credit_card,BILL_AMT1,MICE-RF,9049,0.04147640690401988
+credit_card,BILL_AMT1,dae_v2,9049,0.1018774429770064

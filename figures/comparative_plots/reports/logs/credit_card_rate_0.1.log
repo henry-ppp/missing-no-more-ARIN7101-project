@@ -1,0 +1,17 @@
+Hidden cells, 95% basic bootstrap CI from 1000 row resamples (this mask only).
+Wasserstein columns are bias-corrected; the plug-in values are in the JSON.
+                            RMSE        vs mean (RMSE)           Wasserstein vs mean (Wasserstein)
+MissForest  0.643 [0.556, 0.713]  0.380 [0.344, 0.416]  0.117 [0.112, 0.122]  0.789 [0.782, 0.797]
+MICE-RF     0.638 [0.547, 0.711]  0.385 [0.346, 0.424]  0.113 [0.108, 0.118]  0.796 [0.789, 0.804]
+SoftImpute  0.768 [0.680, 0.846]  0.260 [0.230, 0.288]  0.238 [0.232, 0.245]  0.571 [0.564, 0.578]
+Sinkhorn    0.841 [0.747, 0.923]  0.190 [0.160, 0.217]  0.188 [0.180, 0.195]  0.662 [0.652, 0.672]
+mean        1.038 [0.954, 1.109]  0.000 [0.000, 0.000]  0.556 [0.546, 0.565]  0.000 [0.000, 0.000]
+Downstream LogisticRegression, 5-fold CV, auroc:
+                           auroc            gap closed
+MissForest  0.656 [0.649, 0.664]  0.707 [0.568, 0.827]
+MICE-RF     0.657 [0.650, 0.665]  0.777 [0.637, 0.899]
+SoftImpute  0.653 [0.645, 0.660]  0.439 [0.316, 0.540]
+Sinkhorn    0.652 [0.644, 0.658]  0.330 [0.175, 0.481]
+mean        0.648 [0.640, 0.655]  0.000 [0.000, 0.000]
+true        0.660 [0.652, 0.667]  1.000 [1.000, 1.000]
+Saved figures/comparative_plots/reports/credit_card/full/rate_0.1_seed_0/evaluation_v2_4dbcd093adbdd312.json

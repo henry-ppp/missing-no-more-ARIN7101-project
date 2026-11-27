@@ -26,7 +26,7 @@ From the repository root, after `pip install -r requirements.txt`:
 
    Folders are searched for `evaluation*.json`. Each figure is saved as PDF and SVG (sharp on slides) and as a 300-dpi PNG, with a CSV of exactly what it shows. A figure the reports can't support is skipped, with the reason printed. Add `--mode quick`, `--seed 0` or `--rename old=new` as needed.
 
-Commands for the six representative figures on the current results: [examples/README.md](examples/README.md).
+Commands that make the shared figures from the current results (all twelve methods): [examples/README.md](examples/README.md).
 
 ## In Python
 
@@ -87,7 +87,7 @@ Score names the figures know: `relative_improvement` (RMSE), `wasserstein_improv
 
 Names are matched ignoring case, `-` and `_`. Mean imputation is always the grey 0 line, never a coloured series.
 
-A new model gets the one spare colour (red) and a warning. To keep its look fixed, add it to `_DEFAULT_MODELS` in `style.py`, or call `register_model('name', label='...', family='deep learning')` before plotting. Colours come from a palette checked for colour-blind readers, and are never generated, so at most eight models fit in one figure.
+A new model gets the one spare colour (red) and a warning. To keep its look fixed, add it to `_DEFAULT_MODELS` in `style.py`, or call `register_model('name', label='...', family='deep learning')` before plotting. Colours come from a palette checked for colour-blind readers, and are never generated, so only eight models can each have their own colour. The shared figures show twelve, so `examples/make_figures.py` registers the five not listed above (SoftImpute, Sinkhorn OT, Autoencoder, MIDA, MIWAE). It reuses a colour only across families and always with a different shape, and every figure names the methods.
 
 ## Training histories
 
